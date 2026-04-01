@@ -1,41 +1,73 @@
-# MetricNotes
+# React + TypeScript + Vite
 
-> **Gestão Produtiva e Business Intelligence para Autônomos**
-> 
-> *Protótipo de sistema web desenvolvido como Trabalho de Conclusão de Curso (TCC) em Análise e Desenvolvimento de Sistemas.*
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-yellow)<br>
+Currently, two official plugins are available:
 
-### Pré-requisitos
-- PHP (8.3.30)
-- Composer (2.9.5)
-- Node.js ( v24.13.1)
-- NPM (11.8.0)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-### Passo a Passo
+## React Compiler
 
-1. Backend:<br>
-   Clone o repositório
-   ```bash
-   git clone https://github.com/gabriellatcc/metricnotes-api/
-   ```
-   Instale as dependências e rode o backend:
-     ```bash
-   composer install
-   cp .env.example .env
-   php artisan jwt:secret
-   php artisan serve
-   ```
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-2. Frontend:<br>
-   Clone o repositório
-   ```bash
-   git clone https://github.com/gabriellatcc/metricnotes-web/
-   ```
-   Instale as dependências e rode o frontend:
-   ```bash
-   npm install
-   npm run dev
-   ```
+## Expanding the ESLint configuration
 
-3. Acesse: http://localhost:3000
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
