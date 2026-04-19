@@ -1,11 +1,11 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { AUTH_TOKEN_STORAGE_KEY } from "@/lib/api-client";
+import { getAuthAccessToken } from "@/lib/api-client";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
-    if (typeof localStorage === "undefined") return;
-    if (!localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)) {
+    if (typeof window === "undefined") return;
+    if (!getAuthAccessToken()) {
       throw redirect({ to: "/login" });
     }
   },

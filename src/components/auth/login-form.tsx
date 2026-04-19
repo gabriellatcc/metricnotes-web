@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { authFormCardClassName } from "@/routes/(auth)/_layout";
 import { useAuthLogin } from "@/generated/api/auth/auth";
 import { setAuthAccessToken } from "@/lib/api-client";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -30,12 +31,13 @@ export function LoginForm() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
 
   const login = useAuthLogin({
     mutation: {
       onSuccess: (res) => {
         const token = res.data.access_token;
-        if (token) setAuthAccessToken(token);
+        if (token) setAuthAccessToken(token, rememberMe);
         navigate({ to: "/" });
       },
     },
@@ -49,10 +51,10 @@ export function LoginForm() {
   const errorMessage = login.isError ? getErrorMessage(login.error) : null;
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className={authFormCardClassName("w-full max-w-md")}>
       <CardHeader className="space-y-2">
-        <CardTitle>Sign in</CardTitle>
-        <CardDescription>Email and password from your account.</CardDescription>
+        <CardTitle>Entrar</CardTitle>
+        <CardDescription>Email e senha da sua conta.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -73,7 +75,7 @@ export function LoginForm() {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <FieldLabel htmlFor="password">Senha</FieldLabel>
               <FieldContent>
                 <Input
                   id="password"
@@ -86,20 +88,33 @@ export function LoginForm() {
                 />
               </FieldContent>
             </Field>
+
+            <div className="flex items-center gap-2 pt-1">
+              <input
+                id="remember-me"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="size-4 shrink-0 rounded border border-input bg-background text-primary shadow-xs ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              <label htmlFor="remember-me" className="cursor-pointer text-sm leading-none text-muted-foreground">
+                Lembrar-me
+              </label>
+            </div>
           </FieldGroup>
 
           {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
 
           <Button type="submit" className="w-full" disabled={login.isPending}>
-            {login.isPending ? "Signing in…" : "Sign in"}
+            {login.isPending ? "Entrando…" : "Entrar"}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col gap-2 text-sm text-muted-foreground">
         <p>
-          No account?{" "}
+          Não tem uma conta?{" "}
           <Link to="/signup" className="text-foreground underline underline-offset-4">
-            Sign up
+            Criar conta
           </Link>
         </p>
       </CardFooter>

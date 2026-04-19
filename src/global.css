@@ -3,6 +3,61 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+/* Auth pages: floating gradient blobs */
+@keyframes auth-blob-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(18px, -22px, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-12px, 14px, 0) scale(0.96);
+  }
+}
+
+.auth-blob-1 {
+  animation: auth-blob-drift 14s ease-in-out infinite;
+}
+
+.auth-blob-2 {
+  animation: auth-blob-drift 18s ease-in-out infinite reverse;
+}
+
+.auth-blob-3 {
+  animation: auth-blob-drift 12s ease-in-out infinite 2s;
+}
+
+@keyframes auth-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-illustration svg {
+  animation: auth-fade-in-up 0.85s ease-out forwards;
+}
+
+@keyframes auth-float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.auth-float-slow {
+  animation: auth-float-y 5s ease-in-out infinite;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { authFormCardClassName } from "@/routes/(auth)/_layout";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useStoreUser } from "@/generated/api/user/user";
@@ -53,16 +54,16 @@ export function SignupForm() {
   const errorMessage = signup.isError ? getErrorMessage(signup.error) : null;
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className={authFormCardClassName("w-full max-w-md")}>
       <CardHeader className="space-y-2">
-        <CardTitle>Create account</CardTitle>
-        <CardDescription>Name, email, and password.</CardDescription>
+        <CardTitle>Criar conta</CardTitle>
+        <CardDescription>Nome, e-mail e senha.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="signup-name">Name</FieldLabel>
+              <FieldLabel htmlFor="signup-name">Nome</FieldLabel>
               <FieldContent>
                 <Input
                   id="signup-name"
@@ -77,7 +78,7 @@ export function SignupForm() {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="signup-email">Email</FieldLabel>
+              <FieldLabel htmlFor="signup-email">E-mail</FieldLabel>
               <FieldContent>
                 <Input
                   id="signup-email"
@@ -92,7 +93,7 @@ export function SignupForm() {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="signup-password">Password</FieldLabel>
+              <FieldLabel htmlFor="signup-password">Senha</FieldLabel>
               <FieldContent>
                 <Input
                   id="signup-password"
@@ -107,7 +108,7 @@ export function SignupForm() {
             </Field>
 
             <Field>
-              <FieldLabel htmlFor="signup-confirm-password">Confirm password</FieldLabel>
+              <FieldLabel htmlFor="signup-confirm-password">Confirmação de senha</FieldLabel>
               <FieldContent>
                 <Input
                   id="signup-confirm-password"
@@ -122,19 +123,19 @@ export function SignupForm() {
             </Field>
           </FieldGroup>
 
-          {mismatch ? <p className="text-sm text-destructive">Passwords do not match.</p> : null}
+          {mismatch ? <p className="text-sm text-destructive">As senhas não coincidem.</p> : null}
           {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
 
           <Button type="submit" className="w-full" disabled={signup.isPending || mismatch}>
-            {signup.isPending ? "Creating…" : "Sign up"}
+            {signup.isPending ? "Criando…" : "Criar conta"}
           </Button>
         </form>
       </CardContent>
       <CardFooter className="text-sm text-muted-foreground">
         <p>
-          Already have an account?{" "}
+          Já tem uma conta?{" "}
           <Link to="/login" className="text-foreground underline underline-offset-4">
-            Sign in
+            Entrar
           </Link>
         </p>
       </CardFooter>
