@@ -102,14 +102,19 @@ export default defineConfig({
     output: {
       target: "./src/generated/api/index.ts",
       schemas: "./src/generated/api/models",
-      client: "axios",
-      /** One folder per OpenAPI tag (e.g. `Auth/Auth.ts`, `User/User.ts`). */
+      client: "react-query",
+      httpClient: "axios",
+      /** One folder per OpenAPI tag (e.g. `auth/auth.ts`, `user/user.ts`). */
       mode: "tags-split",
       clean: true,
       override: {
         mutator: {
           path: "./src/lib/api-client.ts",
           name: "apiClient",
+        },
+        query: {
+          useMutation: true,
+          version: 5,
         },
       },
     },

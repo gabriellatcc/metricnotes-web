@@ -4,6 +4,25 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   TaskAssignType200,
   TaskAssignTypeBody,
@@ -26,113 +45,562 @@ import { apiClient } from '../../../lib/api-client';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
-  export const getTask = () => {
+
 /**
  * @summary Store Task
  */
-const taskStore = (
+export const taskStore = (
     taskStoreBody: TaskStoreBody,
- options?: SecondParameter<typeof apiClient<TaskStore200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskStore200>(
       {url: `/task/`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: taskStoreBody
+      data: taskStoreBody, signal
     },
       options);
     }
-  /**
+
+
+
+export const getTaskStoreMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskStore>>, TError,{data: TaskStoreBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskStore>>, TError,{data: TaskStoreBody}, TContext> => {
+
+const mutationKey = ['taskStore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskStore>>, {data: TaskStoreBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  taskStore(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskStoreMutationResult = NonNullable<Awaited<ReturnType<typeof taskStore>>>
+    export type TaskStoreMutationBody = TaskStoreBody
+    export type TaskStoreMutationError = unknown
+
+    /**
+ * @summary Store Task
+ */
+export const useTaskStore = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskStore>>, TError,{data: TaskStoreBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskStore>>,
+        TError,
+        {data: TaskStoreBody},
+        TContext
+      > => {
+      return useMutation(getTaskStoreMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Update Task
  */
-const taskUpdate = (
+export const taskUpdate = (
     id: string,
     taskUpdateBody: TaskUpdateBody,
- options?: SecondParameter<typeof apiClient<TaskUpdate200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskUpdate200>(
       {url: `/task/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
-      data: taskUpdateBody
+      data: taskUpdateBody, signal
     },
       options);
     }
-  /**
+
+
+
+export const getTaskUpdateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskUpdate>>, TError,{id: string;data: TaskUpdateBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskUpdate>>, TError,{id: string;data: TaskUpdateBody}, TContext> => {
+
+const mutationKey = ['taskUpdate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskUpdate>>, {id: string;data: TaskUpdateBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  taskUpdate(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof taskUpdate>>>
+    export type TaskUpdateMutationBody = TaskUpdateBody
+    export type TaskUpdateMutationError = unknown
+
+    /**
+ * @summary Update Task
+ */
+export const useTaskUpdate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskUpdate>>, TError,{id: string;data: TaskUpdateBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskUpdate>>,
+        TError,
+        {id: string;data: TaskUpdateBody},
+        TContext
+      > => {
+      return useMutation(getTaskUpdateMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Show Task
  */
-const taskShow = (
+export const taskShow = (
     id: string,
- options?: SecondParameter<typeof apiClient<TaskShow200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskShow200>(
-      {url: `/task/${id}`, method: 'GET'
+      {url: `/task/${id}`, method: 'GET', signal
     },
       options);
     }
-  /**
+
+
+
+
+export const getTaskShowQueryKey = (id: string,) => {
+    return [
+    `/task/${id}`
+    ] as const;
+    }
+
+
+export const getTaskShowQueryOptions = <TData = Awaited<ReturnType<typeof taskShow>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskShow>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getTaskShowQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof taskShow>>> = ({ signal }) => taskShow(id, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof taskShow>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type TaskShowQueryResult = NonNullable<Awaited<ReturnType<typeof taskShow>>>
+export type TaskShowQueryError = unknown
+
+
+export function useTaskShow<TData = Awaited<ReturnType<typeof taskShow>>, TError = unknown>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskShow>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof taskShow>>,
+          TError,
+          Awaited<ReturnType<typeof taskShow>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTaskShow<TData = Awaited<ReturnType<typeof taskShow>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskShow>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof taskShow>>,
+          TError,
+          Awaited<ReturnType<typeof taskShow>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTaskShow<TData = Awaited<ReturnType<typeof taskShow>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskShow>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Show Task
+ */
+
+export function useTaskShow<TData = Awaited<ReturnType<typeof taskShow>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskShow>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getTaskShowQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * @summary Delete Task
  */
-const taskDelete = (
+export const taskDelete = (
     id: string,
- options?: SecondParameter<typeof apiClient<TaskDelete200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskDelete200>(
-      {url: `/task/${id}`, method: 'DELETE'
+      {url: `/task/${id}`, method: 'DELETE', signal
     },
       options);
     }
-  /**
+
+
+
+export const getTaskDeleteMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskDelete>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskDelete>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['taskDelete'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskDelete>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  taskDelete(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof taskDelete>>>
+
+    export type TaskDeleteMutationError = unknown
+
+    /**
+ * @summary Delete Task
+ */
+export const useTaskDelete = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskDelete>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskDelete>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getTaskDeleteMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Index Task
  */
-const taskIndex = (
+export const taskIndex = (
     params?: TaskIndexParams,
- options?: SecondParameter<typeof apiClient<TaskIndex200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskIndex200>(
       {url: `/task`, method: 'GET',
-        params
+        params, signal
     },
       options);
     }
-  /**
+
+
+
+
+export const getTaskIndexQueryKey = (params?: TaskIndexParams,) => {
+    return [
+    `/task`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getTaskIndexQueryOptions = <TData = Awaited<ReturnType<typeof taskIndex>>, TError = unknown>(params?: TaskIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getTaskIndexQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof taskIndex>>> = ({ signal }) => taskIndex(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof taskIndex>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type TaskIndexQueryResult = NonNullable<Awaited<ReturnType<typeof taskIndex>>>
+export type TaskIndexQueryError = unknown
+
+
+export function useTaskIndex<TData = Awaited<ReturnType<typeof taskIndex>>, TError = unknown>(
+ params: undefined |  TaskIndexParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskIndex>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof taskIndex>>,
+          TError,
+          Awaited<ReturnType<typeof taskIndex>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTaskIndex<TData = Awaited<ReturnType<typeof taskIndex>>, TError = unknown>(
+ params?: TaskIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskIndex>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof taskIndex>>,
+          TError,
+          Awaited<ReturnType<typeof taskIndex>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTaskIndex<TData = Awaited<ReturnType<typeof taskIndex>>, TError = unknown>(
+ params?: TaskIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Index Task
+ */
+
+export function useTaskIndex<TData = Awaited<ReturnType<typeof taskIndex>>, TError = unknown>(
+ params?: TaskIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof taskIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getTaskIndexQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * @summary AssignType
  */
-const taskAssignType = (
+export const taskAssignType = (
     id: string,
     taskAssignTypeBody: TaskAssignTypeBody,
- options?: SecondParameter<typeof apiClient<TaskAssignType200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskAssignType200>(
       {url: `/task/${id}/type`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
-      data: taskAssignTypeBody
+      data: taskAssignTypeBody, signal
     },
       options);
     }
-  /**
+
+
+
+export const getTaskAssignTypeMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskAssignType>>, TError,{id: string;data: TaskAssignTypeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskAssignType>>, TError,{id: string;data: TaskAssignTypeBody}, TContext> => {
+
+const mutationKey = ['taskAssignType'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskAssignType>>, {id: string;data: TaskAssignTypeBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  taskAssignType(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskAssignTypeMutationResult = NonNullable<Awaited<ReturnType<typeof taskAssignType>>>
+    export type TaskAssignTypeMutationBody = TaskAssignTypeBody
+    export type TaskAssignTypeMutationError = unknown
+
+    /**
+ * @summary AssignType
+ */
+export const useTaskAssignType = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskAssignType>>, TError,{id: string;data: TaskAssignTypeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskAssignType>>,
+        TError,
+        {id: string;data: TaskAssignTypeBody},
+        TContext
+      > => {
+      return useMutation(getTaskAssignTypeMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Update Completion
  */
-const taskUpdateCompletion = (
+export const taskUpdateCompletion = (
     id: string,
- options?: SecondParameter<typeof apiClient<TaskUpdateCompletion200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskUpdateCompletion200>(
-      {url: `/task/${id}/complete`, method: 'PATCH'
+      {url: `/task/${id}/complete`, method: 'PATCH', signal
     },
       options);
     }
-  /**
+
+
+
+export const getTaskUpdateCompletionMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskUpdateCompletion>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskUpdateCompletion>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['taskUpdateCompletion'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskUpdateCompletion>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  taskUpdateCompletion(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskUpdateCompletionMutationResult = NonNullable<Awaited<ReturnType<typeof taskUpdateCompletion>>>
+
+    export type TaskUpdateCompletionMutationError = unknown
+
+    /**
+ * @summary Update Completion
+ */
+export const useTaskUpdateCompletion = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskUpdateCompletion>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskUpdateCompletion>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getTaskUpdateCompletionMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Update Postpone
  */
-const taskUpdatePostpone = (
+export const taskUpdatePostpone = (
     id: string,
     taskUpdatePostponeBody: TaskUpdatePostponeBody,
- options?: SecondParameter<typeof apiClient<TaskUpdatePostpone200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<TaskUpdatePostpone200>(
       {url: `/task/${id}/postpone`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
-      data: taskUpdatePostponeBody
+      data: taskUpdatePostponeBody, signal
     },
       options);
     }
-  return {taskStore,taskUpdate,taskShow,taskDelete,taskIndex,taskAssignType,taskUpdateCompletion,taskUpdatePostpone}};
-export type TaskStoreResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskStore']>>>
-export type TaskUpdateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskUpdate']>>>
-export type TaskShowResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskShow']>>>
-export type TaskDeleteResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskDelete']>>>
-export type TaskIndexResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskIndex']>>>
-export type TaskAssignTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskAssignType']>>>
-export type TaskUpdateCompletionResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskUpdateCompletion']>>>
-export type TaskUpdatePostponeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTask>['taskUpdatePostpone']>>>
+
+
+
+export const getTaskUpdatePostponeMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskUpdatePostpone>>, TError,{id: string;data: TaskUpdatePostponeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskUpdatePostpone>>, TError,{id: string;data: TaskUpdatePostponeBody}, TContext> => {
+
+const mutationKey = ['taskUpdatePostpone'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskUpdatePostpone>>, {id: string;data: TaskUpdatePostponeBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  taskUpdatePostpone(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskUpdatePostponeMutationResult = NonNullable<Awaited<ReturnType<typeof taskUpdatePostpone>>>
+    export type TaskUpdatePostponeMutationBody = TaskUpdatePostponeBody
+    export type TaskUpdatePostponeMutationError = unknown
+
+    /**
+ * @summary Update Postpone
+ */
+export const useTaskUpdatePostpone = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskUpdatePostpone>>, TError,{id: string;data: TaskUpdatePostponeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskUpdatePostpone>>,
+        TError,
+        {id: string;data: TaskUpdatePostponeBody},
+        TContext
+      > => {
+      return useMutation(getTaskUpdatePostponeMutationOptions(options), queryClient);
+    }

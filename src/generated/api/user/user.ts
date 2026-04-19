@@ -4,6 +4,25 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   StoreUser200,
   StoreUserBody,
@@ -21,76 +40,378 @@ import { apiClient } from '../../../lib/api-client';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
-  export const getUser = () => {
+
 /**
  * Método de criação/cadastro de usuário
  * @summary Store User
  */
-const storeUser = (
+export const storeUser = (
     storeUserBody: StoreUserBody,
- options?: SecondParameter<typeof apiClient<StoreUser200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<StoreUser200>(
       {url: `/api/user/`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: storeUserBody
+      data: storeUserBody, signal
     },
       options);
     }
-  /**
+
+
+
+export const getStoreUserMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof storeUser>>, TError,{data: StoreUserBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof storeUser>>, TError,{data: StoreUserBody}, TContext> => {
+
+const mutationKey = ['storeUser'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof storeUser>>, {data: StoreUserBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  storeUser(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type StoreUserMutationResult = NonNullable<Awaited<ReturnType<typeof storeUser>>>
+    export type StoreUserMutationBody = StoreUserBody
+    export type StoreUserMutationError = unknown
+
+    /**
+ * @summary Store User
+ */
+export const useStoreUser = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof storeUser>>, TError,{data: StoreUserBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof storeUser>>,
+        TError,
+        {data: StoreUserBody},
+        TContext
+      > => {
+      return useMutation(getStoreUserMutationOptions(options), queryClient);
+    }
+    /**
  * Listagem de usuários.
  * @summary Index User
  */
-const userIndex = (
+export const userIndex = (
     params?: UserIndexParams,
- options?: SecondParameter<typeof apiClient<UserIndex200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<UserIndex200>(
       {url: `/api/user/`, method: 'GET',
-        params
+        params, signal
     },
       options);
     }
-  /**
+
+
+
+
+export const getUserIndexQueryKey = (params?: UserIndexParams,) => {
+    return [
+    `/api/user/`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getUserIndexQueryOptions = <TData = Awaited<ReturnType<typeof userIndex>>, TError = unknown>(params?: UserIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getUserIndexQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof userIndex>>> = ({ signal }) => userIndex(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof userIndex>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type UserIndexQueryResult = NonNullable<Awaited<ReturnType<typeof userIndex>>>
+export type UserIndexQueryError = unknown
+
+
+export function useUserIndex<TData = Awaited<ReturnType<typeof userIndex>>, TError = unknown>(
+ params: undefined |  UserIndexParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof userIndex>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof userIndex>>,
+          TError,
+          Awaited<ReturnType<typeof userIndex>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUserIndex<TData = Awaited<ReturnType<typeof userIndex>>, TError = unknown>(
+ params?: UserIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userIndex>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof userIndex>>,
+          TError,
+          Awaited<ReturnType<typeof userIndex>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUserIndex<TData = Awaited<ReturnType<typeof userIndex>>, TError = unknown>(
+ params?: UserIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Index User
+ */
+
+export function useUserIndex<TData = Awaited<ReturnType<typeof userIndex>>, TError = unknown>(
+ params?: UserIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getUserIndexQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * Atualiza o usuário.
  * @summary Update User
  */
-const userUpdate = (
+export const userUpdate = (
     id: string,
     userUpdateBody: UserUpdateBody,
- options?: SecondParameter<typeof apiClient<UserUpdate200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<UserUpdate200>(
       {url: `/api/user/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
-      data: userUpdateBody
+      data: userUpdateBody, signal
     },
       options);
     }
-  /**
+
+
+
+export const getUserUpdateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userUpdate>>, TError,{id: string;data: UserUpdateBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof userUpdate>>, TError,{id: string;data: UserUpdateBody}, TContext> => {
+
+const mutationKey = ['userUpdate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof userUpdate>>, {id: string;data: UserUpdateBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  userUpdate(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UserUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof userUpdate>>>
+    export type UserUpdateMutationBody = UserUpdateBody
+    export type UserUpdateMutationError = unknown
+
+    /**
+ * @summary Update User
+ */
+export const useUserUpdate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userUpdate>>, TError,{id: string;data: UserUpdateBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof userUpdate>>,
+        TError,
+        {id: string;data: UserUpdateBody},
+        TContext
+      > => {
+      return useMutation(getUserUpdateMutationOptions(options), queryClient);
+    }
+    /**
  * Exclui o usuário
  * @summary Delete User
  */
-const userDelete = (
+export const userDelete = (
     id: string,
- options?: SecondParameter<typeof apiClient<UserDelete200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<UserDelete200>(
-      {url: `/api/user/${id}`, method: 'DELETE'
+      {url: `/api/user/${id}`, method: 'DELETE', signal
     },
       options);
     }
-  /**
+
+
+
+export const getUserDeleteMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userDelete>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof userDelete>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['userDelete'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof userDelete>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  userDelete(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UserDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof userDelete>>>
+
+    export type UserDeleteMutationError = unknown
+
+    /**
+ * @summary Delete User
+ */
+export const useUserDelete = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userDelete>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof userDelete>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getUserDeleteMutationOptions(options), queryClient);
+    }
+    /**
  * Mostra os dados de um usuário
  * @summary Show User
  */
-const userShow = (
+export const userShow = (
     id: string,
- options?: SecondParameter<typeof apiClient<UserShow200>>,) => {
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
       return apiClient<UserShow200>(
-      {url: `/api/user/${id}`, method: 'GET'
+      {url: `/api/user/${id}`, method: 'GET', signal
     },
       options);
     }
-  return {storeUser,userIndex,userUpdate,userDelete,userShow}};
-export type StoreUserResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUser>['storeUser']>>>
-export type UserIndexResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUser>['userIndex']>>>
-export type UserUpdateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUser>['userUpdate']>>>
-export type UserDeleteResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUser>['userDelete']>>>
-export type UserShowResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUser>['userShow']>>>
+
+
+
+
+export const getUserShowQueryKey = (id: string,) => {
+    return [
+    `/api/user/${id}`
+    ] as const;
+    }
+
+
+export const getUserShowQueryOptions = <TData = Awaited<ReturnType<typeof userShow>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userShow>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getUserShowQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof userShow>>> = ({ signal }) => userShow(id, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof userShow>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type UserShowQueryResult = NonNullable<Awaited<ReturnType<typeof userShow>>>
+export type UserShowQueryError = unknown
+
+
+export function useUserShow<TData = Awaited<ReturnType<typeof userShow>>, TError = unknown>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof userShow>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof userShow>>,
+          TError,
+          Awaited<ReturnType<typeof userShow>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUserShow<TData = Awaited<ReturnType<typeof userShow>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userShow>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof userShow>>,
+          TError,
+          Awaited<ReturnType<typeof userShow>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUserShow<TData = Awaited<ReturnType<typeof userShow>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userShow>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Show User
+ */
+
+export function useUserShow<TData = Awaited<ReturnType<typeof userShow>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof userShow>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getUserShowQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
