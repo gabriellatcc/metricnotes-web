@@ -58,6 +58,96 @@
   animation: auth-float-y 5s ease-in-out infinite;
 }
 
+/* Marketing home: scroll-triggered reveals */
+.scroll-reveal {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal--fade-up {
+  transform: translate3d(0, 1.75rem, 0);
+}
+
+.scroll-reveal--fade-in {
+  transform: none;
+}
+
+.scroll-reveal--slide-left {
+  transform: translate3d(-1.5rem, 0, 0);
+}
+
+.scroll-reveal--zoom {
+  transform: scale(0.96);
+}
+
+.scroll-reveal--visible.scroll-reveal--fade-up,
+.scroll-reveal--visible.scroll-reveal--fade-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.scroll-reveal--visible.scroll-reveal--slide-left {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.scroll-reveal--visible.scroll-reveal--zoom {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+}
+
+/* Hero: soft floating orbs (always animates; disabled with reduced motion via separate class if needed) */
+@keyframes home-orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0) scale(1.03);
+  }
+}
+
+@keyframes home-gradient-shift {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+.home-hero-orb {
+  animation: home-orb-float 12s ease-in-out infinite;
+}
+
+.home-hero-orb-delay {
+  animation-delay: -4s;
+}
+
+.home-hero-glow {
+  animation: home-gradient-shift 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-orb,
+  .home-hero-glow {
+    animation: none;
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

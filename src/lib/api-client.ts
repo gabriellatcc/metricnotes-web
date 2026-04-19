@@ -24,6 +24,12 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+function notifyAuthStorageChanged() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("metricnotes-auth"));
+  }
+}
+
 /**
  * @param rememberMe — if true, persist in `localStorage`; otherwise session-only (`sessionStorage`).
  */
@@ -33,13 +39,18 @@ export function setAuthAccessToken(token: string | null, rememberMe = true) {
   sessionStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
   localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
 
-  if (!token) return;
+  if (!token) {
+    notifyAuthStorageChanged();
+    return;
+  }
 
   if (rememberMe) {
     localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
   } else {
     sessionStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
   }
+
+  notifyAuthStorageChanged();
 }
 
 export const apiClient = async <T>(

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authFormCardClassName } from "@/routes/(auth)/_layout";
+import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { useAuthLogin } from "@/generated/api/auth/auth";
 import { setAuthAccessToken } from "@/lib/api-client";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -38,7 +38,7 @@ export function LoginForm() {
       onSuccess: (res) => {
         const token = res.data.access_token;
         if (token) setAuthAccessToken(token, rememberMe);
-        navigate({ to: "/" });
+        navigate({ to: "/app" });
       },
     },
   });

@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { authFormCardClassName } from "@/routes/(auth)/_layout";
+import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useStoreUser } from "@/generated/api/user/user";
