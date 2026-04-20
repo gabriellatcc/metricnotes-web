@@ -16,9 +16,9 @@ function RootLayout() {
       <Toaster
         position="top-right"
         richColors
-        closeButton
+        closeButton={false}
         expand={false}
-        duration={4800}
+        duration={5200}
         className="z-[100]"
       />
       {!hideHeader ? <SiteHeader /> : null}

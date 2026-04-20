@@ -1,11 +1,19 @@
 import { useCallback, useSyncExternalStore } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuthMe } from "@/generated/api/auth/auth";
 import { getAuthAccessToken, setAuthAccessToken } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ClipboardList, Settings } from "lucide-react";
+import { ChevronDown, ClipboardList, Settings } from "lucide-react";
 
 function subscribeToken(callback: () => void) {
   window.addEventListener("storage", callback);
@@ -76,34 +84,52 @@ export function SiteHeader() {
                 <ClipboardList className="size-4" aria-hidden />
                 Tarefas
               </Link>
-              <Link
-                to="/settings"
-                className={cn(
-                  buttonVariants({ variant: "ghost", size: "sm" }),
-                  "gap-1.5",
-                  pathname === "/settings" && "bg-accent text-accent-foreground",
-                )}
-              >
-                <Settings className="size-4" aria-hidden />
-                Configurações
-              </Link>
             </nav>
           ) : null}
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {loggedIn ? (
-            <>
-              <div className="hidden max-w-[160px] flex-col text-right text-xs leading-tight sm:flex">
-                <span className="truncate font-medium text-foreground">
-                  {user?.name ?? (me.isLoading ? "…" : "Conta")}
-                </span>
-                <span className="truncate text-muted-foreground">{user?.email ?? ""}</span>
-              </div>
-              <Button type="button" variant="outline" size="sm" onClick={logout}>
-                Sair
-              </Button>
-            </>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="max-w-[min(100%,220px)] gap-1.5"
+                  aria-label="Menu da conta"
+                >
+                  <span className="truncate">{user?.name ?? (me.isLoading ? "…" : "Conta")}</span>
+                  <ChevronDown className="size-3.5 shrink-0 opacity-70" aria-hidden />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {user?.email ? (
+                  <>
+                    <DropdownMenuLabel className="font-normal">
+                      <span className="block truncate text-foreground">{user.name}</span>
+                      <span className="block truncate text-xs font-normal text-muted-foreground">
+                        {user.email}
+                      </span>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                  </>
+                ) : null}
+                <DropdownMenuItem asChild>
+                  <Link to="/settings" className="flex cursor-pointer items-center gap-2">
+                    <Settings className="size-4 opacity-70" aria-hidden />
+                    Configurações
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                  onSelect={() => logout()}
+                >
+                  Sair
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <>
               <Link
@@ -131,16 +157,6 @@ export function SiteHeader() {
               )}
             >
               Tarefas
-            </Link>
-            <Link
-              to="/settings"
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "sm" }),
-                "shrink-0",
-                pathname === "/settings" && "bg-accent",
-              )}
-            >
-              Configurações
             </Link>
           </div>
         </div>
