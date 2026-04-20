@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 import type { WeekdayIndex, WeeklyAnalyticsData } from "./types";
 
-const WEEKDAY_LABELS: readonly string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WEEKDAY_LABELS: readonly string[] = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
 
 function cellKey(day: WeekdayIndex, row: number) {
   return `${day}-${row}`;
@@ -43,17 +43,17 @@ export function HeatmapChart({ data }: HeatmapChartProps) {
   const rows = data.timeBlocks.length;
 
   return (
-    <div className="flex h-full min-h-[260px] flex-col rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
-      <div className="mb-3">
-        <h3 className="text-sm font-semibold">Completion density</h3>
-        <p className="text-xs text-muted-foreground">Day of week × time block</p>
+    <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
+      <div className="mb-2">
+        <h3 className="text-sm font-semibold">Densidade de conclusões</h3>
+        <p className="text-xs text-muted-foreground">Dia da semana × faixa horária</p>
       </div>
       <div className="flex min-h-0 flex-1 flex-col overflow-x-auto">
         <div
-          className="grid w-full min-w-[320px] gap-1"
+          className="grid w-full min-w-[300px] gap-0.5 sm:gap-1"
           style={{
-            gridTemplateColumns: `minmax(4.5rem,5.5rem) repeat(7, minmax(0,1fr))`,
-            gridTemplateRows: `auto repeat(${rows}, minmax(1.75rem,2rem))`,
+            gridTemplateColumns: `minmax(4rem,5rem) repeat(7, minmax(0,1fr))`,
+            gridTemplateRows: `auto repeat(${rows}, minmax(1.25rem,1.5rem))`,
           }}
         >
           <div />
@@ -75,7 +75,7 @@ export function HeatmapChart({ data }: HeatmapChartProps) {
                 return (
                   <div
                     key={cellKey(day, row)}
-                    title={`${WEEKDAY_LABELS[day]} ${block}: ${v} tasks`}
+                    title={`${WEEKDAY_LABELS[day]} ${block}: ${v} tarefas`}
                     className={cn("rounded-sm transition-colors", intensityClass(v, max))}
                   />
                 );
@@ -83,15 +83,15 @@ export function HeatmapChart({ data }: HeatmapChartProps) {
             </div>
           ))}
         </div>
-        <div className="mt-3 flex items-center justify-end gap-2 text-[10px] text-muted-foreground">
-          <span>Lower</span>
+        <div className="mt-2 flex items-center justify-end gap-2 text-[10px] text-muted-foreground">
+          <span>Menor</span>
           <div className="flex gap-0.5">
-            <span className="h-3 w-5 rounded-sm bg-muted" />
-            <span className="h-3 w-5 rounded-sm bg-primary/40" />
-            <span className="h-3 w-5 rounded-sm bg-primary/70" />
-            <span className="h-3 w-5 rounded-sm bg-primary" />
+            <span className="h-2.5 w-4 rounded-sm bg-muted" />
+            <span className="h-2.5 w-4 rounded-sm bg-primary/40" />
+            <span className="h-2.5 w-4 rounded-sm bg-primary/70" />
+            <span className="h-2.5 w-4 rounded-sm bg-primary" />
           </div>
-          <span>Higher</span>
+          <span>Maior</span>
         </div>
       </div>
     </div>

@@ -43,13 +43,13 @@ export const MOCK_WEEKLY_ANALYTICS: WeeklyAnalyticsData = {
     { dayIndex: 6, timeBlockIndex: 4, completedCount: 2 },
   ],
   tasksPerWeekday: [
-    { dayIndex: 0, shortLabel: "Mon", totalCompleted: 22 },
-    { dayIndex: 1, shortLabel: "Tue", totalCompleted: 35 },
-    { dayIndex: 2, shortLabel: "Wed", totalCompleted: 33 },
-    { dayIndex: 3, shortLabel: "Thu", totalCompleted: 35 },
-    { dayIndex: 4, shortLabel: "Fri", totalCompleted: 33 },
-    { dayIndex: 5, shortLabel: "Sat", totalCompleted: 23 },
-    { dayIndex: 6, shortLabel: "Sun", totalCompleted: 12 },
+    { dayIndex: 0, shortLabel: "Seg", totalCompleted: 22 },
+    { dayIndex: 1, shortLabel: "Ter", totalCompleted: 35 },
+    { dayIndex: 2, shortLabel: "Qua", totalCompleted: 33 },
+    { dayIndex: 3, shortLabel: "Qui", totalCompleted: 35 },
+    { dayIndex: 4, shortLabel: "Sex", totalCompleted: 33 },
+    { dayIndex: 5, shortLabel: "Sáb", totalCompleted: 23 },
+    { dayIndex: 6, shortLabel: "Dom", totalCompleted: 12 },
   ],
   distributionByTimeBlock: [
     { blockId: "06-09", label: "06–09", totalCompleted: 18 },
@@ -61,12 +61,12 @@ export const MOCK_WEEKLY_ANALYTICS: WeeklyAnalyticsData = {
   summary: {
     totalTasksWeek: 193,
     dailyAverage: 27.6,
-    bestDay: { label: "Tuesday", total: 35 },
+    bestDay: { label: "Terça-feira", total: 35 },
     bestTimeBlock: { label: "09:00–12:00", total: 65 },
     insights: [
-      "Mid-morning (09–12) concentrates the highest completion volume — protect that window for deep work.",
-      "Tuesday and Thursday are your strongest weekdays; consider scheduling reviews on lighter days.",
-      "Weekend activity is lower; batch small tasks on Saturday evening if you need to clear backlog.",
+      "O meio da manhã (09–12) concentra o maior volume de conclusões — proteja essa janela para trabalho focado.",
+      "Terça e quinta são seus dias mais fortes; considere agendar revisões nos dias mais leves.",
+      "O fim de semana é mais tranquilo; agrupe tarefas pequenas no sábado à noite se precisar zerar o backlog.",
     ],
   },
 };
@@ -79,7 +79,7 @@ async function fetchWeeklyAnalytics(): Promise<WeeklyAnalyticsData> {
 const QUERY_KEY = ["weekly-analytics"] as const;
 
 /**
- * Mock API hook — swap `queryFn` for a real `apiClient` call when the endpoint exists.
+ * Hook de API de exemplo — troque `queryFn` por uma chamada real ao `apiClient` quando o endpoint existir.
  */
 export function useWeeklyAnalytics() {
   return useQuery({

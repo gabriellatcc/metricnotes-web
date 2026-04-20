@@ -75,7 +75,7 @@ function MarketingHomePage() {
                 body: "Menos fricção entre pensamento e ação—seu backlog fica honesto e atualizado.",
               },
               {
-                title: "Veja o big picture",
+                title: "Veja o panorama geral",
                 desc: "Prioridades, prazos e status em um olhar—sem muitas planilhas.",
                 body: "Faça decisões com contexto: o que está vencendo, o que está bloqueado, o que pode esperar.",
               },

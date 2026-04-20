@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { Loader2, Moon, Sun } from "lucide-react";
+import { ArrowLeft, Loader2, Moon, Sun } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -171,7 +171,17 @@ function SettingsPage() {
     <main className="min-h-full flex-1 bg-background">
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8 border-b border-border pb-6">
-          <div>
+          <div className="relative">
+            <Link
+              to="/dashboard"
+              aria-label="Voltar ao painel"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "relative z-10 mb-3 inline-flex size-9 items-center justify-center rounded-full p-0 sm:absolute sm:mb-0 sm:left-0 sm:top-1.5 sm:-translate-x-[calc(100%+0.75rem)]",
+              )}
+            >
+              <ArrowLeft className="size-4" />
+            </Link>
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">Configurações</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Gerencie as informações da sua conta, senha e preferências de tema.
@@ -354,10 +364,6 @@ function SettingsPage() {
               </Button>
             </div>
           </section>
-
-          <Link to="/tasks" className={cn(buttonVariants({ variant: "outline" }), "w-fit rounded-full")}>
-            Voltar às tarefas
-          </Link>
         </div>
       </div>
     </main>

@@ -34,10 +34,10 @@ export function WeeklyBarChart({ data }: WeeklyBarChartProps) {
   }));
 
   return (
-    <div className="flex h-full min-h-[280px] flex-col rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
-      <div className="mb-2 shrink-0">
-        <h3 className="text-sm font-semibold">Tasks completed by day</h3>
-        <p className="text-xs text-muted-foreground">Monday → Sunday</p>
+    <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
+      <div className="mb-1.5 shrink-0">
+        <h3 className="text-sm font-semibold">Tarefas concluídas por dia</h3>
+        <p className="text-xs text-muted-foreground">Segunda a domingo</p>
       </div>
       <div className="min-h-0 w-full flex-1 [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground">
         <ResponsiveContainer width="100%" height="100%">
@@ -60,7 +60,7 @@ export function WeeklyBarChart({ data }: WeeklyBarChartProps) {
                 color: CHART.tooltipFg,
                 boxShadow: "var(--shadow-sm)",
               }}
-              formatter={(value: number | undefined) => [`${value ?? 0} tasks`, "Completed"]}
+              formatter={(value: number | undefined) => [`${value ?? 0} tarefas`, "Concluídas"]}
             />
             <Bar dataKey="total" fill={CHART.bar} radius={[4, 4, 0, 0]} maxBarSize={40} />
           </BarChart>

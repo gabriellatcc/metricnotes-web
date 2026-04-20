@@ -33,10 +33,10 @@ export function TaskDistributionAreaChart({ data }: TaskDistributionAreaChartPro
   }));
 
   return (
-    <div className="flex h-full min-h-[280px] flex-col rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
-      <div className="mb-2 shrink-0">
-        <h3 className="text-sm font-semibold">Task volume by time block</h3>
-        <p className="text-xs text-muted-foreground">Aggregated across the week</p>
+    <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
+      <div className="mb-1.5 shrink-0">
+        <h3 className="text-sm font-semibold">Volume de tarefas por faixa horária</h3>
+        <p className="text-xs text-muted-foreground">Agregado ao longo da semana</p>
       </div>
       <div className="min-h-0 w-full flex-1 [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground">
         <ResponsiveContainer width="100%" height="100%">
@@ -64,7 +64,7 @@ export function TaskDistributionAreaChart({ data }: TaskDistributionAreaChartPro
                 color: CHART.tooltipFg,
                 boxShadow: "var(--shadow-sm)",
               }}
-              formatter={(value: number | undefined) => [`${value ?? 0} tasks`, "Volume"]}
+              formatter={(value: number | undefined) => [`${value ?? 0} tarefas`, "Volume"]}
             />
             <Area
               type="monotone"

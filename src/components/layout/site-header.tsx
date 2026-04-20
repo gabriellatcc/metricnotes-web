@@ -64,10 +64,10 @@ export function SiteHeader() {
           {showMarketingNav ? (
             <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
               <a href="/#features" className="hover:text-foreground">
-                Features
+                Funcionalidades
               </a>
               <a href="/#why" className="hover:text-foreground">
-                Why us
+                Por que nós
               </a>
             </nav>
           ) : null}
@@ -82,7 +82,7 @@ export function SiteHeader() {
                 )}
               >
                 <BarChart3 className="size-4" aria-hidden />
-                Dashboard
+                Painel
               </Link>
               <Link
                 to="/tasks"
@@ -154,10 +154,10 @@ export function SiteHeader() {
                 to="/login"
                 className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
               >
-                Login
+                Entrar
               </Link>
               <Link to="/signup" className={cn(buttonVariants({ size: "sm" }))}>
-                Create account
+                Criar conta
               </Link>
             </>
           )}
@@ -174,7 +174,7 @@ export function SiteHeader() {
                 pathname === "/dashboard" && "bg-accent",
               )}
             >
-              Dashboard
+              Painel
             </Link>
             <Link
               to="/tasks"

@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Two-letter initials for avatars and account chips. */
+/** Iniciais de duas letras para avatares e identificação da conta. */
 export function initialsFromName(name: string | undefined): string {
   const trimmed = name?.trim();
   if (!trimmed) return "?";

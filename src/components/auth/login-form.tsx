@@ -54,13 +54,13 @@ export function LoginForm() {
     <Card className={authFormCardClassName("w-full max-w-md")}>
       <CardHeader className="space-y-2">
         <CardTitle>Entrar</CardTitle>
-        <CardDescription>Email e senha da sua conta.</CardDescription>
+        <CardDescription>E-mail e senha da sua conta.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <FieldLabel htmlFor="email">E-mail</FieldLabel>
               <FieldContent>
                 <Input
                   id="email"

@@ -135,30 +135,6 @@ function TaskCard({ task, busy, onToggleComplete, onEdit, onDelete }: TaskCardPr
       <div className="flex shrink-0 flex-col items-end justify-between gap-2 pl-1">
         <div className="flex items-center gap-1.5">
           <PriorityDots value={task.priority} />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
-            disabled={busy}
-            onClick={() => onEdit(task)}
-            aria-label="Editar tarefa"
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
-            disabled={busy}
-            onClick={() => {
-              if (window.confirm("Excluir esta tarefa?")) onDelete(task);
-            }}
-            aria-label="Excluir tarefa"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
         </div>
 
         <details ref={menuRef} className="relative text-right">
