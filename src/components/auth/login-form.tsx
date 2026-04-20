@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -15,17 +14,8 @@ import { Input } from "@/components/ui/input";
 import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { useAuthLogin } from "@/generated/api/auth/auth";
 import { setAuthAccessToken } from "@/lib/api-client";
+import { toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
 import { Link, useNavigate } from "@tanstack/react-router";
-
-function getErrorMessage(error: unknown): string {
-  if (axios.isAxiosError(error)) {
-    const data = error.response?.data as { message?: unknown } | undefined;
-    if (typeof data?.message === "string") return data.message;
-    return error.message;
-  }
-  if (error instanceof Error) return error.message;
-  return "Request failed.";
-}
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -36,9 +26,21 @@ export function LoginForm() {
   const login = useAuthLogin({
     mutation: {
       onSuccess: (res) => {
-        const token = res.data.access_token;
-        if (token) setAuthAccessToken(token, rememberMe);
-        navigate({ to: "/app" });
+        const token =
+          res.data.authorization?.access_token ?? res.data.access_token;
+        if (!token) {
+          toastApiError(
+            new Error("Resposta sem token de acesso."),
+            "Login incompleto",
+          );
+          return;
+        }
+        setAuthAccessToken(token, rememberMe);
+        toastApiSuccessFromBody(res, "Sessão iniciada.");
+        navigate({ to: "/tasks" });
+      },
+      onError: (error) => {
+        toastApiError(error);
       },
     },
   });
@@ -47,8 +49,6 @@ export function LoginForm() {
     event.preventDefault();
     login.mutate({ data: { email, password } });
   };
-
-  const errorMessage = login.isError ? getErrorMessage(login.error) : null;
 
   return (
     <Card className={authFormCardClassName("w-full max-w-md")}>
@@ -102,8 +102,6 @@ export function LoginForm() {
               </label>
             </div>
           </FieldGroup>
-
-          {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
 
           <Button type="submit" className="w-full" disabled={login.isPending}>
             {login.isPending ? "Entrando…" : "Entrar"}

@@ -53,6 +53,13 @@ export function setAuthAccessToken(token: string | null, rememberMe = true) {
   notifyAuthStorageChanged();
 }
 
+export class ApiEmptyResponseError extends Error {
+  constructor(message = "O servidor não retornou dados.") {
+    super(message);
+    this.name = "ApiEmptyResponseError";
+  }
+}
+
 export const apiClient = async <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,
@@ -66,5 +73,16 @@ export const apiClient = async <T>(
     },
   });
 
-  return response.data as T;
+  const { data, status } = response;
+
+  // No JSON body (e.g. 204) — let callers handle `undefined` if needed
+  if (status === 204 || status === 205) {
+    return data as T;
+  }
+
+  if (data === undefined || data === null) {
+    throw new ApiEmptyResponseError();
+  }
+
+  return data as T;
 };

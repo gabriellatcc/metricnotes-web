@@ -1,15 +1,18 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
+import { TasksPage } from "@/components/tasks/tasks-page";
 import { getAuthAccessToken } from "@/lib/api-client";
 
-/** Legacy `/app` URL: send authenticated users to tasks. */
-export const Route = createFileRoute("/app")({
+export const Route = createFileRoute("/tasks")({
   beforeLoad: () => {
     if (typeof window === "undefined") return;
     if (!getAuthAccessToken()) {
       throw redirect({ to: "/login" });
     }
-    throw redirect({ to: "/tasks", replace: true });
   },
-  component: () => null,
+  component: TasksRoute,
 });
+
+function TasksRoute() {
+  return <TasksPage />;
+}

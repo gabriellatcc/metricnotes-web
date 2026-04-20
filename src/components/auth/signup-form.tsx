@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -14,20 +13,8 @@ import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useStoreUser } from "@/generated/api/user/user";
+import { toastApiError, toastApiSuccessFromBody, toastApiWarning } from "@/lib/api-toast";
 import { Link, useNavigate } from "@tanstack/react-router";
-
-function getErrorMessage(error: unknown): string {
-  if (axios.isAxiosError(error)) {
-    const data = error.response?.data as { message?: unknown } | undefined;
-    if (typeof data?.message === "string") return data.message;
-    if (data && typeof data === "object" && "errors" in data) {
-      return "Validation failed. Check your input.";
-    }
-    return error.message;
-  }
-  if (error instanceof Error) return error.message;
-  return "Request failed.";
-}
 
 export function SignupForm() {
   const navigate = useNavigate();
@@ -38,20 +25,24 @@ export function SignupForm() {
 
   const signup = useStoreUser({
     mutation: {
-      onSuccess: () => {
+      onSuccess: (res) => {
+        toastApiSuccessFromBody(res, "Conta criada. Faça login.");
         navigate({ to: "/login" });
+      },
+      onError: (error) => {
+        toastApiError(error);
       },
     },
   });
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (password !== confirmPassword) return;
+    if (password !== confirmPassword) {
+      toastApiWarning("As senhas não coincidem.");
+      return;
+    }
     signup.mutate({ data: { name, email, password } });
   };
-
-  const mismatch = password !== confirmPassword && confirmPassword.length > 0;
-  const errorMessage = signup.isError ? getErrorMessage(signup.error) : null;
 
   return (
     <Card className={authFormCardClassName("w-full max-w-md")}>
@@ -123,10 +114,7 @@ export function SignupForm() {
             </Field>
           </FieldGroup>
 
-          {mismatch ? <p className="text-sm text-destructive">As senhas não coincidem.</p> : null}
-          {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
-
-          <Button type="submit" className="w-full" disabled={signup.isPending || mismatch}>
+          <Button type="submit" className="w-full" disabled={signup.isPending}>
             {signup.isPending ? "Criando…" : "Criar conta"}
           </Button>
         </form>
