@@ -51,7 +51,7 @@ export const taskTypeStore = (
 
 
       return apiClient<TaskTypeStore200>(
-      {url: `/task-type`, method: 'POST',
+      {url: `/api/task-type`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: taskTypeStoreBody, signal
     },
@@ -114,7 +114,7 @@ export const taskTypeIndex = (
 
 
       return apiClient<TaskTypeIndex200>(
-      {url: `/task-type`, method: 'GET',
+      {url: `/api/task-type`, method: 'GET',
         params, signal
     },
       options);
@@ -125,7 +125,7 @@ export const taskTypeIndex = (
 
 export const getTaskTypeIndexQueryKey = (params?: TaskTypeIndexParams,) => {
     return [
-    `/task-type`, ...(params ? [params] : [])
+    `/api/task-type`, ...(params ? [params] : [])
     ] as const;
     }
 
@@ -206,7 +206,7 @@ export const taskTypeUpdate = (
 
 
       return apiClient<TaskTypeUpdate200>(
-      {url: `/task-type/${id}`, method: 'PUT',
+      {url: `/api/task-type/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: taskTypeUpdateBody, signal
     },
@@ -269,7 +269,7 @@ export const taskTypeShow = (
 
 
       return apiClient<TaskTypeShow200>(
-      {url: `/task-type/${id}`, method: 'GET', signal
+      {url: `/api/task-type/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -279,7 +279,7 @@ export const taskTypeShow = (
 
 export const getTaskTypeShowQueryKey = (id: string,) => {
     return [
-    `/task-type/${id}`
+    `/api/task-type/${id}`
     ] as const;
     }
 
@@ -359,7 +359,7 @@ export const taskTypeDelete = (
 
 
       return apiClient<TaskTypeDelete200>(
-      {url: `/task-type/${id}`, method: 'DELETE', signal
+      {url: `/api/task-type/${id}`, method: 'DELETE', signal
     },
       options);
     }

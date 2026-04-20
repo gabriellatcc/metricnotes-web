@@ -113,7 +113,7 @@ export const authMe = (
 
 
       return apiClient<AuthMe200>(
-      {url: `/auth/me`, method: 'GET', signal
+      {url: `/api/auth/me`, method: 'GET', signal
     },
       options);
     }
@@ -123,7 +123,7 @@ export const authMe = (
 
 export const getAuthMeQueryKey = () => {
     return [
-    `/auth/me`
+    `/api/auth/me`
     ] as const;
     }
 
@@ -204,7 +204,7 @@ export const authRefreshToken = (
 
 
       return apiClient<AuthRefreshToken200>(
-      {url: `/auth/refresh-token`, method: 'POST',
+      {url: `/api/auth/refresh-token`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: authRefreshTokenBody, signal
     },

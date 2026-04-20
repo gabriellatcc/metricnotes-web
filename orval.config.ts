@@ -84,10 +84,28 @@ function normalizeInvalidSchemaKeys(spec: Record<string, unknown>): Record<strin
   return doc;
 }
 
+/**
+ * Swagger mixes `/api/auth/login` with `/auth/me` and `/task` — Laravel serves everything under `/api/*`.
+ * Normalize so generated clients always hit `/api/...` (required for routing + CORS `paths: api/*`).
+ */
+function prefixApiPaths(spec: Record<string, unknown>): void {
+  const paths = spec.paths as Record<string, unknown> | undefined;
+  if (!paths) return;
+  const next: Record<string, unknown> = {};
+  for (const [path, def] of Object.entries(paths)) {
+    const normalized =
+      path === "/api" || path.startsWith("/api/") ? path : `/api${path.startsWith("/") ? path : `/${path}`}`;
+    next[normalized] = def;
+  }
+  spec.paths = next;
+}
+
 function prepareOpenApiFromSwaggerPath(swaggerPath: string): Record<string, unknown> {
   const raw = JSON.parse(readFileSync(swaggerPath, "utf8")) as Record<string, unknown>;
   upgradeNullOnlyTypes(raw);
-  return normalizeInvalidSchemaKeys(raw);
+  const doc = normalizeInvalidSchemaKeys(raw);
+  prefixApiPaths(doc);
+  return doc;
 }
 
 const openApiSpec = prepareOpenApiFromSwaggerPath(join(__dirname, "swagger.json"));

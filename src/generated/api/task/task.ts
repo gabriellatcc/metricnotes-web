@@ -56,7 +56,7 @@ export const taskStore = (
 
 
       return apiClient<TaskStore200>(
-      {url: `/task/`, method: 'POST',
+      {url: `/api/task/`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: taskStoreBody, signal
     },
@@ -120,7 +120,7 @@ export const taskUpdate = (
 
 
       return apiClient<TaskUpdate200>(
-      {url: `/task/${id}`, method: 'PUT',
+      {url: `/api/task/${id}`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
       data: taskUpdateBody, signal
     },
@@ -183,7 +183,7 @@ export const taskShow = (
 
 
       return apiClient<TaskShow200>(
-      {url: `/task/${id}`, method: 'GET', signal
+      {url: `/api/task/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -193,7 +193,7 @@ export const taskShow = (
 
 export const getTaskShowQueryKey = (id: string,) => {
     return [
-    `/task/${id}`
+    `/api/task/${id}`
     ] as const;
     }
 
@@ -273,7 +273,7 @@ export const taskDelete = (
 
 
       return apiClient<TaskDelete200>(
-      {url: `/task/${id}`, method: 'DELETE', signal
+      {url: `/api/task/${id}`, method: 'DELETE', signal
     },
       options);
     }
@@ -334,7 +334,7 @@ export const taskIndex = (
 
 
       return apiClient<TaskIndex200>(
-      {url: `/task`, method: 'GET',
+      {url: `/api/task`, method: 'GET',
         params, signal
     },
       options);
@@ -345,7 +345,7 @@ export const taskIndex = (
 
 export const getTaskIndexQueryKey = (params?: TaskIndexParams,) => {
     return [
-    `/task`, ...(params ? [params] : [])
+    `/api/task`, ...(params ? [params] : [])
     ] as const;
     }
 
@@ -426,7 +426,7 @@ export const taskAssignType = (
 
 
       return apiClient<TaskAssignType200>(
-      {url: `/task/${id}/type`, method: 'PATCH',
+      {url: `/api/task/${id}/type`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: taskAssignTypeBody, signal
     },
@@ -489,7 +489,7 @@ export const taskUpdateCompletion = (
 
 
       return apiClient<TaskUpdateCompletion200>(
-      {url: `/task/${id}/complete`, method: 'PATCH', signal
+      {url: `/api/task/${id}/complete`, method: 'PATCH', signal
     },
       options);
     }
@@ -551,7 +551,7 @@ export const taskUpdatePostpone = (
 
 
       return apiClient<TaskUpdatePostpone200>(
-      {url: `/task/${id}/postpone`, method: 'PATCH',
+      {url: `/api/task/${id}/postpone`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: taskUpdatePostponeBody, signal
     },

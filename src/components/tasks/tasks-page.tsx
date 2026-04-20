@@ -221,7 +221,7 @@ export function TasksPage() {
   }, [filterTab]);
 
   const invalidateTasks = useCallback(() => {
-    void queryClient.invalidateQueries({ queryKey: ["/task"] });
+    void queryClient.invalidateQueries({ queryKey: ["/api/task"] });
   }, [queryClient]);
 
   const indexQuery = useTaskIndex(
