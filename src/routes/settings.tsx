@@ -21,7 +21,7 @@ import { useUserUpdate } from "@/generated/api/user/user";
 import { getAuthAccessToken } from "@/lib/api-client";
 import { getPasswordStrength } from "@/lib/password-strength";
 import { toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
-import { cn } from "@/lib/utils";
+import { cn, initialsFromName } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({
   beforeLoad: () => {
@@ -32,13 +32,6 @@ export const Route = createFileRoute("/settings")({
   },
   component: SettingsPage,
 });
-
-function initialsFromName(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
-  return (parts[0]![0]! + parts[parts.length - 1]![0]!).toUpperCase();
-}
 
 function PasswordStrengthBar({ password }: { password: string }) {
   const { score, label } = getPasswordStrength(password);
@@ -175,192 +168,198 @@ function SettingsPage() {
   const themeDirty = pendingTheme !== theme;
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-12 px-4 py-10">
-      <header className="space-y-2 border-b border-border pb-8">
-        <h1 className="text-2xl font-semibold tracking-tight">Configurações</h1>
-        <p className="text-sm text-muted-foreground">
-          Gerencie as informações da sua conta, senha e preferências de tema.
-        </p>
-      </header>
-
-      {/* Informações pessoais */}
-      <section className="space-y-6">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold">Informações pessoais</h2>
-          <p className="text-sm text-muted-foreground">Nome e e-mail exibidos na sua conta.</p>
-        </div>
-        <form onSubmit={saveProfile} className="space-y-8">
-          {me.isLoading ? (
-            <p className="text-sm text-muted-foreground">Carregando…</p>
-          ) : me.isError ? (
-            <p className="text-sm text-muted-foreground">
-              Não foi possível carregar o perfil. Veja a notificação acima.
+    <main className="min-h-full flex-1 bg-background">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <header className="mb-8 border-b border-border pb-6">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Configurações</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Gerencie as informações da sua conta, senha e preferências de tema.
             </p>
-          ) : user ? (
-            <div className="flex flex-col gap-8 md:flex-row md:items-start">
-              <div
-                className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-dashed border-border bg-muted/40 text-xl font-semibold text-muted-foreground"
-                aria-hidden
-              >
-                {initialsFromName(profileName || user.name)}
+          </div>
+        </header>
+
+        <div className="flex w-full flex-col gap-12">
+          {/* Informações pessoais */}
+          <section className="space-y-6">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold">Informações pessoais</h2>
+              <p className="text-sm text-muted-foreground">Nome e e-mail exibidos na sua conta.</p>
+            </div>
+            <form onSubmit={saveProfile} className="space-y-8">
+              {me.isLoading ? (
+                <p className="text-sm text-muted-foreground">Carregando…</p>
+              ) : me.isError ? (
+                <p className="text-sm text-muted-foreground">
+                  Não foi possível carregar o perfil. Veja a notificação acima.
+                </p>
+              ) : user ? (
+                <div className="flex flex-col gap-8 md:flex-row md:items-start">
+                  <div
+                    className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-dashed border-border bg-muted/40 text-xl font-semibold text-muted-foreground"
+                    aria-hidden
+                  >
+                    {initialsFromName(profileName || user.name)}
+                  </div>
+                  <FieldGroup className="min-w-0 flex-1">
+                    <Field>
+                      <FieldLabel htmlFor="settings-name">Nome</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          id="settings-name"
+                          value={profileName}
+                          onChange={(e) => setProfileName(e.target.value)}
+                          autoComplete="name"
+                          className="w-full rounded-xl"
+                          required
+                        />
+                      </FieldContent>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="settings-email">E-mail</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          id="settings-email"
+                          type="email"
+                          value={profileEmail}
+                          onChange={(e) => setProfileEmail(e.target.value)}
+                          autoComplete="email"
+                          className="w-full rounded-xl"
+                          required
+                        />
+                      </FieldContent>
+                    </Field>
+                  </FieldGroup>
+                </div>
+              ) : null}
+              <div className="flex justify-end border-t border-border pt-6">
+                <Button type="submit" disabled={busyProfile || !user} className="min-w-[120px] rounded-full">
+                  {busyProfile ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      Salvando…
+                    </>
+                  ) : (
+                    "Salvar"
+                  )}
+                </Button>
               </div>
-              <FieldGroup className="min-w-0 flex-1">
+            </form>
+          </section>
+
+          {/* Senha */}
+          <section className="space-y-6 border-t border-border pt-12">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold">Senha</h2>
+              <p className="text-sm text-muted-foreground">
+                Use pelo menos 8 caracteres, letras maiúsculas e minúsculas, números e símbolos para uma senha
+                segura.
+              </p>
+            </div>
+            <form onSubmit={savePassword} className="space-y-8">
+              <FieldGroup className="w-full space-y-4">
                 <Field>
-                  <FieldLabel htmlFor="settings-name">Nome</FieldLabel>
+                  <FieldLabel htmlFor="settings-password">Nova senha</FieldLabel>
                   <FieldContent>
                     <Input
-                      id="settings-name"
-                      value={profileName}
-                      onChange={(e) => setProfileName(e.target.value)}
-                      autoComplete="name"
-                      className="max-w-lg rounded-xl"
-                      required
+                      id="settings-password"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      autoComplete="new-password"
+                      className="rounded-xl"
+                      placeholder="••••••••"
                     />
+                    <PasswordStrengthBar password={newPassword} />
                   </FieldContent>
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="settings-email">E-mail</FieldLabel>
+                  <FieldLabel htmlFor="settings-password-confirm">Confirmar senha</FieldLabel>
                   <FieldContent>
                     <Input
-                      id="settings-email"
-                      type="email"
-                      value={profileEmail}
-                      onChange={(e) => setProfileEmail(e.target.value)}
-                      autoComplete="email"
-                      className="max-w-lg rounded-xl"
-                      required
+                      id="settings-password-confirm"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      autoComplete="new-password"
+                      className="rounded-xl"
+                      placeholder="••••••••"
                     />
                   </FieldContent>
                 </Field>
               </FieldGroup>
+              <div className="flex justify-end border-t border-border pt-6">
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  disabled={busyPassword || !user || !newPassword}
+                  className="min-w-[120px] rounded-full"
+                >
+                  {busyPassword ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      Salvando…
+                    </>
+                  ) : (
+                    "Salvar senha"
+                  )}
+                </Button>
+              </div>
+            </form>
+          </section>
+
+          {/* Tema — carrossel */}
+          <section className="space-y-6 border-t border-border pt-12">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold">Tema</h2>
+              <p className="text-sm text-muted-foreground">
+                Deslize ou use as setas para escolher o modo claro ou escuro. Depois salve a preferência.
+              </p>
             </div>
-          ) : null}
-          <div className="flex justify-end border-t border-border pt-6">
-            <Button type="submit" disabled={busyProfile || !user} className="min-w-[120px] rounded-full">
-              {busyProfile ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Salvando…
-                </>
-              ) : (
-                "Salvar"
-              )}
-            </Button>
-          </div>
-        </form>
-      </section>
 
-      {/* Senha */}
-      <section className="space-y-6 border-t border-border pt-12">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold">Senha</h2>
-          <p className="text-sm text-muted-foreground">
-            Use pelo menos 8 caracteres, letras maiúsculas e minúsculas, números e símbolos para uma senha
-            segura.
-          </p>
+            <div className="relative w-full px-2 sm:px-10">
+              <Carousel
+                setApi={setCarouselApi}
+                opts={{ loop: false, startIndex: theme === "dark" ? 1 : 0 }}
+                className="w-full"
+              >
+                <CarouselContent>
+                  <CarouselItem>
+                    <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-amber-50 via-background to-sky-50 p-8 text-center dark:from-amber-950/30 dark:via-card dark:to-sky-950/20">
+                      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-background/80 shadow-sm">
+                        <Sun className="size-7 text-amber-500" />
+                      </span>
+                      <span className="text-lg font-semibold">Claro</span>
+                      <span className="text-sm text-muted-foreground">Interface clara para o dia a dia.</span>
+                    </div>
+                  </CarouselItem>
+                  <CarouselItem>
+                    <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900 p-8 text-center text-slate-100">
+                      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
+                        <Moon className="size-7 text-slate-200" />
+                      </span>
+                      <span className="text-lg font-semibold">Escuro</span>
+                      <span className="text-sm text-slate-300">Menos brilho, confortável à noite.</span>
+                    </div>
+                  </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious className="border-border bg-background" />
+                <CarouselNext className="border-border bg-background" />
+              </Carousel>
+            </div>
+
+            <div className="flex justify-end border-t border-border pt-6">
+              <Button type="button" onClick={saveTheme} disabled={!themeDirty} className="min-w-[120px] rounded-full">
+                Salvar tema
+              </Button>
+            </div>
+          </section>
+
+          <Link to="/tasks" className={cn(buttonVariants({ variant: "outline" }), "w-fit rounded-full")}>
+            Voltar às tarefas
+          </Link>
         </div>
-        <form onSubmit={savePassword} className="space-y-8">
-          <FieldGroup className="max-w-md space-y-4">
-            <Field>
-              <FieldLabel htmlFor="settings-password">Nova senha</FieldLabel>
-              <FieldContent>
-                <Input
-                  id="settings-password"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  autoComplete="new-password"
-                  className="rounded-xl"
-                  placeholder="••••••••"
-                />
-                <PasswordStrengthBar password={newPassword} />
-              </FieldContent>
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="settings-password-confirm">Confirmar senha</FieldLabel>
-              <FieldContent>
-                <Input
-                  id="settings-password-confirm"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  autoComplete="new-password"
-                  className="rounded-xl"
-                  placeholder="••••••••"
-                />
-              </FieldContent>
-            </Field>
-          </FieldGroup>
-          <div className="flex justify-end border-t border-border pt-6">
-            <Button
-              type="submit"
-              variant="secondary"
-              disabled={busyPassword || !user || !newPassword}
-              className="min-w-[120px] rounded-full"
-            >
-              {busyPassword ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Salvando…
-                </>
-              ) : (
-                "Salvar senha"
-              )}
-            </Button>
-          </div>
-        </form>
-      </section>
-
-      {/* Tema — carrossel */}
-      <section className="space-y-6 border-t border-border pt-12">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold">Tema</h2>
-          <p className="text-sm text-muted-foreground">
-            Deslize ou use as setas para escolher o modo claro ou escuro. Depois salve a preferência.
-          </p>
-        </div>
-
-        <div className="relative px-10">
-          <Carousel
-            setApi={setCarouselApi}
-            opts={{ loop: false, startIndex: theme === "dark" ? 1 : 0 }}
-            className="w-full max-w-xl mx-auto"
-          >
-            <CarouselContent>
-              <CarouselItem>
-                <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-amber-50 via-background to-sky-50 p-8 text-center dark:from-amber-950/30 dark:via-card dark:to-sky-950/20">
-                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-background/80 shadow-sm">
-                    <Sun className="size-7 text-amber-500" />
-                  </span>
-                  <span className="text-lg font-semibold">Claro</span>
-                  <span className="text-sm text-muted-foreground">Interface clara para o dia a dia.</span>
-                </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900 p-8 text-center text-slate-100">
-                  <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
-                    <Moon className="size-7 text-slate-200" />
-                  </span>
-                  <span className="text-lg font-semibold">Escuro</span>
-                  <span className="text-sm text-slate-300">Menos brilho, confortável à noite.</span>
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-            <CarouselPrevious className="border-border bg-background" />
-            <CarouselNext className="border-border bg-background" />
-          </Carousel>
-        </div>
-
-        <div className="flex justify-end border-t border-border pt-6">
-          <Button type="button" onClick={saveTheme} disabled={!themeDirty} className="min-w-[120px] rounded-full">
-            Salvar tema
-          </Button>
-        </div>
-      </section>
-
-      <Link to="/tasks" className={cn(buttonVariants({ variant: "outline" }), "w-fit rounded-full")}>
-        Voltar às tarefas
-      </Link>
+      </div>
     </main>
   );
 }

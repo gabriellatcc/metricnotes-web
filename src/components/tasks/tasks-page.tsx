@@ -367,243 +367,247 @@ export function TasksPage() {
     : "Preencha para criar uma nova tarefa.";
 
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-4 py-8">
-      <header className="space-y-5">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Tarefas</h1>
-          <p className="text-sm text-muted-foreground">
-            Organize o que importa — marque como concluída, filtre e busque.
-          </p>
-        </div>
-
-        <div className="rounded-2xl bg-muted/60 px-4 py-3 shadow-inner">
-          <label className="sr-only" htmlFor="task-search">
-            Buscar tarefas
-          </label>
-          <Input
-            id="task-search"
-            placeholder="Buscar por nome ou descrição…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="h-11 rounded-xl border-0 bg-background shadow-sm"
-          />
-        </div>
-
-        <div
-          className="flex flex-wrap gap-2"
-          role="tablist"
-          aria-label="Filtrar por status"
-        >
-          {FILTER_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              aria-selected={filterTab === tab.id}
-              onClick={() => setFilterTab(tab.id)}
-              className={cn(
-                "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                filterTab === tab.id
-                  ? "bg-foreground text-background"
-                  : "bg-muted/80 text-muted-foreground hover:bg-muted hover:text-foreground",
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs text-muted-foreground">
-            {pagination
-              ? `${pagination.total} tarefa(s) — página ${pagination.current_page} de ${pagination.last_page}`
-              : indexQuery.isLoading
-                ? "Carregando…"
-                : ""}
-          </p>
-          <Button
-            type="button"
-            className="rounded-full gap-2"
-            onClick={() => {
-              setEditingId(null);
-              setForm(emptyForm());
-              setCreateOpen(true);
-            }}
-          >
-            <Plus className="h-4 w-4" />
-            Nova tarefa
-          </Button>
-        </div>
-      </header>
-
-      <section aria-label="Lista de tarefas">
-        {indexQuery.isLoading ? (
-          <p className="text-sm text-muted-foreground">Carregando lista…</p>
-        ) : indexQuery.isError ? (
-          <p className="text-sm text-muted-foreground">
-            Não foi possível carregar a lista. Veja a notificação acima.
-          </p>
-        ) : filteredItems.length === 0 ? (
-          <div className="rounded-2xl border border-dashed bg-muted/20 px-6 py-14 text-center">
-            <p className="text-sm font-medium text-foreground/80">
-              {items.length === 0 ? "Nenhuma tarefa ainda." : "Nenhuma tarefa neste filtro."}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {items.length === 0
-                ? "Crie uma tarefa ou ajuste a busca."
-                : "Tente outro filtro ou limpe a busca."}
+    <main className="min-h-full flex-1 bg-background">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <header className="mb-8 border-b border-border pb-6">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Tarefas</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Organize o que importa — marque como concluída, filtre e busque.
             </p>
           </div>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {filteredItems.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                busy={busy}
-                onToggleComplete={toggleComplete}
-                onEdit={startEdit}
-                onDelete={handleDelete}
-              />
+        </header>
+
+        <div className="flex w-full flex-col gap-8">
+          <div className="rounded-2xl bg-muted/60 px-4 py-3 shadow-inner">
+            <label className="sr-only" htmlFor="task-search">
+              Buscar tarefas
+            </label>
+            <Input
+              id="task-search"
+              placeholder="Buscar por nome ou descrição…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="h-11 rounded-xl border-0 bg-background shadow-sm"
+            />
+          </div>
+
+          <div
+            className="flex flex-wrap gap-2"
+            role="tablist"
+            aria-label="Filtrar por status"
+          >
+            {FILTER_TABS.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={filterTab === tab.id}
+                onClick={() => setFilterTab(tab.id)}
+                className={cn(
+                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  filterTab === tab.id
+                    ? "bg-foreground text-background"
+                    : "bg-muted/80 text-muted-foreground hover:bg-muted hover:text-foreground",
+                )}
+              >
+                {tab.label}
+              </button>
             ))}
-          </ul>
-        )}
-      </section>
+          </div>
 
-      {pagination && pagination.last_page > 1 ? (
-        <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="rounded-full"
-            disabled={page <= 1 || indexQuery.isFetching}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-          >
-            Anterior
-          </Button>
-          <span className="text-xs text-muted-foreground">
-            Página {pagination.current_page} / {pagination.last_page}
-          </span>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="rounded-full"
-            disabled={page >= pagination.last_page || indexQuery.isFetching}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Próxima
-          </Button>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-xs text-muted-foreground">
+              {pagination
+                ? `${pagination.total} tarefa(s) — página ${pagination.current_page} de ${pagination.last_page}`
+                : indexQuery.isLoading
+                  ? "Carregando…"
+                  : ""}
+            </p>
+            <Button
+              type="button"
+              className="rounded-full gap-2"
+              onClick={() => {
+                setEditingId(null);
+                setForm(emptyForm());
+                setCreateOpen(true);
+              }}
+            >
+              <Plus className="h-4 w-4" />
+              Nova tarefa
+            </Button>
+          </div>
+
+          <section aria-label="Lista de tarefas">
+            {indexQuery.isLoading ? (
+              <p className="text-sm text-muted-foreground">Carregando lista…</p>
+            ) : indexQuery.isError ? (
+              <p className="text-sm text-muted-foreground">
+                Não foi possível carregar a lista. Veja a notificação acima.
+              </p>
+            ) : filteredItems.length === 0 ? (
+              <div className="rounded-2xl border border-dashed bg-muted/20 px-6 py-14 text-center">
+                <p className="text-sm font-medium text-foreground/80">
+                  {items.length === 0 ? "Nenhuma tarefa ainda." : "Nenhuma tarefa neste filtro."}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {items.length === 0
+                    ? "Crie uma tarefa ou ajuste a busca."
+                    : "Tente outro filtro ou limpe a busca."}
+                </p>
+              </div>
+            ) : (
+              <ul className="flex flex-col gap-3">
+                {filteredItems.map((task) => (
+                  <TaskCard
+                    key={task.id}
+                    task={task}
+                    busy={busy}
+                    onToggleComplete={toggleComplete}
+                    onEdit={startEdit}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </ul>
+            )}
+          </section>
+
+          {pagination && pagination.last_page > 1 ? (
+            <div className="flex items-center justify-between gap-2 border-t border-border pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="rounded-full"
+                disabled={page <= 1 || indexQuery.isFetching}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Anterior
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                Página {pagination.current_page} / {pagination.last_page}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="rounded-full"
+                disabled={page >= pagination.last_page || indexQuery.isFetching}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                Próxima
+              </Button>
+            </div>
+          ) : null}
         </div>
-      ) : null}
 
-      <Dialog
-        open={createOpen}
-        onOpenChange={(open) => {
-          if (!open) cancelEdit();
-        }}
-      >
-        <DialogContent className="gap-0 p-0 sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{formTitle}</DialogTitle>
-            <DialogDescription>{formDesc}</DialogDescription>
-          </DialogHeader>
-          <form onSubmit={handleSubmit} className="flex max-h-[min(70vh,560px)] flex-col">
-            <div className="space-y-4 overflow-y-auto px-6 py-4">
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="task-name">Nome</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      id="task-name"
-                      value={form.name}
-                      onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                      required
-                      className="rounded-xl"
-                    />
-                  </FieldContent>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="task-desc">Descrição</FieldLabel>
-                  <FieldContent>
-                    <textarea
-                      id="task-desc"
-                      className={cn(inputClass, "min-h-24 rounded-xl")}
-                      value={form.description}
-                      onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                      required
-                    />
-                  </FieldContent>
-                </Field>
-                <div className="grid gap-4 sm:grid-cols-3">
+        <Dialog
+          open={createOpen}
+          onOpenChange={(open) => {
+            if (!open) cancelEdit();
+          }}
+        >
+          <DialogContent className="gap-0 p-0 sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>{formTitle}</DialogTitle>
+              <DialogDescription>{formDesc}</DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="flex max-h-[min(70vh,560px)] flex-col">
+              <div className="space-y-4 overflow-y-auto px-6 py-4">
+                <FieldGroup>
                   <Field>
-                    <FieldLabel htmlFor="task-status">Status</FieldLabel>
-                    <FieldContent>
-                      <select
-                        id="task-status"
-                        className={cn(inputClass, "rounded-xl")}
-                        value={form.status}
-                        onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
-                      >
-                        {STATUS_OPTIONS.map((o) => (
-                          <option key={o.value} value={o.value}>
-                            {o.label}
-                          </option>
-                        ))}
-                      </select>
-                    </FieldContent>
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="task-priority">Prioridade</FieldLabel>
-                    <FieldContent>
-                      <select
-                        id="task-priority"
-                        className={cn(inputClass, "rounded-xl")}
-                        value={form.priority}
-                        onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
-                      >
-                        {PRIORITY_OPTIONS.map((p) => (
-                          <option key={p} value={p}>
-                            {p}
-                          </option>
-                        ))}
-                      </select>
-                    </FieldContent>
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="task-due">Prazo</FieldLabel>
+                    <FieldLabel htmlFor="task-name">Nome</FieldLabel>
                     <FieldContent>
                       <Input
-                        id="task-due"
-                        value={form.due_date}
-                        onChange={(e) => setForm((f) => ({ ...f, due_date: e.target.value }))}
-                        placeholder="DD-MM-AAAA"
+                        id="task-name"
+                        value={form.name}
+                        onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                         required
                         className="rounded-xl"
                       />
                     </FieldContent>
                   </Field>
-                </div>
-              </FieldGroup>
-            </div>
-            <DialogFooter className="gap-2 sm:gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="rounded-full"
-                onClick={cancelEdit}
-                disabled={busy}
-              >
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={busy} className="rounded-full">
-                {editingId ? "Salvar alterações" : "Criar tarefa"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+                  <Field>
+                    <FieldLabel htmlFor="task-desc">Descrição</FieldLabel>
+                    <FieldContent>
+                      <textarea
+                        id="task-desc"
+                        className={cn(inputClass, "min-h-24 rounded-xl")}
+                        value={form.description}
+                        onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                        required
+                      />
+                    </FieldContent>
+                  </Field>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <Field>
+                      <FieldLabel htmlFor="task-status">Status</FieldLabel>
+                      <FieldContent>
+                        <select
+                          id="task-status"
+                          className={cn(inputClass, "rounded-xl")}
+                          value={form.status}
+                          onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
+                        >
+                          {STATUS_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>
+                              {o.label}
+                            </option>
+                          ))}
+                        </select>
+                      </FieldContent>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="task-priority">Prioridade</FieldLabel>
+                      <FieldContent>
+                        <select
+                          id="task-priority"
+                          className={cn(inputClass, "rounded-xl")}
+                          value={form.priority}
+                          onChange={(e) => setForm((f) => ({ ...f, priority: e.target.value }))}
+                        >
+                          {PRIORITY_OPTIONS.map((p) => (
+                            <option key={p} value={p}>
+                              {p}
+                            </option>
+                          ))}
+                        </select>
+                      </FieldContent>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="task-due">Prazo</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          id="task-due"
+                          value={form.due_date}
+                          onChange={(e) => setForm((f) => ({ ...f, due_date: e.target.value }))}
+                          placeholder="DD-MM-AAAA"
+                          required
+                          className="rounded-xl"
+                        />
+                      </FieldContent>
+                    </Field>
+                  </div>
+                </FieldGroup>
+              </div>
+              <DialogFooter className="gap-2 sm:gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="rounded-full"
+                  onClick={cancelEdit}
+                  disabled={busy}
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" disabled={busy} className="rounded-full">
+                  {editingId ? "Salvar alterações" : "Criar tarefa"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
     </main>
   );
 }

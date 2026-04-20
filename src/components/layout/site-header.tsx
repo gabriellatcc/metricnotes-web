@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthMe } from "@/generated/api/auth/auth";
 import { getAuthAccessToken, setAuthAccessToken } from "@/lib/api-client";
-import { cn } from "@/lib/utils";
+import { cn, initialsFromName } from "@/lib/utils";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ChevronDown, ClipboardList, Settings } from "lucide-react";
+import { BarChart3, ClipboardList, Settings } from "lucide-react";
 
 function subscribeToken(callback: () => void) {
   window.addEventListener("storage", callback);
@@ -53,7 +53,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
+      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-4 lg:gap-8">
           <Link
             to="/"
@@ -73,6 +73,17 @@ export function SiteHeader() {
           ) : null}
           {loggedIn ? (
             <nav className="hidden items-center gap-1 sm:flex">
+              <Link
+                to="/dashboard"
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "gap-1.5",
+                  pathname === "/dashboard" && "bg-accent text-accent-foreground",
+                )}
+              >
+                <BarChart3 className="size-4" aria-hidden />
+                Dashboard
+              </Link>
               <Link
                 to="/tasks"
                 className={cn(
@@ -94,13 +105,20 @@ export function SiteHeader() {
               <DropdownMenuTrigger asChild>
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
-                  className="max-w-[min(100%,220px)] gap-1.5"
+                  className="h-9 max-w-[min(100%,260px)] gap-2 rounded-full pl-1.5 pr-2.5 font-normal"
                   aria-label="Menu da conta"
                 >
-                  <span className="truncate">{user?.name ?? (me.isLoading ? "…" : "Conta")}</span>
-                  <ChevronDown className="size-3.5 shrink-0 opacity-70" aria-hidden />
+                  <span
+                    className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-foreground"
+                    aria-hidden
+                  >
+                    {me.isLoading ? "…" : initialsFromName(user?.name)}
+                  </span>
+                  <span className="truncate text-left text-sm text-foreground">
+                    {user?.name ?? (me.isLoading ? "Carregando…" : "Conta")}
+                  </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -146,8 +164,18 @@ export function SiteHeader() {
         </div>
       </div>
       {loggedIn ? (
-        <div className="flex border-t border-border/60 px-4 py-2 sm:hidden">
+        <div className="mx-auto flex w-full max-w-7xl border-t border-border/60 px-4 py-2 sm:hidden sm:px-6 lg:px-8">
           <div className="flex w-full gap-1 overflow-x-auto">
+            <Link
+              to="/dashboard"
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "sm" }),
+                "shrink-0",
+                pathname === "/dashboard" && "bg-accent",
+              )}
+            >
+              Dashboard
+            </Link>
             <Link
               to="/tasks"
               className={cn(
