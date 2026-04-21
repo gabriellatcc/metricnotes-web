@@ -10,18 +10,18 @@ function cellKey(day: WeekdayIndex, row: number) {
   return `${day}-${row}`;
 }
 
-/** Density steps using theme `primary` + `muted` (shadcn tokens). */
+/** Density using theme chart tokens for a richer ramp than primary-only */
 function intensityClass(value: number, max: number): string {
   if (max <= 0 || value <= 0) return "bg-muted";
   const t = value / max;
-  if (t < 0.15) return "bg-muted";
-  if (t < 0.28) return "bg-primary/15";
-  if (t < 0.4) return "bg-primary/28";
-  if (t < 0.52) return "bg-primary/40";
-  if (t < 0.64) return "bg-primary/52";
-  if (t < 0.76) return "bg-primary/65";
-  if (t < 0.88) return "bg-primary/78";
-  return "bg-primary";
+  if (t < 0.14) return "bg-muted";
+  if (t < 0.26) return "bg-chart-3/30";
+  if (t < 0.38) return "bg-chart-4/45";
+  if (t < 0.5) return "bg-chart-2/55";
+  if (t < 0.62) return "bg-chart-1/45";
+  if (t < 0.74) return "bg-chart-1/70";
+  if (t < 0.86) return "bg-chart-1/85";
+  return "bg-chart-5";
 }
 
 type HeatmapChartProps = {
@@ -46,7 +46,9 @@ export function HeatmapChart({ data }: HeatmapChartProps) {
     <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
       <div className="mb-2">
         <h3 className="text-sm font-semibold">Densidade de conclusões</h3>
-        <p className="text-xs text-muted-foreground">Dia da semana × faixa horária</p>
+        <p className="text-xs text-muted-foreground">
+          Dia da semana × faixa horária · última semana (7 dias)
+        </p>
       </div>
       <div className="flex min-h-0 flex-1 flex-col overflow-x-auto">
         <div
@@ -60,7 +62,7 @@ export function HeatmapChart({ data }: HeatmapChartProps) {
           {WEEKDAY_LABELS.map((d) => (
             <div
               key={d}
-              className="flex items-end justify-center pb-1 text-center text-[10px] font-medium uppercase tracking-wide text-muted-foreground"
+              className="flex items-end justify-center pb-1 text-center text-[10px] font-semibold uppercase tracking-wider text-muted-foreground"
             >
               {d}
             </div>
@@ -76,22 +78,15 @@ export function HeatmapChart({ data }: HeatmapChartProps) {
                   <div
                     key={cellKey(day, row)}
                     title={`${WEEKDAY_LABELS[day]} ${block}: ${v} tarefas`}
-                    className={cn("rounded-sm transition-colors", intensityClass(v, max))}
+                    className={cn(
+                      "rounded-md ring-1 ring-border/20 transition-transform duration-200 hover:z-[1] hover:scale-110 hover:ring-2 hover:ring-primary/40",
+                      intensityClass(v, max),
+                    )}
                   />
                 );
               })}
             </div>
           ))}
-        </div>
-        <div className="mt-2 flex items-center justify-end gap-2 text-[10px] text-muted-foreground">
-          <span>Menor</span>
-          <div className="flex gap-0.5">
-            <span className="h-2.5 w-4 rounded-sm bg-muted" />
-            <span className="h-2.5 w-4 rounded-sm bg-primary/40" />
-            <span className="h-2.5 w-4 rounded-sm bg-primary/70" />
-            <span className="h-2.5 w-4 rounded-sm bg-primary" />
-          </div>
-          <span>Maior</span>
         </div>
       </div>
     </div>

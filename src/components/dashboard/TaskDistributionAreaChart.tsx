@@ -36,7 +36,7 @@ export function TaskDistributionAreaChart({ data }: TaskDistributionAreaChartPro
     <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
       <div className="mb-1.5 shrink-0">
         <h3 className="text-sm font-semibold">Volume de tarefas por faixa horária</h3>
-        <p className="text-xs text-muted-foreground">Agregado ao longo da semana</p>
+        <p className="text-xs text-muted-foreground">Soma na última semana (todos os dias somados)</p>
       </div>
       <div className="min-h-0 w-full flex-1 [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground">
         <ResponsiveContainer width="100%" height="100%">

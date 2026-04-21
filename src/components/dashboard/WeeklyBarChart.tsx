@@ -37,7 +37,7 @@ export function WeeklyBarChart({ data }: WeeklyBarChartProps) {
     <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
       <div className="mb-1.5 shrink-0">
         <h3 className="text-sm font-semibold">Tarefas concluídas por dia</h3>
-        <p className="text-xs text-muted-foreground">Segunda a domingo</p>
+        <p className="text-xs text-muted-foreground">Cada barra: total na última semana (Seg–Dom)</p>
       </div>
       <div className="min-h-0 w-full flex-1 [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground">
         <ResponsiveContainer width="100%" height="100%">

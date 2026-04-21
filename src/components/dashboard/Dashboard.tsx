@@ -41,8 +41,10 @@ export function Dashboard() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h1 className="text-2xl font-semibold tracking-tight text-foreground">Painel</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Análise semanal de tarefas — mapa de calor, tendências e resumo (dados de exemplo).
+              <p className="mt-1 max-w-2xl text-pretty text-sm text-muted-foreground">
+                Todos os gráficos e números abaixo referem-se à <strong className="font-medium text-foreground">última
+                semana</strong> (sete dias, de segunda a domingo). Conteúdo de exemplo até existir integração com a
+                API.
               </p>
             </div>
             {isFetching ? (

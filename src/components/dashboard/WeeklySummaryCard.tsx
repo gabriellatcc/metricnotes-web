@@ -8,7 +8,7 @@ export function WeeklySummaryCard({ summary }: WeeklySummaryCardProps) {
   return (
     <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
       <h3 className="text-sm font-semibold">Desempenho na semana</h3>
-      <p className="mt-0.5 text-xs text-muted-foreground">Resumo do conjunto de dados atual</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">Resumo da última semana (7 dias, segunda a domingo)</p>
 
       <div className="mt-3 space-y-4 text-sm">
         <section>
@@ -28,12 +28,10 @@ export function WeeklySummaryCard({ summary }: WeeklySummaryCardProps) {
         </section>
 
         <section>
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Productivity peaks
-          </h4>
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Picos</h4>
           <ul className="mt-1.5 space-y-1.5">
             <li className="flex items-start justify-between gap-2 rounded-lg border border-border/80 bg-muted/30 px-2.5 py-1.5">
-              <span className="text-muted-foreground">Best day</span>
+              <span className="text-muted-foreground">Melhor dia</span>
               <span className="text-right font-medium text-foreground">
                 {summary.bestDay.label}
                 <span className="ml-2 tabular-nums text-muted-foreground">({summary.bestDay.total})</span>

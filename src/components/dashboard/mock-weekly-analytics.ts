@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import type { WeeklyAnalyticsData } from "./types";
 
-/** Deterministic mock dataset — sufficient volume for heatmap + charts. */
+/**
+ * Dados de exemplo: representam uma **última semana** (7 dias, Seg–Dom) de tarefas concluídas.
+ * Suficiente volume para o mapa de calor e os gráficos.
+ */
 export const MOCK_WEEKLY_ANALYTICS: WeeklyAnalyticsData = {
   timeBlocks: ["06:00–09:00", "09:00–12:00", "12:00–15:00", "15:00–18:00", "18:00–21:00"],
   heatmap: [
