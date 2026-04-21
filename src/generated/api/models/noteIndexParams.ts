@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type IndexShowParams = {
+export type NoteIndexParams = {
 per_page?: number;
 page?: number;
 search?: string;

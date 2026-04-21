@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as NotesRouteImport } from './routes/notes'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,6 +26,11 @@ const TasksRoute = TasksRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/dashboard': typeof DashboardRoute
+  '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/login': typeof authLoginRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/dashboard': typeof DashboardRoute
+  '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/login': typeof authLoginRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/dashboard': typeof DashboardRoute
+  '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/(auth)/login': typeof authLoginRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/dashboard'
+    | '/notes'
     | '/settings'
     | '/tasks'
     | '/login'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/dashboard'
+    | '/notes'
     | '/settings'
     | '/tasks'
     | '/login'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/dashboard'
+    | '/notes'
     | '/settings'
     | '/tasks'
     | '/(auth)/login'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
   DashboardRoute: typeof DashboardRoute
+  NotesRoute: typeof NotesRoute
   SettingsRoute: typeof SettingsRoute
   TasksRoute: typeof TasksRoute
   authLoginRoute: typeof authLoginRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   DashboardRoute: DashboardRoute,
+  NotesRoute: NotesRoute,
   SettingsRoute: SettingsRoute,
   TasksRoute: TasksRoute,
   authLoginRoute: authLoginRoute,

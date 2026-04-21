@@ -13,7 +13,7 @@ import { useAuthMe } from "@/generated/api/auth/auth";
 import { getAuthAccessToken, setAuthAccessToken } from "@/lib/api-client";
 import { cn, initialsFromName } from "@/lib/utils";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BarChart3, ClipboardList, Settings } from "lucide-react";
+import { BarChart3, ClipboardList, Settings, StickyNote } from "lucide-react";
 
 function subscribeToken(callback: () => void) {
   window.addEventListener("storage", callback);
@@ -94,6 +94,17 @@ export function SiteHeader() {
               >
                 <ClipboardList className="size-4" aria-hidden />
                 Tarefas
+              </Link>
+              <Link
+                to="/notes"
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "gap-1.5",
+                  pathname === "/notes" && "bg-accent text-accent-foreground",
+                )}
+              >
+                <StickyNote className="size-4" aria-hidden />
+                Notas
               </Link>
             </nav>
           ) : null}
@@ -185,6 +196,16 @@ export function SiteHeader() {
               )}
             >
               Tarefas
+            </Link>
+            <Link
+              to="/notes"
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "sm" }),
+                "shrink-0",
+                pathname === "/notes" && "bg-accent",
+              )}
+            >
+              Notas
             </Link>
           </div>
         </div>
