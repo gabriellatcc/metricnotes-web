@@ -4,10 +4,9 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { TaskTypeResource } from './taskTypeResource';
 
-export type TaskTypeStore200 = {
+export type TipDelete200 = {
   success: boolean;
-  data: TaskTypeResource;
+  data: boolean;
   message: string;
 };

@@ -4,10 +4,10 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { TaskTypeIndex200Data } from './taskTypeIndex200Data';
+import type { IndexShow200Data } from './indexShow200Data';
 
-export type TaskTypeIndex200 = {
+export type IndexShow200 = {
   success: boolean;
-  data: TaskTypeIndex200Data;
+  data: IndexShow200Data;
   message: string;
 };

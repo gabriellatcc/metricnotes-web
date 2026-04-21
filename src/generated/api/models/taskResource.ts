@@ -4,7 +4,6 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { TypeResource } from './typeResource';
 
 export interface TaskResource {
   id: string;
@@ -29,5 +28,5 @@ export interface TaskResource {
   created_at: string;
   updated_at: string;
   user_id: string;
-  task_types: TypeResource[];
+  tips: unknown[];
 }

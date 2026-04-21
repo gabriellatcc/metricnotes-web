@@ -24,8 +24,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  TaskAssignType200,
-  TaskAssignTypeBody,
+  TaskAssignTip200,
+  TaskAssignTipBody,
   TaskDelete200,
   TaskIndex200,
   TaskIndexParams,
@@ -416,30 +416,30 @@ export function useTaskIndex<TData = Awaited<ReturnType<typeof taskIndex>>, TErr
 
 
 /**
- * @summary AssignType
+ * @summary Assign Tip
  */
-export const taskAssignType = (
+export const taskAssignTip = (
     id: string,
-    taskAssignTypeBody: TaskAssignTypeBody,
+    taskAssignTipBody: TaskAssignTipBody,
  options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
 ) => {
 
 
-      return apiClient<TaskAssignType200>(
+      return apiClient<TaskAssignTip200>(
       {url: `/api/task/${id}/type`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
-      data: taskAssignTypeBody, signal
+      data: taskAssignTipBody, signal
     },
       options);
     }
 
 
 
-export const getTaskAssignTypeMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskAssignType>>, TError,{id: string;data: TaskAssignTypeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof taskAssignType>>, TError,{id: string;data: TaskAssignTypeBody}, TContext> => {
+export const getTaskAssignTipMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskAssignTip>>, TError,{id: string;data: TaskAssignTipBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskAssignTip>>, TError,{id: string;data: TaskAssignTipBody}, TContext> => {
 
-const mutationKey = ['taskAssignType'];
+const mutationKey = ['taskAssignTip'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -449,10 +449,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskAssignType>>, {id: string;data: TaskAssignTypeBody}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskAssignTip>>, {id: string;data: TaskAssignTipBody}> = (props) => {
           const {id,data} = props ?? {};
 
-          return  taskAssignType(id,data,requestOptions)
+          return  taskAssignTip(id,data,requestOptions)
         }
 
 
@@ -462,22 +462,22 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type TaskAssignTypeMutationResult = NonNullable<Awaited<ReturnType<typeof taskAssignType>>>
-    export type TaskAssignTypeMutationBody = TaskAssignTypeBody
-    export type TaskAssignTypeMutationError = unknown
+    export type TaskAssignTipMutationResult = NonNullable<Awaited<ReturnType<typeof taskAssignTip>>>
+    export type TaskAssignTipMutationBody = TaskAssignTipBody
+    export type TaskAssignTipMutationError = unknown
 
     /**
- * @summary AssignType
+ * @summary Assign Tip
  */
-export const useTaskAssignType = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskAssignType>>, TError,{id: string;data: TaskAssignTypeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+export const useTaskAssignTip = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskAssignTip>>, TError,{id: string;data: TaskAssignTipBody}, TContext>, request?: SecondParameter<typeof apiClient>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof taskAssignType>>,
+        Awaited<ReturnType<typeof taskAssignTip>>,
         TError,
-        {id: string;data: TaskAssignTypeBody},
+        {id: string;data: TaskAssignTipBody},
         TContext
       > => {
-      return useMutation(getTaskAssignTypeMutationOptions(options), queryClient);
+      return useMutation(getTaskAssignTipMutationOptions(options), queryClient);
     }
     /**
  * @summary Update Completion

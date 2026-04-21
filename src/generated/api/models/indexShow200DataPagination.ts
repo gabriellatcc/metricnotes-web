@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type TaskTypeIndex200DataPagination = {
+export type IndexShow200DataPagination = {
   current_page: number;
   per_page: number;
   total: number;

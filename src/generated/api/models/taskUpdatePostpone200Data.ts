@@ -27,5 +27,5 @@ export type TaskUpdatePostpone200Data = {
   created_at: string;
   updated_at: string;
   user_id: string;
-  task_types: string[];
+  tips: string[];
 };

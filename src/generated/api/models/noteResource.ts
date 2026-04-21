@@ -6,11 +6,12 @@
  */
 import type { UserResource } from './userResource';
 
-export interface TaskTypeResource {
+export interface NoteResource {
   id: string;
-  user: UserResource;
-  name: string;
-  color: string;
+  title: string;
+  body: string;
   created_at: string;
   updated_at: string;
+  user: UserResource;
+  tips: string[];
 }

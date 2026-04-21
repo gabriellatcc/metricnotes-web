@@ -4,9 +4,11 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
+import type { UserResource } from './userResource';
 
-export interface TypeResource {
+export interface TipResource {
   id: string;
+  user: UserResource;
   name: string;
   color: string;
   created_at: string;

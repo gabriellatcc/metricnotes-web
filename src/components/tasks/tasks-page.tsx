@@ -41,6 +41,12 @@ function statusLabel(status: string): string {
   return STATUS_OPTIONS.find((o) => o.value === status)?.label ?? status;
 }
 
+function formatTaskDateTime(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso.slice(0, 19).replace("T", " ");
+  return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
 function emptyForm(): TaskStoreBody {
   const d = new Date();
   const due = `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
@@ -127,6 +133,16 @@ function TaskCard({ task, busy, onToggleComplete, onEdit, onDelete }: TaskCardPr
             <span>
               Prazo:{" "}
               <span className="font-mono text-[0.7rem]">{task.current_due_date.slice(0, 10)}</span>
+            </span>
+          ) : null}
+          {task.created_at ? (
+            <span title={task.created_at}>
+              Criada: <span className="font-mono text-[0.7rem]">{formatTaskDateTime(task.created_at)}</span>
+            </span>
+          ) : null}
+          {task.updated_at ? (
+            <span title={task.updated_at}>
+              Atualizada: <span className="font-mono text-[0.7rem]">{formatTaskDateTime(task.updated_at)}</span>
             </span>
           ) : null}
         </div>

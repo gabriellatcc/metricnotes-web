@@ -4,10 +4,10 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { TaskAssignType200Data } from './taskAssignType200Data';
+import type { TipIndex200Data } from './tipIndex200Data';
 
-export type TaskAssignType200 = {
+export type TipIndex200 = {
   success: boolean;
-  data: TaskAssignType200Data;
+  data: TipIndex200Data;
   message: string;
 };

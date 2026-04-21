@@ -5,8 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type TaskTypeIndexParams = {
-search?: number;
-per_page?: number;
-page?: number;
-};
+export type NoteDelete200 = { [key: string]: unknown };

@@ -5,6 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type TaskAssignTypeBody = {
-  task_type_ids: string[];
+export type TaskAssignTipBody = {
+  tips_ids: string[];
 };

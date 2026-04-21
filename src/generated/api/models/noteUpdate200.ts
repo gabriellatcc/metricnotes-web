@@ -4,10 +4,10 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { TaskTypeResource } from './taskTypeResource';
+import type { NoteResource } from './noteResource';
 
-export type TaskTypeShow200 = {
+export type NoteUpdate200 = {
   success: boolean;
-  data: TaskTypeResource;
+  data: NoteResource;
   message: string;
 };

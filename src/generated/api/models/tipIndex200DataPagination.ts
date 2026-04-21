@@ -5,7 +5,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type TaskTypeStoreBody = {
-  name: string;
-  color: string;
+export type TipIndex200DataPagination = {
+  current_page: number;
+  per_page: number;
+  total: number;
+  last_page: number;
 };
