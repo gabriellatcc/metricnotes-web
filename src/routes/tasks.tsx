@@ -1,6 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import { TasksPage } from "@/components/tasks/tasks-page";
 import { getAuthAccessToken } from "@/lib/api-client";
 
 export const Route = createFileRoute("/tasks")({
@@ -10,9 +9,9 @@ export const Route = createFileRoute("/tasks")({
       throw redirect({ to: "/login" });
     }
   },
-  component: TasksRoute,
+  component: TasksLayout,
 });
 
-function TasksRoute() {
-  return <TasksPage />;
+function TasksLayout() {
+  return <Outlet />;
 }

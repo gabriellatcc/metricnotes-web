@@ -15,6 +15,8 @@ import { Route as NotesRouteImport } from './routes/notes'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TasksIndexRouteImport } from './routes/tasks.index'
+import { Route as TasksCompletedRouteImport } from './routes/tasks.completed'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 
@@ -48,6 +50,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TasksIndexRoute = TasksIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksCompletedRoute = TasksCompletedRouteImport.update({
+  id: '/completed',
+  path: '/completed',
+  getParentRoute: () => TasksRoute,
+} as any)
 const authSignupRoute = authSignupRouteImport.update({
   id: '/(auth)/signup',
   path: '/signup',
@@ -65,9 +77,11 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
-  '/tasks': typeof TasksRoute
+  '/tasks': typeof TasksRouteWithChildren
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/tasks/completed': typeof TasksCompletedRoute
+  '/tasks/': typeof TasksIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,9 +89,10 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
-  '/tasks': typeof TasksRoute
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/tasks/completed': typeof TasksCompletedRoute
+  '/tasks': typeof TasksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,9 +101,11 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
-  '/tasks': typeof TasksRoute
+  '/tasks': typeof TasksRouteWithChildren
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signup': typeof authSignupRoute
+  '/tasks/completed': typeof TasksCompletedRoute
+  '/tasks/': typeof TasksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +118,8 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/login'
     | '/signup'
+    | '/tasks/completed'
+    | '/tasks/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,9 +127,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/notes'
     | '/settings'
-    | '/tasks'
     | '/login'
     | '/signup'
+    | '/tasks/completed'
+    | '/tasks'
   id:
     | '__root__'
     | '/'
@@ -121,6 +141,8 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/(auth)/login'
     | '/(auth)/signup'
+    | '/tasks/completed'
+    | '/tasks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -129,7 +151,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   NotesRoute: typeof NotesRoute
   SettingsRoute: typeof SettingsRoute
-  TasksRoute: typeof TasksRoute
+  TasksRoute: typeof TasksRouteWithChildren
   authLoginRoute: typeof authLoginRoute
   authSignupRoute: typeof authSignupRoute
 }
@@ -178,6 +200,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tasks/': {
+      id: '/tasks/'
+      path: '/'
+      fullPath: '/tasks/'
+      preLoaderRoute: typeof TasksIndexRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/completed': {
+      id: '/tasks/completed'
+      path: '/completed'
+      fullPath: '/tasks/completed'
+      preLoaderRoute: typeof TasksCompletedRouteImport
+      parentRoute: typeof TasksRoute
+    }
     '/(auth)/signup': {
       id: '/(auth)/signup'
       path: '/signup'
@@ -195,13 +231,25 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface TasksRouteChildren {
+  TasksCompletedRoute: typeof TasksCompletedRoute
+  TasksIndexRoute: typeof TasksIndexRoute
+}
+
+const TasksRouteChildren: TasksRouteChildren = {
+  TasksCompletedRoute: TasksCompletedRoute,
+  TasksIndexRoute: TasksIndexRoute,
+}
+
+const TasksRouteWithChildren = TasksRoute._addFileChildren(TasksRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   DashboardRoute: DashboardRoute,
   NotesRoute: NotesRoute,
   SettingsRoute: SettingsRoute,
-  TasksRoute: TasksRoute,
+  TasksRoute: TasksRouteWithChildren,
   authLoginRoute: authLoginRoute,
   authSignupRoute: authSignupRoute,
 }

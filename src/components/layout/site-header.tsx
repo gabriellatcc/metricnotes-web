@@ -89,7 +89,8 @@ export function SiteHeader() {
                 className={cn(
                   buttonVariants({ variant: "ghost", size: "sm" }),
                   "gap-1.5",
-                  pathname === "/tasks" && "bg-accent text-accent-foreground",
+                  (pathname === "/tasks" || pathname.startsWith("/tasks/")) &&
+                    "bg-accent text-accent-foreground",
                 )}
               >
                 <ClipboardList className="size-4" aria-hidden />
@@ -192,7 +193,7 @@ export function SiteHeader() {
               className={cn(
                 buttonVariants({ variant: "ghost", size: "sm" }),
                 "shrink-0",
-                pathname === "/tasks" && "bg-accent",
+                (pathname === "/tasks" || pathname.startsWith("/tasks/")) && "bg-accent",
               )}
             >
               Tarefas

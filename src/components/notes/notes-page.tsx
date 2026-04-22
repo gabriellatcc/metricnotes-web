@@ -46,11 +46,12 @@ function formatNoteDateTime(iso: string): string {
 type NoteCardProps = {
   note: NoteResource;
   layout: "strip" | "grid";
+  onView: (note: NoteResource) => void;
   onEdit: (note: NoteResource) => void;
   onDelete: (note: NoteResource) => void;
 };
 
-function NoteCard({ note, layout, onEdit, onDelete }: NoteCardProps) {
+function NoteCard({ note, layout, onView, onEdit, onDelete }: NoteCardProps) {
   const menuRef = useRef<HTMLDetailsElement>(null);
   const closeMenu = () => {
     if (menuRef.current) menuRef.current.open = false;
@@ -59,17 +60,24 @@ function NoteCard({ note, layout, onEdit, onDelete }: NoteCardProps) {
   return (
     <li
       className={cn(
-        "flex min-h-[11rem] flex-col rounded-2xl border border-border/80 bg-card p-4 shadow-sm transition-shadow hover:shadow-md",
+        "flex min-h-0 cursor-pointer flex-col rounded-2xl border border-border/80 bg-card p-4 shadow-sm transition-all duration-200",
+        "hover:-translate-y-px hover:border-primary/45 hover:shadow-md hover:ring-2 hover:ring-primary/15",
+        "active:scale-[0.998]",
         layout === "strip" && "w-full",
         layout === "grid" && "h-full",
       )}
+      title="Abrir para ler a nota completa"
+      onClick={() => onView(note)}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="line-clamp-2 min-w-0 flex-1 text-base font-semibold leading-snug tracking-tight text-foreground">
             {note.title}
           </h3>
-          <div className="flex shrink-0 items-center gap-0.5">
+          <div
+            className="flex shrink-0 items-center gap-0.5"
+            onClick={(e) => e.stopPropagation()}
+          >
             <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted/80 text-muted-foreground">
               <StickyNote className="h-3.5 w-3.5" aria-hidden />
             </span>
@@ -107,7 +115,6 @@ function NoteCard({ note, layout, onEdit, onDelete }: NoteCardProps) {
             </details>
           </div>
         </div>
-        <p className="line-clamp-4 flex-1 text-sm leading-relaxed text-muted-foreground">{note.body}</p>
         <div className="mt-auto border-t border-border/60 pt-2 text-[0.65rem] text-muted-foreground">
           <p className="font-mono">
             {formatNoteDateTime(note.created_at)} · {formatNoteDateTime(note.updated_at)}
@@ -125,6 +132,7 @@ export function NotesPage() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
+  const [viewNote, setViewNote] = useState<NoteResource | null>(null);
   const [layout, setLayout] = useState<"strip" | "grid">("strip");
 
   useEffect(() => {
@@ -190,7 +198,13 @@ export function NotesPage() {
 
   const busy = storeMutation.isPending || updateMutation.isPending || deleteMutation.isPending;
 
+  const openViewNote = useCallback((note: NoteResource) => {
+    setViewNote(note);
+    setCreateOpen(false);
+  }, []);
+
   const startEdit = useCallback((note: NoteResource) => {
+    setViewNote(null);
     setEditingId(note.id);
     setCreateOpen(true);
     setForm({ title: note.title, body: note.body });
@@ -275,6 +289,7 @@ export function NotesPage() {
                 type="button"
                 className="rounded-full gap-2"
                 onClick={() => {
+                  setViewNote(null);
                   setEditingId(null);
                   setForm(emptyForm());
                   setCreateOpen(true);
@@ -314,6 +329,7 @@ export function NotesPage() {
                     key={note.id}
                     note={note}
                     layout="strip"
+                    onView={openViewNote}
                     onEdit={startEdit}
                     onDelete={handleDelete}
                   />
@@ -329,6 +345,7 @@ export function NotesPage() {
                     key={note.id}
                     note={note}
                     layout="grid"
+                    onView={openViewNote}
                     onEdit={startEdit}
                     onDelete={handleDelete}
                   />
@@ -365,6 +382,40 @@ export function NotesPage() {
             </div>
           ) : null}
         </div>
+
+        <Dialog
+          open={viewNote != null}
+          onOpenChange={(open) => {
+            if (!open) setViewNote(null);
+          }}
+        >
+          <DialogContent className="gap-0 p-0 sm:max-w-lg" showClose>
+            {viewNote ? (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="pr-2">{viewNote.title}</DialogTitle>
+                  <DialogDescription>Somente leitura</DialogDescription>
+                </DialogHeader>
+                <div className="max-h-[min(65vh,480px)] space-y-4 overflow-y-auto px-6 py-4">
+                  <div>
+                    <p className="text-xs font-medium uppercase text-muted-foreground">Conteúdo</p>
+                    <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-foreground">{viewNote.body}</p>
+                  </div>
+                  <dl className="grid gap-2 border-t border-border/60 pt-3 text-xs text-muted-foreground">
+                    <div className="flex flex-wrap justify-between gap-2">
+                      <dt>Criada</dt>
+                      <dd className="font-mono text-foreground/90">{formatNoteDateTime(viewNote.created_at)}</dd>
+                    </div>
+                    <div className="flex flex-wrap justify-between gap-2">
+                      <dt>Atualizada</dt>
+                      <dd className="font-mono text-foreground/90">{formatNoteDateTime(viewNote.updated_at)}</dd>
+                    </div>
+                  </dl>
+                </div>
+              </>
+            ) : null}
+          </DialogContent>
+        </Dialog>
 
         <Dialog
           open={createOpen}
