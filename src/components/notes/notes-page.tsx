@@ -1,6 +1,6 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MoreHorizontal, Pencil, Plus, StickyNote, Trash2, LayoutGrid, List } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +15,11 @@ import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/fie
 import { Input } from "@/components/ui/input";
 import type { NoteResource } from "@/generated/api/models";
 import type { NoteUpdateBody } from "@/generated/api/models/noteUpdateBody";
+import type { IndexShow200 } from "@/generated/api/models/indexShow200";
+import type { IndexShowParams } from "@/generated/api/models/indexShowParams";
 import type { StoreNoteBody } from "@/generated/api/models/storeNoteBody";
-import { useNoteDelete, useNoteIndex, useNoteUpdate, useStoreNote } from "@/generated/api/note/note";
+import { useNoteDelete, useNoteUpdate, useStoreNote } from "@/generated/api/note/note";
+import { apiClient } from "@/lib/api-client";
 import { toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
 import { cn } from "@/lib/utils";
 
@@ -148,10 +151,24 @@ export function NotesPage() {
     void queryClient.invalidateQueries({ queryKey: ["/api/note"] });
   }, [queryClient]);
 
-  const indexQuery = useNoteIndex({
-    page,
-    per_page: perPage,
-    ...(debouncedSearch.length > 0 ? { search: debouncedSearch } : {}),
+  const listParams: IndexShowParams = useMemo(
+    () => ({
+      page,
+      per_page: perPage,
+      ...(debouncedSearch.length > 0 ? { search: debouncedSearch } : {}),
+    }),
+    [page, perPage, debouncedSearch],
+  );
+
+  const indexQuery = useQuery({
+    queryKey: ["/api/note", "list", listParams] as const,
+    queryFn: ({ signal }) =>
+      apiClient<IndexShow200>({
+        url: "/api/note",
+        method: "GET",
+        params: listParams,
+        signal,
+      }),
   });
 
   const storeMutation = useStoreNote({

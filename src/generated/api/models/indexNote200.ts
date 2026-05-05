@@ -4,10 +4,10 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { NoteIndex200Data } from './noteIndex200Data';
+import type { IndexNote200Data } from './indexNote200Data';
 
-export type NoteIndex200 = {
+export type IndexNote200 = {
   success: boolean;
-  data: NoteIndex200Data;
+  data: IndexNote200Data;
   message: string;
 };

@@ -5,9 +5,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type StoreUserBody = {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
+export type IndexNote200DataPagination = {
+  current_page: number;
+  per_page: number;
+  total: number;
+  last_page: number;
 };

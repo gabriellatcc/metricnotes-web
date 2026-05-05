@@ -37,7 +37,7 @@ export function LoginForm() {
         }
         setAuthAccessToken(token, rememberMe);
         toastApiSuccessFromBody(res, "Sessão iniciada.");
-        navigate({ to: "/tasks" });
+        navigate({ to: "/dashboard" });
       },
       onError: (error) => {
         toastApiError(error);

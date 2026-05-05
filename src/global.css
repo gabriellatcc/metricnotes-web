@@ -318,6 +318,14 @@
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
 }
 
+/*
+ * Edge / IE legacy: ocultar o botão nativo “mostrar senha” para não ficar dois olhos ao lado do nosso.
+ */
+[data-slot="input"][type="password"]::-ms-reveal,
+[data-slot="input"][type="password"]::-ms-clear {
+  display: none;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

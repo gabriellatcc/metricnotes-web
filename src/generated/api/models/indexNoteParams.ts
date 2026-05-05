@@ -5,9 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type NoteIndex200DataPagination = {
-  current_page: number;
-  per_page: number;
-  total: number;
-  last_page: number;
+export type IndexNoteParams = {
+per_page?: number;
+page?: number;
+search?: string;
 };

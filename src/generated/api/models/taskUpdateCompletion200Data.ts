@@ -4,7 +4,7 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { TaskUpdateCompletion200DataTipsItem } from './taskUpdateCompletion200DataTipsItem';
+import type { TaskUpdateCompletion200DataTaskTypesItem } from './taskUpdateCompletion200DataTaskTypesItem';
 
 export type TaskUpdateCompletion200Data = {
   id: string;
@@ -28,5 +28,5 @@ export type TaskUpdateCompletion200Data = {
   created_at: string;
   updated_at: string;
   user_id: string;
-  tips: TaskUpdateCompletion200DataTipsItem[];
+  task_types: TaskUpdateCompletion200DataTaskTypesItem[];
 };

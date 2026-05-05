@@ -5,8 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type NoteIndexParams = {
-per_page?: number;
-page?: number;
-search?: string;
-};
+export type GetApiTaskUuidView200 = { [key: string]: unknown };

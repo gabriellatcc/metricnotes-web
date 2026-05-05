@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type TaskUpdateCompletion200DataTipsItem = {
+export type TaskUpdateCompletion200DataTaskTypesItem = {
   id?: string;
   name?: string;
   color?: string;

@@ -24,9 +24,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  IndexNote200,
+  IndexNoteParams,
   NoteDelete200,
-  NoteIndex200,
-  NoteIndexParams,
   NoteUpdate200,
   NoteUpdateBody,
   StoreNote200,
@@ -104,97 +104,6 @@ export const useStoreNote = <TError = unknown,
       return useMutation(getStoreNoteMutationOptions(options), queryClient);
     }
     /**
- * @summary Index Note
- */
-export const noteIndex = (
-    params?: NoteIndexParams,
- options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
-) => {
-
-
-      return apiClient<NoteIndex200>(
-      {url: `/api/note`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getNoteIndexQueryKey = (params?: NoteIndexParams,) => {
-    return [
-    `/api/note`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getNoteIndexQueryOptions = <TData = Awaited<ReturnType<typeof noteIndex>>, TError = unknown>(params?: NoteIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof noteIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getNoteIndexQueryKey(params);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof noteIndex>>> = ({ signal }) => noteIndex(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof noteIndex>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type NoteIndexQueryResult = NonNullable<Awaited<ReturnType<typeof noteIndex>>>
-export type NoteIndexQueryError = unknown
-
-
-export function useNoteIndex<TData = Awaited<ReturnType<typeof noteIndex>>, TError = unknown>(
- params: undefined |  NoteIndexParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof noteIndex>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof noteIndex>>,
-          TError,
-          Awaited<ReturnType<typeof noteIndex>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useNoteIndex<TData = Awaited<ReturnType<typeof noteIndex>>, TError = unknown>(
- params?: NoteIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof noteIndex>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof noteIndex>>,
-          TError,
-          Awaited<ReturnType<typeof noteIndex>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useNoteIndex<TData = Awaited<ReturnType<typeof noteIndex>>, TError = unknown>(
- params?: NoteIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof noteIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary Index Note
- */
-
-export function useNoteIndex<TData = Awaited<ReturnType<typeof noteIndex>>, TError = unknown>(
- params?: NoteIndexParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof noteIndex>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getNoteIndexQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
-
-
-
-
-/**
  * @summary Update
  */
 export const noteUpdate = (
@@ -259,6 +168,104 @@ export const useNoteUpdate = <TError = unknown,
       return useMutation(getNoteUpdateMutationOptions(options), queryClient);
     }
     /**
+ * @summary Index Note
+ */
+export const indexNote = (
+    id: string,
+    params?: IndexNoteParams,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<IndexNote200>(
+      {url: `/api/note/${id}`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getIndexNoteQueryKey = (id: string,
+    params?: IndexNoteParams,) => {
+    return [
+    `/api/note/${id}`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getIndexNoteQueryOptions = <TData = Awaited<ReturnType<typeof indexNote>>, TError = unknown>(id: string,
+    params?: IndexNoteParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof indexNote>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getIndexNoteQueryKey(id,params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof indexNote>>> = ({ signal }) => indexNote(id,params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof indexNote>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type IndexNoteQueryResult = NonNullable<Awaited<ReturnType<typeof indexNote>>>
+export type IndexNoteQueryError = unknown
+
+
+export function useIndexNote<TData = Awaited<ReturnType<typeof indexNote>>, TError = unknown>(
+ id: string,
+    params: undefined |  IndexNoteParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof indexNote>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof indexNote>>,
+          TError,
+          Awaited<ReturnType<typeof indexNote>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useIndexNote<TData = Awaited<ReturnType<typeof indexNote>>, TError = unknown>(
+ id: string,
+    params?: IndexNoteParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof indexNote>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof indexNote>>,
+          TError,
+          Awaited<ReturnType<typeof indexNote>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useIndexNote<TData = Awaited<ReturnType<typeof indexNote>>, TError = unknown>(
+ id: string,
+    params?: IndexNoteParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof indexNote>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Index Note
+ */
+
+export function useIndexNote<TData = Awaited<ReturnType<typeof indexNote>>, TError = unknown>(
+ id: string,
+    params?: IndexNoteParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof indexNote>>, TError, TData>>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getIndexNoteQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
  * @summary Show Note Copy
  */
 export const noteDelete = (

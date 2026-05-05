@@ -4,10 +4,10 @@
  * Módulo predefinido
  * OpenAPI spec version: 1.0.0
  */
-import type { NoteIndex200DataPagination } from './noteIndex200DataPagination';
+import type { IndexNote200DataPagination } from './indexNote200DataPagination';
 import type { NoteResource } from './noteResource';
 
-export type NoteIndex200Data = {
+export type IndexNote200Data = {
   items: NoteResource[];
-  pagination: NoteIndex200DataPagination;
+  pagination: IndexNote200DataPagination;
 };
