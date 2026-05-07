@@ -23,6 +23,9 @@
     },
     {
       "name": "UserOperation"
+    },
+    {
+      "name": "Notification"
     }
   ],
   "paths": {
@@ -52,12 +55,7 @@
                 "required": [
                   "email",
                   "password"
-                ],
-                "x-apidog-orders": [
-                  "email",
-                  "password"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "email": "admin@metricnotes.com",
@@ -103,15 +101,7 @@
                         "token_type",
                         "expires_in",
                         "authorization"
-                      ],
-                      "x-apidog-orders": [
-                        "user",
-                        "access_token",
-                        "token_type",
-                        "expires_in",
-                        "authorization"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -121,13 +111,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -150,15 +134,10 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
-        "security": [],
-        "x-apidog-folder": "Auth",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33211893-run"
+        "security": []
       }
     },
     "/auth/me": {
@@ -210,24 +189,12 @@
                             "email",
                             "created_at",
                             "updated_at"
-                          ],
-                          "x-apidog-orders": [
-                            "id",
-                            "name",
-                            "email",
-                            "created_at",
-                            "updated_at"
-                          ],
-                          "x-apidog-ignore-properties": []
+                          ]
                         }
                       },
                       "required": [
                         "user"
-                      ],
-                      "x-apidog-orders": [
-                        "user"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -237,13 +204,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -260,19 +221,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Auth",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33306060-run"
+        ]
       }
     },
     "/auth/refresh-token": {
@@ -297,11 +253,7 @@
                 },
                 "required": [
                   "refresh_token"
-                ],
-                "x-apidog-orders": [
-                  "refresh_token"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NzYxNzYwMjUsImV4cCI6MTc3NjE3OTYyNSwibmJmIjoxNzc2MTc2MDI1LCJqdGkiOiJmVGlZZTJkM21FOHd4VHNaIiwic3ViIjoiYTE4NWRhNjgtZmFmOC00MDBiLTk1ZjAtZjdiNjRlOWIzNWM2IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.z9NVVegCUteMlEM_gEvz4Jk-4MOcAbFATPH7lCbiV68"
@@ -349,15 +301,7 @@
                             "email",
                             "created_at",
                             "updated_at"
-                          ],
-                          "x-apidog-orders": [
-                            "id",
-                            "name",
-                            "email",
-                            "created_at",
-                            "updated_at"
-                          ],
-                          "x-apidog-ignore-properties": []
+                          ]
                         },
                         "authorization": {
                           "type": "object",
@@ -376,24 +320,13 @@
                             "access_token",
                             "token_type",
                             "expires_in"
-                          ],
-                          "x-apidog-orders": [
-                            "access_token",
-                            "token_type",
-                            "expires_in"
-                          ],
-                          "x-apidog-ignore-properties": []
+                          ]
                         }
                       },
                       "required": [
                         "user",
                         "authorization"
-                      ],
-                      "x-apidog-orders": [
-                        "user",
-                        "authorization"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -403,13 +336,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": false,
@@ -418,15 +345,10 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
-        "security": [],
-        "x-apidog-folder": "Auth",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33306512-run"
+        "security": []
       }
     },
     "/api/user/{id}": {
@@ -465,13 +387,7 @@
                   "password": {
                     "type": "string"
                   }
-                },
-                "x-apidog-orders": [
-                  "name",
-                  "email",
-                  "password"
-                ],
-                "x-apidog-ignore-properties": []
+                }
               },
               "example": {
                 "name": "Gabrielllaaaaaa",
@@ -504,13 +420,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": false,
@@ -522,19 +432,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "UserCrud",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33213053-run"
+        ]
       },
       "delete": {
         "summary": "Delete User",
@@ -578,13 +483,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -593,19 +492,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "UserCrud",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33213515-run"
+        ]
       },
       "get": {
         "summary": "Show User",
@@ -663,15 +557,7 @@
                         "email",
                         "created_at",
                         "updated_at"
-                      ],
-                      "x-apidog-orders": [
-                        "id",
-                        "name",
-                        "email",
-                        "created_at",
-                        "updated_at"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -681,13 +567,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -702,19 +582,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "UserCrud",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33213517-run"
+        ]
       }
     },
     "/api/user/": {
@@ -751,14 +626,7 @@
                   "email",
                   "password",
                   "password_confirmation"
-                ],
-                "x-apidog-orders": [
-                  "name",
-                  "email",
-                  "password",
-                  "password_confirmation"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "name": "Gabriella",
@@ -794,12 +662,7 @@
                       "required": [
                         "user",
                         "authorization"
-                      ],
-                      "x-apidog-orders": [
-                        "user",
-                        "authorization"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -809,13 +672,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": false,
@@ -824,15 +681,10 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
-        "security": [],
-        "x-apidog-folder": "UserCrud",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-32872032-run"
+        "security": []
       },
       "get": {
         "summary": "Index User",
@@ -915,25 +767,13 @@
                             "per_page",
                             "total",
                             "last_page"
-                          ],
-                          "x-apidog-orders": [
-                            "current_page",
-                            "per_page",
-                            "total",
-                            "last_page"
-                          ],
-                          "x-apidog-ignore-properties": []
+                          ]
                         }
                       },
                       "required": [
                         "items",
                         "pagination"
-                      ],
-                      "x-apidog-orders": [
-                        "items",
-                        "pagination"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -943,13 +783,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -1030,19 +864,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "UserCrud",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33213516-run"
+        ]
       }
     },
     "/task/": {
@@ -1083,22 +912,14 @@
                   "status",
                   "priority",
                   "due_date"
-                ],
-                "x-apidog-orders": [
-                  "name",
-                  "description",
-                  "status",
-                  "priority",
-                  "due_date"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "name": "tarefa teste",
                 "description": "estou testando criar o método store para tarefa",
                 "status": "in_progress",
                 "priority": "2",
-                "due_date": "16-04-2026"
+                "due_date": "08-05-2026"
               }
             }
           },
@@ -1126,13 +947,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": false,
@@ -1141,19 +956,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33408541-run"
+        ]
       }
     },
     "/task/{id}": {
@@ -1182,9 +992,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {},
-                "x-apidog-ignore-properties": [],
-                "x-apidog-orders": []
+                "properties": {}
               },
               "example": {
                 "name": "edicao de titulo teste",
@@ -1219,13 +1027,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -1253,19 +1055,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33512011-run"
+        ]
       },
       "get": {
         "summary": "Show Task",
@@ -1309,13 +1106,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -1343,19 +1134,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33504821-run"
+        ]
       },
       "delete": {
         "summary": "Delete Task",
@@ -1399,13 +1185,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -1414,19 +1194,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33510947-run"
+        ]
       }
     },
     "/task": {
@@ -1511,25 +1286,13 @@
                             "per_page",
                             "total",
                             "last_page"
-                          ],
-                          "x-apidog-orders": [
-                            "current_page",
-                            "per_page",
-                            "total",
-                            "last_page"
-                          ],
-                          "x-apidog-ignore-properties": []
+                          ]
                         }
                       },
                       "required": [
                         "items",
                         "pagination"
-                      ],
-                      "x-apidog-orders": [
-                        "items",
-                        "pagination"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -1539,13 +1302,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -1583,19 +1340,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33504824-run"
+        ]
       }
     },
     "/task/{id}/type": {
@@ -1634,11 +1386,7 @@
                 },
                 "required": [
                   "tips_ids"
-                ],
-                "x-apidog-orders": [
-                  "tips_ids"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "task_type_ids": [
@@ -1671,13 +1419,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -1713,19 +1455,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33588963-run"
+        ]
       }
     },
     "/task/{id}/complete": {
@@ -1834,15 +1571,7 @@
                               "updated_at": {
                                 "type": "string"
                               }
-                            },
-                            "x-apidog-orders": [
-                              "id",
-                              "name",
-                              "color",
-                              "created_at",
-                              "updated_at"
-                            ],
-                            "x-apidog-ignore-properties": []
+                            }
                           }
                         }
                       },
@@ -1865,28 +1594,7 @@
                         "updated_at",
                         "user_id",
                         "task_types"
-                      ],
-                      "x-apidog-orders": [
-                        "id",
-                        "name",
-                        "description",
-                        "status",
-                        "priority",
-                        "is_being_viewed",
-                        "last_viewed_at",
-                        "completed_at",
-                        "original_due_date",
-                        "current_due_date",
-                        "postponed_count",
-                        "postponed_date_1",
-                        "postponed_date_2",
-                        "postponed_date_3",
-                        "created_at",
-                        "updated_at",
-                        "user_id",
-                        "task_types"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -1896,13 +1604,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -1938,19 +1640,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "testing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33589259-run"
+        ]
       }
     },
     "/task/{id}/postpone": {
@@ -1979,9 +1676,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {},
-                "x-apidog-ignore-properties": [],
-                "x-apidog-orders": []
+                "properties": {}
               },
               "example": {
                 "current_due_date": "2026-04-25"
@@ -2081,28 +1776,7 @@
                         "updated_at",
                         "user_id",
                         "task_types"
-                      ],
-                      "x-apidog-orders": [
-                        "id",
-                        "name",
-                        "description",
-                        "status",
-                        "priority",
-                        "is_being_viewed",
-                        "last_viewed_at",
-                        "completed_at",
-                        "original_due_date",
-                        "current_due_date",
-                        "postponed_count",
-                        "postponed_date_1",
-                        "postponed_date_2",
-                        "postponed_date_3",
-                        "created_at",
-                        "updated_at",
-                        "user_id",
-                        "task_types"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -2112,13 +1786,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -2146,19 +1814,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33683134-run"
+        ]
       }
     },
     "/task/{uuid}/view": {
@@ -2185,9 +1848,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 },
                 "example": {
                   "success": false,
@@ -2195,15 +1856,10 @@
                   "message": "Não autenticado."
                 }
               }
-            },
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            }
           }
         },
-        "security": [],
-        "x-apidog-folder": "Task",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33889715-run"
+        "security": []
       }
     },
     "/tip": {
@@ -2232,12 +1888,7 @@
                 "required": [
                   "name",
                   "color"
-                ],
-                "x-apidog-orders": [
-                  "name",
-                  "color"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "name": "Tipo teste",
@@ -2269,13 +1920,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -2297,19 +1942,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Tip",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33502599-run"
+        ]
       },
       "get": {
         "summary": "Index Tip",
@@ -2392,25 +2032,13 @@
                             "per_page",
                             "total",
                             "last_page"
-                          ],
-                          "x-apidog-orders": [
-                            "current_page",
-                            "per_page",
-                            "total",
-                            "last_page"
-                          ],
-                          "x-apidog-ignore-properties": []
+                          ]
                         }
                       },
                       "required": [
                         "items",
                         "pagination"
-                      ],
-                      "x-apidog-orders": [
-                        "items",
-                        "pagination"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -2420,13 +2048,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -2458,19 +2080,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Tip",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33504723-run"
+        ]
       }
     },
     "/tip/{id}": {
@@ -2510,12 +2127,7 @@
                 "required": [
                   "name",
                   "color"
-                ],
-                "x-apidog-orders": [
-                  "name",
-                  "color"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "name": "Mudança de nome teste",
@@ -2547,13 +2159,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -2575,19 +2181,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Tip",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33502609-run"
+        ]
       },
       "get": {
         "summary": " Show Tip",
@@ -2631,13 +2232,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -2659,19 +2254,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Tip",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33502612-run"
+        ]
       },
       "delete": {
         "summary": "Delete Tip",
@@ -2714,13 +2304,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -2729,19 +2313,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Tip",
-        "x-apidog-status": "released",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33504382-run"
+        ]
       }
     },
     "/note": {
@@ -2776,13 +2355,7 @@
                 "required": [
                   "title",
                   "body"
-                ],
-                "x-apidog-orders": [
-                  "title",
-                  "body",
-                  "tips"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "title": "Ideia de produto",
@@ -2814,13 +2387,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": false,
@@ -2833,19 +2400,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Note",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33882844-run"
+        ]
       }
     },
     "/note/{id}": {
@@ -2891,13 +2453,7 @@
                 "required": [
                   "title",
                   "body"
-                ],
-                "x-apidog-orders": [
-                  "title",
-                  "body",
-                  "tips"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "title": "Mudança Ideia de produto",
@@ -2929,13 +2485,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -2958,19 +2508,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Note",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33884888-run"
+        ]
       },
       "get": {
         "summary": "Index Note",
@@ -3061,25 +2606,13 @@
                             "per_page",
                             "total",
                             "last_page"
-                          ],
-                          "x-apidog-orders": [
-                            "current_page",
-                            "per_page",
-                            "total",
-                            "last_page"
-                          ],
-                          "x-apidog-ignore-properties": []
+                          ]
                         }
                       },
                       "required": [
                         "items",
                         "pagination"
-                      ],
-                      "x-apidog-orders": [
-                        "items",
-                        "pagination"
-                      ],
-                      "x-apidog-ignore-properties": []
+                      ]
                     },
                     "message": {
                       "type": "string"
@@ -3089,13 +2622,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -3128,19 +2655,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Note",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33884890-run"
+        ]
       },
       "delete": {
         "summary": "Show Note Copy",
@@ -3169,25 +2691,18 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "properties": {},
-                  "x-apidog-ignore-properties": [],
-                  "x-apidog-orders": []
+                  "properties": {}
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "Note",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-33884894-run"
+        ]
       }
     },
     "/user/{id}/avatar": {
@@ -3251,13 +2766,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -3274,19 +2783,14 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
-        ],
-        "x-apidog-folder": "UserOperation",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-34904147-run"
+        ]
       }
     },
     "/user/{id}/password": {
@@ -3330,13 +2834,7 @@
                   "current_password",
                   "password",
                   "password_confirmation"
-                ],
-                "x-apidog-orders": [
-                  "current_password",
-                  "password",
-                  "password_confirmation"
-                ],
-                "x-apidog-ignore-properties": []
+                ]
               },
               "example": {
                 "current_password": "nova_senha",
@@ -3369,13 +2867,7 @@
                     "success",
                     "data",
                     "message"
-                  ],
-                  "x-apidog-orders": [
-                    "success",
-                    "data",
-                    "message"
-                  ],
-                  "x-apidog-ignore-properties": []
+                  ]
                 },
                 "example": {
                   "success": true,
@@ -3391,19 +2883,318 @@
                 }
               }
             },
-            "headers": {},
-            "x-apidog-name": "Sucesso",
-            "x-apidog-ordering": 0
+            "headers": {}
           }
         },
         "security": [
           {
             "bearer": []
           }
+        ]
+      }
+    },
+    "/notification/task-due": {
+      "get": {
+        "summary": "Index Task Due",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationIndex",
+        "tags": [
+          "Notification"
         ],
-        "x-apidog-folder": "UserOperation",
-        "x-apidog-status": "developing",
-        "x-run-in-apidog": "https://app.apidog.com/web/project/1252176/apis/api-35090538-run"
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "unread_count": {
+                          "type": "integer"
+                        },
+                        "unread": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "task_id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "due_summary": {
+                                "type": "string"
+                              },
+                              "is_read": {
+                                "type": "boolean"
+                              },
+                              "read_at": {
+                                "type": "null"
+                              },
+                              "current_due_date": {
+                                "type": "string"
+                              },
+                              "days_until_due": {
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        },
+                        "read": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "unread_count",
+                        "unread",
+                        "read"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "unread_count": 1,
+                    "unread": [
+                      {
+                        "task_id": "019e029a-db9b-72d5-9c6e-a66adbd7dd44",
+                        "title": "tarefa teste",
+                        "due_summary": "Vence amanhã às 00:00",
+                        "is_read": false,
+                        "read_at": null,
+                        "current_due_date": "2026-05-08T00:00:00+00:00",
+                        "days_until_due": 1
+                      }
+                    ],
+                    "read": []
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/notification/task-due/read-all": {
+      "patch": {
+        "summary": "Read All Task Due",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationReadAll",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updated": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "updated"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "updated": 4
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/notification/task-due/clear": {
+      "patch": {
+        "summary": "Clear Task Due List",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationClearAll",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updated": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "updated"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "updated": 4
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/notification/task-due/{task}/read": {
+      "patch": {
+        "summary": "Read Task Due",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationRead",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "task",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e029a-db9b-72d5-9c6e-a66adbd7dd44",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "task_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "task_id"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "task_id": "019e029a-db9b-72d5-9c6e-a66adbd7dd44"
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     }
   },
@@ -3440,18 +3231,7 @@
           "email",
           "created_at",
           "updated_at"
-        ],
-        "x-apidog-orders": [
-          "id",
-          "name",
-          "email",
-          "created_at",
-          "updated_at",
-          "is_admin",
-          "avatar_url"
-        ],
-        "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        ]
       },
       "Authorization Resource": {
         "type": "object",
@@ -3470,14 +3250,7 @@
           "access_token",
           "token_type",
           "expires_in"
-        ],
-        "x-apidog-orders": [
-          "access_token",
-          "token_type",
-          "expires_in"
-        ],
-        "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        ]
       },
       "Task Resource": {
         "type": "object",
@@ -3557,29 +3330,7 @@
           "updated_at",
           "user_id",
           "tips"
-        ],
-        "x-apidog-orders": [
-          "id",
-          "name",
-          "description",
-          "status",
-          "priority",
-          "is_being_viewed",
-          "last_viewed_at",
-          "completed_at",
-          "original_due_date",
-          "current_due_date",
-          "postponed_count",
-          "postponed_date_1",
-          "postponed_date_2",
-          "postponed_date_3",
-          "created_at",
-          "updated_at",
-          "user_id",
-          "tips"
-        ],
-        "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        ]
       },
       "Tip Resource": {
         "type": "object",
@@ -3610,17 +3361,7 @@
           "color",
           "created_at",
           "updated_at"
-        ],
-        "x-apidog-orders": [
-          "id",
-          "user",
-          "name",
-          "color",
-          "created_at",
-          "updated_at"
-        ],
-        "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        ]
       },
       "Note Resource": {
         "type": "object",
@@ -3658,18 +3399,7 @@
           "updated_at",
           "user",
           "tips"
-        ],
-        "x-apidog-orders": [
-          "id",
-          "title",
-          "body",
-          "created_at",
-          "updated_at",
-          "user",
-          "tips"
-        ],
-        "x-apidog-ignore-properties": [],
-        "x-apidog-folder": ""
+        ]
       }
     },
     "responses": {},

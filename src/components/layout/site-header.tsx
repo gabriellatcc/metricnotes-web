@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { HeaderTaskNotifications } from "@/components/layout/header-task-notifications";
 import { useAuthMe } from "@/generated/api/auth/auth";
 import { getAuthAccessToken, setAuthAccessToken } from "@/lib/api-client";
 import { resolveLaravelStorageUrl } from "@/lib/resolve-media-url";
@@ -125,6 +126,8 @@ export function SiteHeader() {
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           {loggedIn ? (
+            <>
+            <HeaderTaskNotifications enabled={loggedIn} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -183,6 +186,7 @@ export function SiteHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </>
           ) : (
             <>
               <Link
