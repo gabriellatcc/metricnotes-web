@@ -11,4 +11,6 @@ export interface UserResource {
   email: string;
   created_at: string;
   updated_at: string;
+  is_admin?: boolean;
+  avatar_url?: string;
 }

@@ -1,4 +1,4 @@
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthMe } from "@/generated/api/auth/auth";
 import { getAuthAccessToken, setAuthAccessToken } from "@/lib/api-client";
+import { resolveLaravelStorageUrl } from "@/lib/resolve-media-url";
 import { cn, initialsFromName } from "@/lib/utils";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { BarChart3, ClipboardList, Settings, StickyNote } from "lucide-react";
@@ -43,6 +44,17 @@ export function SiteHeader() {
     query: { enabled: loggedIn },
   });
   const user = me.data?.data?.user;
+
+  const avatarSrc = resolveLaravelStorageUrl(
+    (user as { avatar_url?: string | null } | undefined)?.avatar_url ?? undefined,
+  );
+  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
+
+  useEffect(() => {
+    setAvatarLoadFailed(false);
+  }, [avatarSrc]);
+
+  const showAvatar = Boolean(avatarSrc) && !avatarLoadFailed;
 
   const logout = useCallback(() => {
     setAuthAccessToken(null);
@@ -123,10 +135,21 @@ export function SiteHeader() {
                   aria-label="Menu da conta"
                 >
                   <span
-                    className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-foreground"
+                    className="relative flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted text-xs font-semibold text-foreground"
                     aria-hidden
                   >
-                    {me.isLoading ? "…" : initialsFromName(user?.name)}
+                    {me.isLoading ? (
+                      "…"
+                    ) : showAvatar ? (
+                      <img
+                        src={avatarSrc}
+                        alt=""
+                        className="size-full object-cover"
+                        onError={() => setAvatarLoadFailed(true)}
+                      />
+                    ) : (
+                      initialsFromName(user?.name)
+                    )}
                   </span>
                   <span className="truncate text-left text-sm text-foreground">
                     {user?.name ?? (me.isLoading ? "Carregando…" : "Conta")}

@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { ArrowLeft, Loader2, Moon, Sun } from "lucide-react";
+import { ArrowLeft, KeyRound, Loader2, Moon, Palette, Sun, UserRound, type LucideIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -14,14 +14,24 @@ import {
 } from "@/components/ui/carousel";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { PasswordStrengthBar } from "@/components/ui/password-strength-bar";
+import { SettingsAvatarSection } from "@/components/settings/settings-avatar-section";
+import { SettingsPasswordSection } from "@/components/settings/settings-password-section";
 import type { Theme } from "@/components/providers/theme-provider";
 import { useTheme } from "@/components/providers/theme-provider";
 import { getAuthMeQueryKey, useAuthMe } from "@/generated/api/auth/auth";
 import { useUserUpdate } from "@/generated/api/user/user";
 import { getAuthAccessToken } from "@/lib/api-client";
 import { toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
-import { cn, initialsFromName } from "@/lib/utils";
+import { resolveLaravelStorageUrl } from "@/lib/resolve-media-url";
+import { cn } from "@/lib/utils";
+
+type SettingsPanel = "profile" | "password" | "theme";
+
+const SETTINGS_TABS: { panel: SettingsPanel; label: string; icon: LucideIcon }[] = [
+  { panel: "profile", label: "Perfil", icon: UserRound },
+  { panel: "password", label: "Senha", icon: KeyRound },
+  { panel: "theme", label: "Tema", icon: Palette },
+];
 
 export const Route = createFileRoute("/settings")({
   beforeLoad: () => {
@@ -38,6 +48,7 @@ function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const [pendingTheme, setPendingTheme] = useState<Theme>(theme);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [activePanel, setActivePanel] = useState<SettingsPanel>("profile");
 
   const me = useAuthMe({
     query: {
@@ -49,15 +60,10 @@ function SettingsPage() {
   const user = me.data?.data?.user;
 
   const [profileName, setProfileName] = useState("");
-  const [profileEmail, setProfileEmail] = useState("");
-
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     if (user) {
       setProfileName(user.name);
-      setProfileEmail(user.email);
     }
   }, [user]);
 
@@ -87,52 +93,30 @@ function SettingsPage() {
 
   const updateMutation = useUserUpdate({
     mutation: {
-      onSuccess: (res, variables) => {
+      onSuccess: (res) => {
         toastApiSuccessFromBody(res, "Dados salvos.");
         void queryClient.invalidateQueries({ queryKey: getAuthMeQueryKey() });
-        const keys = Object.keys(variables.data);
-        if (keys.includes("password")) {
-          setNewPassword("");
-          setConfirmPassword("");
-        }
       },
       onError: (error) => toastApiError(error),
     },
   });
 
   const busyProfile = updateMutation.isPending;
-  const busyPassword = updateMutation.isPending;
+
+  const profileNameDirty =
+    Boolean(user) && profileName.trim() !== (user?.name ?? "").trim();
 
   const saveProfile = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       if (!user) return;
+      if (profileName.trim() === user.name.trim()) return;
       updateMutation.mutate({
         id: user.id,
-        data: { name: profileName.trim(), email: profileEmail.trim() },
+        data: { name: profileName.trim() },
       });
     },
-    [user, profileName, profileEmail, updateMutation],
-  );
-
-  const savePassword = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!user) return;
-      if (newPassword.length < 6) {
-        toastApiError(new Error("A senha deve ter pelo menos 6 caracteres."), "Validação");
-        return;
-      }
-      if (newPassword !== confirmPassword) {
-        toastApiError(new Error("As senhas não coincidem."), "Validação");
-        return;
-      }
-      updateMutation.mutate({
-        id: user.id,
-        data: { password: newPassword },
-      });
-    },
-    [user, newPassword, confirmPassword, updateMutation],
+    [user, profileName, updateMutation],
   );
 
   const saveTheme = useCallback(() => {
@@ -144,9 +128,9 @@ function SettingsPage() {
 
   return (
     <main className="min-h-full flex-1 bg-background">
-      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-8 border-b border-border pb-6">
-          <div className="relative">
+      <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+        <header className="border-b border-border">
+          <div className="relative mx-auto max-w-2xl pb-2 text-center sm:max-w-none">
             <Link
               to="/dashboard"
               aria-label="Voltar ao painel"
@@ -162,183 +146,176 @@ function SettingsPage() {
               Gerencie as informações da sua conta, senha e preferências de tema.
             </p>
           </div>
+
+          <nav
+            role="tablist"
+            aria-label="Secções das configurações"
+            className="sticky top-[6.5rem] z-20 -mx-4 flex justify-center gap-1 overflow-x-auto border-t border-border/80 bg-background/95 px-2 py-1.5 backdrop-blur supports-[backdrop-filter]:bg-background/85 sm:-mx-6 sm:top-14 sm:px-3 lg:-mx-8 lg:px-4"
+          >
+            {SETTINGS_TABS.map(({ panel, label, icon: Icon }) => {
+              const selected = activePanel === panel;
+              return (
+                <Button
+                  key={panel}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  id={`settings-tab-${panel}`}
+                  variant={selected ? "secondary" : "ghost"}
+                  size="sm"
+                  className={cn(
+                    "h-8 shrink-0 gap-1.5 rounded-full",
+                    selected ? "text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+                  )}
+                  onClick={() => setActivePanel(panel)}
+                >
+                  <Icon className="size-4 opacity-80" aria-hidden />
+                  {label}
+                </Button>
+              );
+            })}
+          </nav>
         </header>
 
-        <div className="flex w-full flex-col gap-12">
-          {/* Informações pessoais */}
-          <section className="space-y-6">
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Informações pessoais</h2>
-              <p className="text-sm text-muted-foreground">Nome e e-mail exibidos na sua conta.</p>
-            </div>
-            <form onSubmit={saveProfile} className="space-y-8">
-              {me.isLoading ? (
-                <p className="text-sm text-muted-foreground">Carregando…</p>
-              ) : me.isError ? (
-                <p className="text-sm text-muted-foreground">
-                  Não foi possível carregar o perfil. Veja a notificação acima.
-                </p>
-              ) : user ? (
-                <div className="flex flex-col gap-8 md:flex-row md:items-start">
-                  <div
-                    className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-dashed border-border bg-muted/40 text-xl font-semibold text-muted-foreground"
-                    aria-hidden
-                  >
-                    {initialsFromName(profileName || user.name)}
-                  </div>
-                  <FieldGroup className="min-w-0 flex-1">
-                    <Field>
-                      <FieldLabel htmlFor="settings-name">Nome</FieldLabel>
-                      <FieldContent>
-                        <Input
-                          id="settings-name"
-                          value={profileName}
-                          onChange={(e) => setProfileName(e.target.value)}
-                          autoComplete="name"
-                          className="w-full rounded-xl"
-                          required
-                        />
-                      </FieldContent>
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="settings-email">E-mail</FieldLabel>
-                      <FieldContent>
-                        <Input
-                          id="settings-email"
-                          type="email"
-                          value={profileEmail}
-                          onChange={(e) => setProfileEmail(e.target.value)}
-                          autoComplete="email"
-                          className="w-full rounded-xl"
-                          required
-                        />
-                      </FieldContent>
-                    </Field>
-                  </FieldGroup>
-                </div>
-              ) : null}
-              <div className="flex justify-end border-t border-border pt-6">
-                <Button type="submit" disabled={busyProfile || !user} className="min-w-[120px] rounded-full">
-                  {busyProfile ? (
-                    <>
-                      <Loader2 className="size-4 animate-spin" />
-                      Salvando…
-                    </>
-                  ) : (
-                    "Salvar"
-                  )}
-                </Button>
-              </div>
-            </form>
-          </section>
-
-          {/* Senha */}
-          <section className="space-y-6 border-t border-border pt-12">
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Senha</h2>
-              <p className="text-sm text-muted-foreground">
-                Use pelo menos 8 caracteres, letras maiúsculas e minúsculas, números e símbolos para uma senha
-                segura.
-              </p>
-            </div>
-            <form onSubmit={savePassword} className="space-y-8">
-              <FieldGroup className="w-full space-y-4">
-                <Field>
-                  <FieldLabel htmlFor="settings-password">Nova senha</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      id="settings-password"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      autoComplete="new-password"
-                      className="rounded-xl"
-                      placeholder="••••••••"
-                    />
-                    <PasswordStrengthBar password={newPassword} />
-                  </FieldContent>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="settings-password-confirm">Confirmar senha</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      id="settings-password-confirm"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      autoComplete="new-password"
-                      className="rounded-xl"
-                      placeholder="••••••••"
-                    />
-                  </FieldContent>
-                </Field>
-              </FieldGroup>
-              <div className="flex justify-end border-t border-border pt-6">
-                <Button
-                  type="submit"
-                  variant="secondary"
-                  disabled={busyPassword || !user || !newPassword}
-                  className="min-w-[120px] rounded-full"
-                >
-                  {busyPassword ? (
-                    <>
-                      <Loader2 className="size-4 animate-spin" />
-                      Salvando…
-                    </>
-                  ) : (
-                    "Salvar senha"
-                  )}
-                </Button>
-              </div>
-            </form>
-          </section>
-
-          {/* Tema — carrossel */}
-          <section className="space-y-6 border-t border-border pt-12">
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Tema</h2>
-              <p className="text-sm text-muted-foreground">
-                Deslize ou use as setas para escolher o modo claro ou escuro. Depois salve a preferência.
-              </p>
-            </div>
-
-            <div className="relative w-full px-2 sm:px-10">
-              <Carousel
-                setApi={setCarouselApi}
-                opts={{ loop: false, startIndex: theme === "dark" ? 1 : 0 }}
-                className="w-full"
+        <div className="mt-5 flex w-full flex-col items-center">
+          {activePanel === "profile" ? (
+            <div
+              role="tabpanel"
+              aria-labelledby="settings-tab-profile"
+              className="outline-none"
+            >
+              <h2 className="sr-only">Perfil</h2>
+              <form
+                onSubmit={saveProfile}
+                className="mx-auto w-full max-w-4xl space-y-4 px-1 sm:px-0"
               >
-                <CarouselContent>
-                  <CarouselItem>
-                    <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-amber-50 via-background to-sky-50 p-8 text-center dark:from-amber-950/30 dark:via-card dark:to-sky-950/20">
-                      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-background/80 shadow-sm">
-                        <Sun className="size-7 text-amber-500" />
-                      </span>
-                      <span className="text-lg font-semibold">Claro</span>
-                      <span className="text-sm text-muted-foreground">Interface clara para o dia a dia.</span>
-                    </div>
-                  </CarouselItem>
-                  <CarouselItem>
-                    <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900 p-8 text-center text-slate-100">
-                      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
-                        <Moon className="size-7 text-slate-200" />
-                      </span>
-                      <span className="text-lg font-semibold">Escuro</span>
-                      <span className="text-sm text-slate-300">Menos brilho, confortável à noite.</span>
-                    </div>
-                  </CarouselItem>
-                </CarouselContent>
-                <CarouselPrevious className="border-border bg-background" />
-                <CarouselNext className="border-border bg-background" />
-              </Carousel>
+                {me.isLoading ? (
+                  <p className="text-sm text-muted-foreground">Carregando…</p>
+                ) : me.isError ? (
+                  <p className="text-sm text-muted-foreground">
+                    Não foi possível carregar o perfil. Veja a notificação acima.
+                  </p>
+                ) : user ? (
+                  <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+                    <SettingsAvatarSection
+                      userId={user.id}
+                      displayName={profileName || user.name}
+                      avatarUrl={resolveLaravelStorageUrl(
+                        (user as { avatar_url?: string | null }).avatar_url ?? undefined,
+                      )}
+                      disabled={busyProfile}
+                    />
+                    <FieldGroup className="w-full min-w-0 flex-1 space-y-4 sm:min-w-[18rem]">
+                      <Field>
+                        <FieldLabel htmlFor="settings-name">Nome</FieldLabel>
+                        <FieldContent>
+                          <Input
+                            id="settings-name"
+                            value={profileName}
+                            onChange={(e) => setProfileName(e.target.value)}
+                            autoComplete="name"
+                            className="w-full rounded-xl"
+                            required
+                          />
+                        </FieldContent>
+                      </Field>
+                      <Field>
+                        <FieldLabel htmlFor="settings-email">E-mail</FieldLabel>
+                        <FieldContent>
+                          <Input
+                            id="settings-email"
+                            type="email"
+                            value={user.email}
+                            disabled
+                            autoComplete="email"
+                            className="w-full cursor-not-allowed rounded-xl bg-muted/50 text-muted-foreground"
+                            title="O e-mail não pode ser alterado nesta tela."
+                          />
+                        </FieldContent>
+                      </Field>
+                    </FieldGroup>
+                  </div>
+                ) : null}
+                <div className="flex justify-end border-t border-border/80 pt-4">
+                  <Button
+                    type="submit"
+                    disabled={busyProfile || !user || !profileNameDirty}
+                    className="min-w-[120px] gap-2 rounded-full"
+                  >
+                    {busyProfile ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" />
+                        Salvando…
+                      </>
+                    ) : (
+                      "Salvar"
+                    )}
+                  </Button>
+                </div>
+              </form>
             </div>
+          ) : null}
 
-            <div className="flex justify-end border-t border-border pt-6">
-              <Button type="button" onClick={saveTheme} disabled={!themeDirty} className="min-w-[120px] rounded-full">
-                Salvar tema
-              </Button>
+          {activePanel === "password" ? (
+            <div
+              role="tabpanel"
+              aria-labelledby="settings-tab-password"
+              className="mx-auto w-full max-w-[80%] outline-none sm:max-w-[min(40rem,80%)]"
+            >
+              <h2 className="sr-only">Senha</h2>
+              {user ? (
+                <SettingsPasswordSection userId={user.id} disabled={me.isLoading || !!me.isError} />
+              ) : me.isLoading ? (
+                <p className="text-sm text-muted-foreground">Carregando…</p>
+              ) : null}
             </div>
-          </section>
+          ) : null}
+
+          {activePanel === "theme" ? (
+            <div
+              role="tabpanel"
+              aria-labelledby="settings-tab-theme"
+              className="mx-auto w-full max-w-3xl outline-none"
+            >
+              <h2 className="sr-only">Tema</h2>
+              <div className="relative w-full px-2 sm:px-10">
+                <Carousel
+                  setApi={setCarouselApi}
+                  opts={{ loop: false, startIndex: theme === "dark" ? 1 : 0 }}
+                  className="w-full"
+                >
+                  <CarouselContent>
+                    <CarouselItem>
+                      <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-amber-50 via-background to-sky-50 p-8 text-center dark:from-amber-950/30 dark:via-card dark:to-sky-950/20">
+                        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-background/80 shadow-sm">
+                          <Sun className="size-7 text-amber-500" />
+                        </span>
+                        <span className="text-lg font-semibold">Claro</span>
+                        <span className="text-sm text-muted-foreground">Interface clara para o dia a dia.</span>
+                      </div>
+                    </CarouselItem>
+                    <CarouselItem>
+                      <div className="flex min-h-[200px] flex-col justify-center gap-3 rounded-2xl border border-border/60 bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900 p-8 text-center text-slate-100">
+                        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
+                          <Moon className="size-7 text-slate-200" />
+                        </span>
+                        <span className="text-lg font-semibold">Escuro</span>
+                        <span className="text-sm text-slate-300">Menos brilho, confortável à noite.</span>
+                      </div>
+                    </CarouselItem>
+                  </CarouselContent>
+                  <CarouselPrevious className="border-border bg-background" />
+                  <CarouselNext className="border-border bg-background" />
+                </Carousel>
+              </div>
+
+              <div className="mt-4 flex justify-end border-t border-border/80 pt-4">
+                <Button type="button" onClick={saveTheme} disabled={!themeDirty} className="min-w-[120px] rounded-full">
+                  Salvar tema
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     </main>
