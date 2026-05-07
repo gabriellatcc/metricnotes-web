@@ -37,6 +37,7 @@ import { useCalendar } from "@/components/ui/imported-calendar/calendar-context"
 import { useDisclosure } from "@/components/ui/imported-calendar/hooks";
 import type { IEvent } from "@/components/ui/imported-calendar/interfaces";
 import { eventSchema, type TEventFormData } from "@/components/ui/imported-calendar/schemas";
+import type { TEventColor } from "@/components/ui/imported-calendar/types";
 
 interface IProps {
   children: ReactNode;
@@ -52,7 +53,7 @@ export function AddEditEventDialog({
   event,
 }: IProps) {
   const { isOpen, onClose, onToggle } = useDisclosure();
-  const { addEvent, updateEvent } = useCalendar();
+  const { addEvent, updateEvent, messages } = useCalendar();
   const isEditing = !!event;
 
   const initialDates = useMemo(() => {
@@ -118,17 +119,17 @@ export function AddEditEventDialog({
 
       if (isEditing) {
         updateEvent(formattedEvent);
-        toast.success("Event updated successfully");
+        toast.success(messages.eventUpdated);
       } else {
         addEvent(formattedEvent);
-        toast.success("Event created successfully");
+        toast.success(messages.eventCreated);
       }
 
       onClose();
       form.reset();
     } catch (error) {
       console.error(`Error ${isEditing ? "editing" : "adding"} event:`, error);
-      toast.error(`Failed to ${isEditing ? "edit" : "add"} event`);
+      toast.error(isEditing ? messages.eventUpdateFailed : messages.eventCreateFailed);
     }
   };
 
@@ -137,11 +138,11 @@ export function AddEditEventDialog({
       <ModalTrigger asChild>{children}</ModalTrigger>
       <ModalContent>
         <ModalHeader>
-          <ModalTitle>{isEditing ? "Edit Event" : "Add New Event"}</ModalTitle>
+          <ModalTitle>
+            {isEditing ? messages.modalEditTitle : messages.modalAddTitle}
+          </ModalTitle>
           <ModalDescription>
-            {isEditing
-              ? "Modify your existing event."
-              : "Create a new event for your calendar."}
+            {isEditing ? messages.modalEditDescription : messages.modalAddDescription}
           </ModalDescription>
         </ModalHeader>
 
@@ -157,12 +158,12 @@ export function AddEditEventDialog({
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel htmlFor="title" className="required">
-                    Title
+                    {messages.titleLabel}
                   </FormLabel>
                   <FormControl>
                     <Input
                       id="title"
-                      placeholder="Enter a title"
+                      placeholder={messages.titlePlaceholder}
                       {...field}
                       className={fieldState.invalid ? "border-red-500" : ""}
                     />
@@ -190,7 +191,7 @@ export function AddEditEventDialog({
               name="color"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel className="required">Variant</FormLabel>
+                  <FormLabel className="required">{messages.variantLabel}</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger
@@ -198,7 +199,7 @@ export function AddEditEventDialog({
                           fieldState.invalid ? "border-red-500" : ""
                         }`}
                       >
-                        <SelectValue placeholder="Select a variant" />
+                        <SelectValue placeholder={messages.variantPlaceholder} />
                       </SelectTrigger>
                       <SelectContent>
                         {COLORS.map((color) => (
@@ -207,7 +208,7 @@ export function AddEditEventDialog({
                               <div
                                 className={`size-3.5 rounded-full bg-${color}-600 dark:bg-${color}-700`}
                               />
-                              {color}
+                              {messages.eventColors[color as TEventColor]}
                             </div>
                           </SelectItem>
                         ))}
@@ -223,11 +224,11 @@ export function AddEditEventDialog({
               name="description"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel className="required">Description</FormLabel>
+                  <FormLabel className="required">{messages.descriptionLabel}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
-                      placeholder="Enter a description"
+                      placeholder={messages.descriptionPlaceholder}
                       className={fieldState.invalid ? "border-red-500" : ""}
                     />
                   </FormControl>
@@ -240,11 +241,11 @@ export function AddEditEventDialog({
         <ModalFooter className="flex justify-end gap-2">
           <ModalClose asChild>
             <Button type="button" variant="outline">
-              Cancel
+              {messages.cancel}
             </Button>
           </ModalClose>
           <Button form="event-form" type="submit">
-            {isEditing ? "Save Changes" : "Create Event"}
+            {isEditing ? messages.saveChanges : messages.createEvent}
           </Button>
         </ModalFooter>
       </ModalContent>

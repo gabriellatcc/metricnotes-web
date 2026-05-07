@@ -19,7 +19,7 @@ interface IProps {
 }
 
 export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
-  const { selectedDate, setSelectedDate, users, use24HourFormat } =
+  const { selectedDate, setSelectedDate, users, use24HourFormat, dateLocale, messages } =
     useCalendar();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -91,7 +91,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           <div className="relative z-20 flex border-b">
             <div className="w-18"></div>
             <span className="flex-1 border-l py-2 text-center text-xs font-medium text-t-quaternary">
-              {format(selectedDate, "EE")}{" "}
+              {format(selectedDate, "EEE", { locale: dateLocale })}{" "}
               <span className="font-semibold text-t-secondary">
                 {format(selectedDate, "d")}
               </span>
@@ -99,7 +99,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           </div>
         </div>
 
-        <ScrollArea className="h-[800px]" type="always" ref={scrollAreaRef}>
+        <ScrollArea className="h-[calc(100dvh-12rem)] min-h-[240px]" type="always" ref={scrollAreaRef}>
           <div className="flex">
             {/* Hours column */}
             <div className="relative w-18">
@@ -109,8 +109,13 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                     {index !== 0 && (
                       <span className="text-xs text-t-quaternary">
                         {format(
-                          new Date().setHours(hour, 0, 0, 0),
+                          (() => {
+                            const d = new Date();
+                            d.setHours(hour, 0, 0, 0);
+                            return d;
+                          })(),
                           use24HourFormat ? "HH:00" : "h a",
+                          { locale: dateLocale },
                         )}
                       </span>
                     )}
@@ -199,7 +204,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
             </div>
           ) : (
             <p className="p-4 text-center text-sm italic text-t-tertiary">
-              No appointments or consultations at the moment
+              {messages.dayViewNoCurrentEvents}
             </p>
           )}
 
@@ -227,7 +232,9 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       <div className="flex items-center gap-1.5">
                         <Calendar className="size-4 text-t-quinary" />
                         <span className="text-sm text-t-tertiary">
-                          {format(new Date(event.startDate), "MMM d, yyyy")}
+                          {format(new Date(event.startDate), "d MMM yyyy", {
+                            locale: dateLocale,
+                          })}
                         </span>
                       </div>
 
@@ -237,11 +244,13 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                           {format(
                             parseISO(event.startDate),
                             use24HourFormat ? "HH:mm" : "hh:mm a",
+                            { locale: dateLocale },
                           )}{" "}
                           -
                           {format(
                             parseISO(event.endDate),
                             use24HourFormat ? "HH:mm" : "hh:mm a",
+                            { locale: dateLocale },
                           )}
                         </span>
                       </div>

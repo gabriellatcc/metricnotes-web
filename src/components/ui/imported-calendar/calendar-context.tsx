@@ -1,10 +1,14 @@
 "use client";
 
+import type { Locale } from "date-fns";
 import type React from "react";
 import { createContext, useContext, useState } from "react";
 import { useLocalStorage } from "@/components/ui/imported-calendar/hooks";
 import type { IEvent, IUser } from "@/components/ui/imported-calendar/interfaces";
 import type { TCalendarView, TEventColor } from "@/components/ui/imported-calendar/types";
+import type { CalendarMessages } from "@/lib/i18n/calendar";
+import { calendarMessagesPt } from "@/lib/i18n/calendar";
+import { ptBR } from "date-fns/locale";
 
 interface ICalendarContext {
   selectedDate: Date;
@@ -29,6 +33,8 @@ interface ICalendarContext {
   removeEvent: (eventId: string) => void;
   clearFilter: () => void;
   integrationsMode: "tasks" | null;
+  dateLocale: Locale;
+  messages: CalendarMessages;
 }
 
 interface CalendarSettings {
@@ -54,6 +60,8 @@ export function CalendarProvider({
   badge = "colored",
   view = "day",
   integrationsMode = null,
+  dateLocale = ptBR,
+  messages = calendarMessagesPt,
 }: {
   children: React.ReactNode;
   users: IUser[];
@@ -62,6 +70,8 @@ export function CalendarProvider({
   badge?: "dot" | "colored";
   /** Quando definido, a barra omitiria ações que não se aplicam (ex.: tarefas da API). */
   integrationsMode?: "tasks" | null;
+  dateLocale?: Locale;
+  messages?: CalendarMessages;
 }) {
   const [settings, setSettings] = useLocalStorage<CalendarSettings>(
     "calendar-settings",
@@ -208,6 +218,8 @@ export function CalendarProvider({
     removeEvent,
     clearFilter,
     integrationsMode,
+    dateLocale,
+    messages,
   };
 
   return (

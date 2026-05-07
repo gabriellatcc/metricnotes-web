@@ -17,6 +17,7 @@ import { MonthEventBadge } from "@/components/ui/imported-calendar/month-event-b
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { AddEditEventDialog } from "@/components/ui/imported-calendar/add-edit-event-dialog";
+import { useCalendar } from "@/components/ui/imported-calendar/calendar-context";
 
 interface IProps {
   cell: ICalendarCell;
@@ -50,6 +51,7 @@ const MAX_VISIBLE_EVENTS = 3;
 export function DayCell({ cell, events, eventPositions }: IProps) {
   const { day, currentMonth, date } = cell;
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { messages } = useCalendar();
 
   // Memoize cellEvents and currentCellMonth for performance
   const { cellEvents, currentCellMonth } = useMemo(() => {
@@ -143,7 +145,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
                     className="border opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                   >
                     <Plus className="h-4 w-4" />
-                    <span className="max-sm:hidden">Add Event</span>
+                    <span className="max-sm:hidden">{messages.addEvent}</span>
                   </Button>
                 </AddEditEventDialog>
               </div>

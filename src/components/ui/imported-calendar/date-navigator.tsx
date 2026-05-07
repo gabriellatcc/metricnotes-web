@@ -25,9 +25,9 @@ const MotionButton = motion.create(Button);
 const MotionBadge = motion.create(Badge);
 
 export function DateNavigator({ view, events }: IProps) {
-  const { selectedDate, setSelectedDate } = useCalendar();
+  const { selectedDate, setSelectedDate, dateLocale, messages } = useCalendar();
 
-  const month = formatDate(selectedDate, "MMMM");
+  const month = formatDate(selectedDate, "MMMM", { locale: dateLocale });
   const year = selectedDate.getFullYear();
 
   const eventCount = useMemo(
@@ -60,7 +60,7 @@ export function DateNavigator({ view, events }: IProps) {
             exit={{ scale: 0.8, opacity: 0 }}
             transition={transition}
           >
-            {eventCount} events
+            {messages.eventsCount(eventCount)}
           </MotionBadge>
         </AnimatePresence>
       </div>
@@ -68,8 +68,7 @@ export function DateNavigator({ view, events }: IProps) {
       <div className="flex items-center gap-2">
         <MotionButton
           variant="outline"
-          size="icon"
-          className="h-6 w-6"
+          className="h-8 w-8 shrink-0 p-0"
           onClick={handlePrevious}
           variants={buttonHover}
           whileHover="hover"
@@ -84,13 +83,12 @@ export function DateNavigator({ view, events }: IProps) {
           animate={{ opacity: 1 }}
           transition={transition}
         >
-          {rangeText(view, selectedDate)}
+          {rangeText(view, selectedDate, dateLocale, messages.rangeFormatError)}
         </motion.p>
 
         <MotionButton
           variant="outline"
-          size="icon"
-          className="h-6 w-6"
+          className="h-8 w-8 shrink-0 p-0"
           onClick={handleNext}
           variants={buttonHover}
           whileHover="hover"

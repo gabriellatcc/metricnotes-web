@@ -15,14 +15,13 @@ import { DateNavigator } from "@/components/ui/imported-calendar/date-navigator"
 import FilterEvents from "@/components/ui/imported-calendar/filter";
 import { TodayButton } from "@/components/ui/imported-calendar/today-button";
 import { UserSelect } from "@/components/ui/imported-calendar/user-select";
-import { Settings } from "@/components/ui/imported-calendar/settings";
 import Views from "./view-tabs";
 
 export function CalendarHeader() {
-  const { view, events, integrationsMode } = useCalendar();
+  const { view, events, integrationsMode, messages } = useCalendar();
 
   return (
-    <div className="flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
+    <div className="bg-card flex shrink-0 flex-col gap-3 border-b p-3 lg:flex-row lg:items-center lg:justify-between">
       <motion.div
         className="flex items-center gap-3"
         variants={slideFromLeft}
@@ -54,18 +53,16 @@ export function CalendarHeader() {
               <AddEditEventDialog>
                 <Button>
                   <Plus className="h-4 w-4" />
-                  Add Event
+                  {messages.addEvent}
                 </Button>
               </AddEditEventDialog>
             </>
           ) : (
             <p className="text-muted-foreground max-w-[16rem] text-xs leading-snug lg:text-right">
-              Prazos vêm das tuas tarefas. Alterar datas faz-se no quadro (arrastar /
-              editar).
+              {messages.tasksModeHint}
             </p>
           )}
         </div>
-        <Settings />
       </motion.div>
     </div>
   );

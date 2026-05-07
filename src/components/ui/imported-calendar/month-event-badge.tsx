@@ -68,7 +68,7 @@ export function MonthEventBadge({
   className,
   position: propPosition,
 }: IProps) {
-  const { badgeVariant, use24HourFormat } = useCalendar();
+  const { badgeVariant, use24HourFormat, dateLocale, messages } = useCalendar();
 
   const itemStart = startOfDay(parseISO(event.startDate));
   const itemEnd = endOfDay(parseISO(event.endDate));
@@ -119,9 +119,9 @@ export function MonthEventBadge({
 
             {renderBadgeText && (
               <p className="flex-1 truncate font-semibold">
-                {eventCurrentDay && (
+                {eventCurrentDay != null && eventTotalDays != null && (
                   <span className="text-xs">
-                    Day {eventCurrentDay} of {eventTotalDays} •{" "}
+                    {messages.dayProgress(eventCurrentDay, eventTotalDays)} •{" "}
                   </span>
                 )}
                 {event.title}
@@ -132,7 +132,7 @@ export function MonthEventBadge({
           <div className="hidden sm:block">
             {renderBadgeTime && (
               <span>
-                {formatTime(new Date(event.startDate), use24HourFormat)}
+                {formatTime(new Date(event.startDate), use24HourFormat, dateLocale)}
               </span>
             )}
           </div>

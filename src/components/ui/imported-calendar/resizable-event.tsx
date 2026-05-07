@@ -32,7 +32,7 @@ export function ResizableEvent({
   children,
   className,
 }: ResizableEventBlockProps) {
-  const { updateEvent, use24HourFormat } = useCalendar();
+  const { updateEvent, use24HourFormat, dateLocale } = useCalendar();
 
   const [isResizing, setIsResizing] = useState(false);
   const [resizePreview, setResizePreview] = useState<{
@@ -87,8 +87,8 @@ export function ResizableEvent({
       }
 
       setResizePreview({
-        start: format(newStart, use24HourFormat ? "HH:mm" : "h:mm a"),
-        end: format(newEnd, use24HourFormat ? "HH:mm" : "h:mm a"),
+        start: format(newStart, use24HourFormat ? "HH:mm" : "h:mm a", { locale: dateLocale }),
+        end: format(newEnd, use24HourFormat ? "HH:mm" : "h:mm a", { locale: dateLocale }),
       });
 
       updateEvent({
@@ -103,6 +103,7 @@ export function ResizableEvent({
       durationInMinutes,
       resizeBoundaries,
       use24HourFormat,
+      dateLocale,
       updateEvent,
       event,
     ],

@@ -10,12 +10,12 @@ import {
 import { useCalendar } from "@/components/ui/imported-calendar/calendar-context";
 
 export function UserSelect() {
-  const { users, selectedUserId, filterEventsBySelectedUser } = useCalendar();
+  const { users, selectedUserId, filterEventsBySelectedUser, messages } = useCalendar();
 
   return (
     <Select value={selectedUserId!} onValueChange={filterEventsBySelectedUser}>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a user" />
+        <SelectValue placeholder={messages.selectUserPlaceholder} />
       </SelectTrigger>
       <SelectContent align="end">
         <SelectItem value="all">
@@ -32,7 +32,7 @@ export function UserSelect() {
               </Avatar>
             ))}
           </AvatarGroup>
-          All
+          {messages.allUsers}
         </SelectItem>
 
         {users.map((user) => (

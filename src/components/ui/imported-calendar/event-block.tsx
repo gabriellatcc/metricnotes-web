@@ -56,7 +56,7 @@ interface IProps
 }
 
 export function EventBlock({ event, className }: IProps) {
-  const { badgeVariant, use24HourFormat } = useCalendar();
+  const { badgeVariant, use24HourFormat, dateLocale } = useCalendar();
 
   const start = parseISO(event.startDate);
   const end = parseISO(event.endDate);
@@ -100,8 +100,8 @@ export function EventBlock({ event, className }: IProps) {
 
             {durationInMinutes > 25 && (
               <p>
-                {formatTime(start, use24HourFormat)} -{" "}
-                {formatTime(end, use24HourFormat)}
+                {formatTime(start, use24HourFormat, dateLocale)} -{" "}
+                {formatTime(end, use24HourFormat, dateLocale)}
               </p>
             )}
           </button>

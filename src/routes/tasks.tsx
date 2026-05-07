@@ -16,10 +16,12 @@ export const Route = createFileRoute("/tasks")({
 function TasksLayout() {
   return (
     <div className="bg-background flex min-h-0 flex-1 flex-col">
-      <div className="mx-auto w-full max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl shrink-0 px-4 pt-4 sm:px-6 lg:px-8">
         <TasksSubNav />
       </div>
-      <Outlet />
+      <div className="flex min-h-0 flex-1 flex-col">
+        <Outlet />
+      </div>
     </div>
   );
 }

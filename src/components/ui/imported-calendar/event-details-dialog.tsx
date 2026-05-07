@@ -29,14 +29,14 @@ interface IProps {
 export function EventDetailsDialog({ event, children }: IProps) {
   const startDate = parseISO(event.startDate);
   const endDate = parseISO(event.endDate);
-  const { use24HourFormat, removeEvent, integrationsMode } = useCalendar();
+  const { use24HourFormat, removeEvent, integrationsMode, dateLocale, messages } = useCalendar();
 
   const deleteEvent = (eventId: string) => {
     try {
       removeEvent(eventId);
-      toast.success("Event deleted successfully.");
+      toast.success(messages.eventDeleted);
     } catch {
-      toast.error("Error deleting event.");
+      toast.error(messages.eventDeleteError);
     }
   };
 
@@ -53,7 +53,7 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <User className="mt-1 size-4 shrink-0 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">Responsible</p>
+                <p className="text-sm font-medium">{messages.responsible}</p>
                 <p className="text-sm text-muted-foreground">
                   {event.user.name}
                 </p>
@@ -63,11 +63,11 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <Calendar className="mt-1 size-4 shrink-0 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">Start Date</p>
+                <p className="text-sm font-medium">{messages.startDate}</p>
                 <p className="text-sm text-muted-foreground">
-                  {format(startDate, "EEEE dd MMMM")}
-                  <span className="mx-1">at</span>
-                  {formatTime(parseISO(event.startDate), use24HourFormat)}
+                  {format(startDate, "EEEE, d 'de' MMMM", { locale: dateLocale })}
+                  <span className="mx-1">{messages.atTime}</span>
+                  {formatTime(parseISO(event.startDate), use24HourFormat, dateLocale)}
                 </p>
               </div>
             </div>
@@ -75,11 +75,11 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <Clock className="mt-1 size-4 shrink-0 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">End Date</p>
+                <p className="text-sm font-medium">{messages.endDate}</p>
                 <p className="text-sm text-muted-foreground">
-                  {format(endDate, "EEEE dd MMMM")}
-                  <span className="mx-1">at</span>
-                  {formatTime(parseISO(event.endDate), use24HourFormat)}
+                  {format(endDate, "EEEE, d 'de' MMMM", { locale: dateLocale })}
+                  <span className="mx-1">{messages.atTime}</span>
+                  {formatTime(parseISO(event.endDate), use24HourFormat, dateLocale)}
                 </p>
               </div>
             </div>
@@ -87,7 +87,7 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <Text className="mt-1 size-4 shrink-0 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">Description</p>
+                <p className="text-sm font-medium">{messages.description}</p>
                 <p className="text-sm text-muted-foreground">
                   {event.description}
                 </p>
@@ -101,12 +101,12 @@ export function EventDetailsDialog({ event, children }: IProps) {
               to="/tasks"
               className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
             >
-              Ir ao quadro
+              {messages.goToBoard}
             </Link>
           ) : (
             <>
               <AddEditEventDialog event={event}>
-                <Button variant="outline">Edit</Button>
+                <Button variant="outline">{messages.editEvent}</Button>
               </AddEditEventDialog>
               <Button
                 variant="outline"
@@ -115,7 +115,7 @@ export function EventDetailsDialog({ event, children }: IProps) {
                   deleteEvent(event.id);
                 }}
               >
-                Delete
+                {messages.deleteEvent}
               </Button>
             </>
           )}

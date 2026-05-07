@@ -28,7 +28,9 @@ function RootLayout() {
         className="z-[100]"
       />
       {!hideHeader ? <SiteHeader /> : null}
-      <Outlet />
+      <div className="flex min-h-0 flex-1 flex-col">
+        <Outlet />
+      </div>
     </div>
   );
 }

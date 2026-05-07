@@ -25,7 +25,7 @@ interface DatePickerProps {
 }
 
 export function DateTimePicker({ form, field }: DatePickerProps) {
-  const { use24HourFormat } = useCalendar();
+  const { use24HourFormat, dateLocale, messages } = useCalendar();
 
   function handleDateSelect(date: Date | undefined) {
     if (date) {
@@ -56,7 +56,7 @@ export function DateTimePicker({ form, field }: DatePickerProps) {
   return (
     <FormItem className="flex flex-col">
       <FormLabel>
-        {field.name === "startDate" ? "Start Date" : "End Date"}
+        {field.name === "startDate" ? messages.startDate : messages.endDate}
       </FormLabel>
       <Popover modal={true}>
         <PopoverTrigger asChild>
@@ -71,10 +71,11 @@ export function DateTimePicker({ form, field }: DatePickerProps) {
               {field.value ? (
                 format(
                   field.value,
-                  use24HourFormat ? "MM/dd/yyyy HH:mm" : "MM/dd/yyyy hh:mm aa",
+                  use24HourFormat ? "dd/MM/yyyy HH:mm" : "dd/MM/yyyy hh:mm aa",
+                  { locale: dateLocale },
                 )
               ) : (
-                <span>MM/DD/YYYY hh:mm aa</span>
+                <span className="text-muted-foreground">dd/mm/aaaa · hora</span>
               )}
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
             </Button>
@@ -87,6 +88,7 @@ export function DateTimePicker({ form, field }: DatePickerProps) {
               selected={field.value}
               onSelect={handleDateSelect}
               initialFocus
+              locale={dateLocale}
             />
             <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
               <ScrollArea className="w-64 sm:w-auto">
@@ -97,7 +99,6 @@ export function DateTimePicker({ form, field }: DatePickerProps) {
                   ).map((hour) => (
                     <Button
                       key={hour}
-                      size="icon"
                       variant={
                         field.value &&
                         field.value.getHours() % (use24HourFormat ? 24 : 12) ===
@@ -105,7 +106,7 @@ export function DateTimePicker({ form, field }: DatePickerProps) {
                           ? "default"
                           : "ghost"
                       }
-                      className="sm:w-full shrink-0 aspect-square"
+                      className="aspect-square h-9 w-9 shrink-0 p-0 sm:w-full"
                       onClick={() => handleTimeChange("hour", hour.toString())}
                     >
                       {hour.toString().padStart(2, "0")}
@@ -119,13 +120,12 @@ export function DateTimePicker({ form, field }: DatePickerProps) {
                   {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
                     <Button
                       key={minute}
-                      size="icon"
                       variant={
                         field.value && field.value.getMinutes() === minute
                           ? "default"
                           : "ghost"
                       }
-                      className="sm:w-full shrink-0 aspect-square"
+                      className="aspect-square h-9 w-9 shrink-0 p-0 sm:w-full"
                       onClick={() =>
                         handleTimeChange("minute", minute.toString())
                       }

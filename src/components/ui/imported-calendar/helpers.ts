@@ -25,6 +25,7 @@ import {
 	subWeeks,
 	subYears,
 } from "date-fns";
+import type { Locale } from "date-fns";
 import { useCalendar } from "@/components/ui/imported-calendar/calendar-context";
 import type {
 	ICalendarCell,
@@ -37,9 +38,15 @@ import type {
 
 const FORMAT_STRING = "MMM d, yyyy";
 
-export function rangeText(view: TCalendarView, date: Date): string {
+export function rangeText(
+	view: TCalendarView,
+	date: Date,
+	locale?: Locale,
+	formatError?: string,
+): string {
 	let start: Date;
 	let end: Date;
+	const opts = locale ? { locale } : undefined;
 
 	switch (view) {
 		case "month":
@@ -51,7 +58,7 @@ export function rangeText(view: TCalendarView, date: Date): string {
 			end = endOfWeek(date);
 			break;
 		case "day":
-			return format(date, FORMAT_STRING);
+			return format(date, FORMAT_STRING, opts);
 		case "year":
 			start = startOfYear(date);
 			end = endOfYear(date);
@@ -61,10 +68,10 @@ export function rangeText(view: TCalendarView, date: Date): string {
 			end = endOfMonth(date);
 			break;
 		default:
-			return "Error while formatting";
+			return formatError ?? "Error while formatting";
 	}
 
-	return `${format(start, FORMAT_STRING)} - ${format(end, FORMAT_STRING)}`;
+	return `${format(start, FORMAT_STRING, opts)} - ${format(end, FORMAT_STRING, opts)}`;
 }
 
 export function navigateDate(
@@ -281,10 +288,12 @@ export function getMonthCellEvents(
 export function formatTime(
 	date: Date | string,
 	use24HourFormat: boolean,
+	locale?: Locale,
 ): string {
 	const parsedDate = typeof date === "string" ? parseISO(date) : date;
 	if (!isValid(parsedDate)) return "";
-	return format(parsedDate, use24HourFormat ? "HH:mm" : "h:mm a");
+	const opts = locale ? { locale } : undefined;
+	return format(parsedDate, use24HourFormat ? "HH:mm" : "h:mm a", opts);
 }
 
 export const getFirstLetters = (str: string): string => {

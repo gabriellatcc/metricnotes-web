@@ -11,7 +11,7 @@ import { useCalendar } from "@/components/ui/imported-calendar/calendar-context"
 import type { TEventColor } from "@/components/ui/imported-calendar/types";
 
 export default function FilterEvents() {
-	const { selectedColors, filterEventsBySelectedColors, clearFilter } =
+	const { selectedColors, filterEventsBySelectedColors, clearFilter, messages } =
 		useCalendar();
 
 	const colors: TEventColor[] = [
@@ -44,7 +44,7 @@ export default function FilterEvents() {
 							className={`size-3.5 rounded-full bg-${color}-600 dark:bg-${color}-700`}
 						/>
 						<span className="capitalize flex justify-center items-center gap-2">
-							{color}
+							{messages.eventColors[color]}
 							<span>
 								{selectedColors.includes(color) && (
 									<span className="text-blue-500">
@@ -65,7 +65,7 @@ export default function FilterEvents() {
 					}}
 				>
 					<RefreshCcw className="size-3.5" />
-					Clear Filter
+					{messages.clearFilter}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

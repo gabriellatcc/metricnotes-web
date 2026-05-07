@@ -30,14 +30,14 @@ export function EventListDialog({
 }: EventListDialogProps) {
   const cellEvents = events;
   const hiddenEventsCount = Math.max(cellEvents.length - maxVisibleEvents, 0);
-  const { badgeVariant, use24HourFormat } = useCalendar();
+  const { badgeVariant, use24HourFormat, dateLocale, messages } = useCalendar();
 
   const defaultTrigger = (
     <span className="cursor-pointer">
       <span className="sm:hidden">+{hiddenEventsCount}</span>
-      <span className="hidden sm:inline py-0.5 px-2 my-1 rounded-xl border">
+        <span className="hidden sm:inline py-0.5 px-2 my-1 rounded-xl border">
         {hiddenEventsCount}
-        <span className="mx-1">more...</span>
+        <span className="mx-1">{messages.moreEventsSuffix}</span>
       </span>
     </span>
   );
@@ -51,7 +51,8 @@ export function EventListDialog({
             <div className="flex items-center gap-2">
               <EventBullet color={cellEvents[0]?.color} className="" />
               <p className="text-sm font-medium">
-                Events on {format(date, "EEEE, MMMM d, yyyy")}
+                {messages.eventsOnDate}{" "}
+                {format(date, "EEEE, d 'de' MMMM yyyy", { locale: dateLocale })}
               </p>
             </div>
           </ModalTitle>
@@ -73,7 +74,7 @@ export function EventListDialog({
                   <div className="flex justify-between items-center w-full">
                     <p className="text-sm font-medium">{event.title}</p>
                     <p className="text-xs">
-                      {formatTime(event.startDate, use24HourFormat)}
+                      {formatTime(event.startDate, use24HourFormat, dateLocale)}
                     </p>
                   </div>
                 </div>
@@ -81,7 +82,7 @@ export function EventListDialog({
             ))
           ) : (
             <p className="text-sm text-muted-foreground">
-              No events for this date.
+              {messages.noEventsThisDate}
             </p>
           )}
         </div>

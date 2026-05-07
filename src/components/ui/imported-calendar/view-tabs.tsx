@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
+import { memo, useMemo } from "react";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -12,38 +13,29 @@ import {
   Grid2X2,
 } from "lucide-react";
 import type { TCalendarView } from "@/components/ui/imported-calendar/types";
-import { memo } from "react";
 
-const tabs = [
-  {
-    name: "Agenda",
-    value: "agenda",
-    icon: () => <CalendarRange className="h-4 w-4" />,
-  },
-  {
-    name: "Day",
-    value: "day",
-    icon: () => <List className="h-4 w-4" />,
-  },
-  {
-    name: "Week",
-    value: "week",
-    icon: () => <Columns className="h-4 w-4" />,
-  },
-  {
-    name: "Month",
-    value: "month",
-    icon: () => <Grid3X3 className="h-4 w-4" />,
-  },
-  {
-    name: "Year",
-    value: "year",
-    icon: () => <Grid2X2 className="h-4 w-4" />,
-  },
+const tabValues: { value: TCalendarView; icon: typeof CalendarRange }[] = [
+  { value: "agenda", icon: CalendarRange },
+  { value: "day", icon: List },
+  { value: "week", icon: Columns },
+  { value: "month", icon: Grid3X3 },
+  { value: "year", icon: Grid2X2 },
 ];
 
 function Views() {
-  const { view, setView } = useCalendar();
+  const { view, setView, messages } = useCalendar();
+
+  const labelFor = useMemo(
+    () =>
+      ({
+        agenda: messages.viewAgenda,
+        day: messages.viewDay,
+        week: messages.viewWeek,
+        month: messages.viewMonth,
+        year: messages.viewYear,
+      }) satisfies Record<TCalendarView, string>,
+    [messages],
+  );
 
   return (
     <Tabs
@@ -52,8 +44,9 @@ function Views() {
       className="gap-4 sm:w-auto w-full"
     >
       <TabsList className="h-auto gap-2 rounded-xl p-1 w-full">
-        {tabs.map(({ icon: Icon, name, value }) => {
+        {tabValues.map(({ icon: Icon, value }) => {
           const isActive = view === value;
+          const name = labelFor[value];
 
           return (
             <motion.div
@@ -61,7 +54,7 @@ function Views() {
               layout
               className={cn(
                 "flex h-8 items-center justify-center overflow-hidden rounded-md",
-                isActive ? "flex-1" : "flex-none"
+                isActive ? "flex-1" : "flex-none",
               )}
               onClick={() => setView(value as TCalendarView)}
               initial={false}
@@ -81,7 +74,7 @@ function Views() {
                   exit={{ filter: "blur(2px)" }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
                 >
-                  <Icon />
+                  <Icon className="h-4 w-4" />
                   <AnimatePresence initial={false}>
                     {isActive && (
                       <motion.span

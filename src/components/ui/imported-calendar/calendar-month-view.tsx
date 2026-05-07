@@ -1,3 +1,4 @@
+import { addDays, format, startOfWeek } from "date-fns";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import {
@@ -19,14 +20,21 @@ interface IProps {
 	multiDayEvents: IEvent[];
 }
 
-const WEEK_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEK_STARTS_ON = 0 as const;
 
 export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
-	const { selectedDate } = useCalendar();
+	const { selectedDate, dateLocale } = useCalendar();
 
 	const allEvents = [...multiDayEvents, ...singleDayEvents];
 
 	const cells = useMemo(() => getCalendarCells(selectedDate), [selectedDate]);
+
+	const weekDayLabels = useMemo(() => {
+		const start = startOfWeek(selectedDate, { weekStartsOn: WEEK_STARTS_ON });
+		return Array.from({ length: 7 }, (_, i) =>
+			format(addDays(start, i), "EEE", { locale: dateLocale }),
+		);
+	}, [selectedDate, dateLocale]);
 
 	const eventPositions = useMemo(
 		() =>
@@ -41,7 +49,7 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
 	return (
 		<motion.div initial="initial" animate="animate" variants={staggerContainer}>
 			<div className="grid grid-cols-7">
-				{WEEK_DAYS.map((day, index) => (
+				{weekDayLabels.map((day, index) => (
 					<motion.div
 						key={day}
 						className="flex items-center justify-center py-2"

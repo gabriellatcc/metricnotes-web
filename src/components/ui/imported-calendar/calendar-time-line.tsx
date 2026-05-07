@@ -3,7 +3,7 @@ import { useCalendar } from "@/components/ui/imported-calendar/calendar-context"
 import { formatTime } from "@/components/ui/imported-calendar/helpers";
 
 export function CalendarTimeline() {
-  const { use24HourFormat } = useCalendar();
+  const { use24HourFormat, dateLocale } = useCalendar();
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export function CalendarTimeline() {
   };
 
   const formatCurrentTime = () => {
-    return formatTime(currentTime, use24HourFormat);
+    return formatTime(currentTime, use24HourFormat, dateLocale);
   };
 
   return (
