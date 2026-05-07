@@ -17,6 +17,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TasksIndexRouteImport } from './routes/tasks.index'
 import { Route as TasksCompletedRouteImport } from './routes/tasks.completed'
+import { Route as TasksCalendarRouteImport } from './routes/tasks.calendar'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 
@@ -60,6 +61,11 @@ const TasksCompletedRoute = TasksCompletedRouteImport.update({
   path: '/completed',
   getParentRoute: () => TasksRoute,
 } as any)
+const TasksCalendarRoute = TasksCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => TasksRoute,
+} as any)
 const authSignupRoute = authSignupRouteImport.update({
   id: '/(auth)/signup',
   path: '/signup',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/tasks': typeof TasksRouteWithChildren
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/tasks/calendar': typeof TasksCalendarRoute
   '/tasks/completed': typeof TasksCompletedRoute
   '/tasks/': typeof TasksIndexRoute
 }
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/tasks/calendar': typeof TasksCalendarRoute
   '/tasks/completed': typeof TasksCompletedRoute
   '/tasks': typeof TasksIndexRoute
 }
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/tasks': typeof TasksRouteWithChildren
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signup': typeof authSignupRoute
+  '/tasks/calendar': typeof TasksCalendarRoute
   '/tasks/completed': typeof TasksCompletedRoute
   '/tasks/': typeof TasksIndexRoute
 }
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/login'
     | '/signup'
+    | '/tasks/calendar'
     | '/tasks/completed'
     | '/tasks/'
   fileRoutesByTo: FileRoutesByTo
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/login'
     | '/signup'
+    | '/tasks/calendar'
     | '/tasks/completed'
     | '/tasks'
   id:
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/tasks'
     | '/(auth)/login'
     | '/(auth)/signup'
+    | '/tasks/calendar'
     | '/tasks/completed'
     | '/tasks/'
   fileRoutesById: FileRoutesById
@@ -214,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TasksCompletedRouteImport
       parentRoute: typeof TasksRoute
     }
+    '/tasks/calendar': {
+      id: '/tasks/calendar'
+      path: '/calendar'
+      fullPath: '/tasks/calendar'
+      preLoaderRoute: typeof TasksCalendarRouteImport
+      parentRoute: typeof TasksRoute
+    }
     '/(auth)/signup': {
       id: '/(auth)/signup'
       path: '/signup'
@@ -232,11 +251,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface TasksRouteChildren {
+  TasksCalendarRoute: typeof TasksCalendarRoute
   TasksCompletedRoute: typeof TasksCompletedRoute
   TasksIndexRoute: typeof TasksIndexRoute
 }
 
 const TasksRouteChildren: TasksRouteChildren = {
+  TasksCalendarRoute: TasksCalendarRoute,
   TasksCompletedRoute: TasksCompletedRoute,
   TasksIndexRoute: TasksIndexRoute,
 }

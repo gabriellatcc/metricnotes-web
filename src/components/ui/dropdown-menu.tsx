@@ -62,11 +62,52 @@ function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typ
   return <DM.Separator className={cn("-mx-1 my-1 h-px bg-border", className)} {...props} />;
 }
 
+function DropdownMenuGroup({ className, ...props }: React.ComponentProps<typeof DM.Group>) {
+  return <DM.Group className={cn(className)} {...props} />;
+}
+
+function DropdownMenuRadioGroup({ className, ...props }: React.ComponentProps<typeof DM.RadioGroup>) {
+  return <DM.RadioGroup className={cn(className)} {...props} />;
+}
+
+function DropdownMenuRadioItem({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof DM.RadioItem>) {
+  return (
+    <DM.RadioItem
+      className={cn(
+        "relative flex cursor-pointer select-none items-center gap-2 rounded-lg py-2 pl-8 pr-2.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        className,
+      )}
+      {...props}
+    >
+      <span className="absolute left-2.5 flex size-3.5 items-center justify-center">
+        <DM.ItemIndicator>
+          <span className="size-2 rounded-full bg-foreground" />
+        </DM.ItemIndicator>
+      </span>
+      {children}
+    </DM.RadioItem>
+  );
+}
+
+function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<"span">) {
+  return (
+    <span className={cn("ml-auto flex items-center text-xs tracking-widest opacity-60", className)} {...props} />
+  );
+}
+
 export {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 };

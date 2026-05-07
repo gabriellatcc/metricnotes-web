@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { TaskKanbanBoard } from "@/components/tasks/task-kanban-board";
@@ -401,6 +401,9 @@ export function TasksPage() {
     ? "Atualize os campos e salve."
     : "Preencha para criar uma nova tarefa.";
 
+  const boardShellClass =
+    "mx-auto w-full max-w-7xl rounded border border-border/30 bg-background px-4 py-3 sm:px-6 lg:px-8";
+
   return (
     <main className="flex min-h-0 flex-1 flex-col bg-background">
       <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
@@ -408,7 +411,7 @@ export function TasksPage() {
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">Tarefas</h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Arraste as cartas entre colunas; concluir ou reabrir no menu “…”. Filtre e busque.
+              Arraste as cartas entre linhas. Crie, edite ou exclua, filtre, busque e o mais importante conclua.
             </p>
           </div>
         </header>
@@ -476,14 +479,19 @@ export function TasksPage() {
         </div>
       </div>
 
-      <section className="flex w-full min-w-0 flex-col" aria-label="Quadro de tarefas">
+      <section className="w-full px-0 pb-6" aria-label="Quadro de tarefas">
         {indexQuery.isLoading ? (
-          <div className="px-4 py-2 text-sm text-muted-foreground sm:px-6 lg:px-8">
-            A carregar quadro…
+          <div className={`${boardShellClass} flex flex-col items-center justify-center gap-3 py-20`}>
+            <Loader2 className="h-9 w-9 animate-spin text-muted-foreground" aria-hidden />
+            <p className="text-sm text-muted-foreground">A carregar quadro…</p>
           </div>
         ) : indexQuery.isError ? (
-          <div className="px-4 py-2 text-sm text-muted-foreground sm:px-6 lg:px-8">
-            Não foi possível carregar as tarefas. Veja a notificação acima.
+          <div className={boardShellClass}>
+            <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
+              <p className="text-sm text-muted-foreground">
+                Não foi possível carregar as tarefas. Veja a notificação acima.
+              </p>
+            </div>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="mx-4 my-2 rounded-2xl border border-dashed bg-muted/20 px-6 py-10 text-center sm:mx-6 sm:my-3 lg:mx-8">
@@ -497,10 +505,7 @@ export function TasksPage() {
             </p>
           </div>
         ) : (
-          <div
-            className="mx-auto flex min-h-0 w-full max-w-7xl flex-col rounded border border-border/30 bg-background px-4 sm:px-6 lg:px-8"
-            style={{ height: "min(calc(100dvh - 10.5rem), 56rem)" }}
-          >
+          <div className={boardShellClass}>
             <TaskKanbanBoard
               tasks={filteredItems}
               busy={busy}

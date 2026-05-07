@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
+import { TasksSubNav } from "@/components/tasks/tasks-subnav";
 import { getAuthAccessToken } from "@/lib/api-client";
 
 export const Route = createFileRoute("/tasks")({
@@ -13,5 +14,12 @@ export const Route = createFileRoute("/tasks")({
 });
 
 function TasksLayout() {
-  return <Outlet />;
+  return (
+    <div className="bg-background flex min-h-0 flex-1 flex-col">
+      <div className="mx-auto w-full max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+        <TasksSubNav />
+      </div>
+      <Outlet />
+    </div>
+  );
 }

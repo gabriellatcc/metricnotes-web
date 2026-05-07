@@ -48,15 +48,6 @@ const dropAnimation: DropAnimation = {
   }),
 };
 
-function statusLabel(status: string): string {
-  const m: Record<string, string> = {
-    in_progress: "Em progresso",
-    completed: "Concluída",
-    postponed: "Adiada",
-  };
-  return m[status] ?? status;
-}
-
 function formatShortDate(iso: string): string {
   return iso.slice(0, 10);
 }
@@ -138,12 +129,11 @@ function TaskCardVisual({
             >
               {task.name}
             </h3>
-            <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[0.65rem] text-muted-foreground">
-              <span className="rounded bg-muted/80 px-1.5 py-0.5 font-medium text-foreground/80">
-                {statusLabel(task.status)}
-              </span>
-              {task.postponed_count > 0 ? <span>Ad. {task.postponed_count}×</span> : null}
-            </div>
+            {task.postponed_count > 0 ? (
+              <div className="mt-1.5 text-[0.65rem] text-muted-foreground">
+                <span>Ad. {task.postponed_count}×</span>
+              </div>
+            ) : null}
             <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[0.6rem] text-muted-foreground">
               {task.original_due_date ? <span>Orig.: {formatShortDate(task.original_due_date)}</span> : null}
               {task.current_due_date ? <span>Atual: {formatShortDate(task.current_due_date)}</span> : null}
@@ -350,17 +340,14 @@ export function TaskKanbanBoard({
   }
 
   return (
-    <div className="flex h-full w-full min-h-0 min-w-0 max-w-full flex-1 flex-col">
+    <div className="flex w-full max-w-full flex-col">
       <DndContext
         sensors={sensors}
         onDragStart={({ active }) => setActiveId(active.id)}
         onDragEnd={handleDragEnd}
         onDragCancel={() => setActiveId(null)}
       >
-        <div
-          className="flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-2 overflow-y-auto pb-0.5 [-ms-overflow-style:none] [scrollbar-gutter:stable] [scrollbar-width:thin]"
-          style={{ WebkitOverflowScrolling: "touch" }}
-        >
+        <div className="flex w-full flex-col gap-2 pb-1">
           {KANBAN_COLUMNS.map((col) => {
             const raw = byColumn[col.id];
             const list = col.id === "done" ? sortDoneByCompletedDesc(raw) : raw;
@@ -429,7 +416,7 @@ export function TaskKanbanBoard({
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir tarefa?</AlertDialogTitle>
             <AlertDialogDescription>
-              Isto remove “{pendingDelete?.name ?? ""}”. Não podes anular depois.
+              Isto remove “{pendingDelete?.name ?? ""}”.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
