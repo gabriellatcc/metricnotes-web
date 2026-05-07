@@ -27,9 +27,13 @@ import type {
   TaskAssignTip200,
   TaskAssignTipBody,
   TaskDelete200,
+  TaskEndViewSession200,
+  TaskEndViewSessionBody,
   TaskIndex200,
   TaskIndexParams,
+  TaskRecordView200,
   TaskShow200,
+  TaskStartViewSession200,
   TaskStore200,
   TaskStoreBody,
   TaskUpdate200,
@@ -603,4 +607,190 @@ export const useTaskUpdatePostpone = <TError = unknown,
         TContext
       > => {
       return useMutation(getTaskUpdatePostponeMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Record Task View
+ */
+export const taskRecordView = (
+    id: string,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<TaskRecordView200>(
+      {url: `/api/task/${id}/view`, method: 'POST', signal
+    },
+      options);
+    }
+
+
+
+export const getTaskRecordViewMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskRecordView>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskRecordView>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['taskRecordView'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskRecordView>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  taskRecordView(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskRecordViewMutationResult = NonNullable<Awaited<ReturnType<typeof taskRecordView>>>
+
+    export type TaskRecordViewMutationError = unknown
+
+    /**
+ * @summary Record Task View
+ */
+export const useTaskRecordView = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskRecordView>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskRecordView>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getTaskRecordViewMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Start Task View Session
+ */
+export const taskStartViewSession = (
+    id: string,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<TaskStartViewSession200>(
+      {url: `/api/task/${id}/view/session/start`, method: 'POST', signal
+    },
+      options);
+    }
+
+
+
+export const getTaskStartViewSessionMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskStartViewSession>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskStartViewSession>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['taskStartViewSession'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskStartViewSession>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  taskStartViewSession(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskStartViewSessionMutationResult = NonNullable<Awaited<ReturnType<typeof taskStartViewSession>>>
+
+    export type TaskStartViewSessionMutationError = unknown
+
+    /**
+ * @summary Start Task View Session
+ */
+export const useTaskStartViewSession = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskStartViewSession>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskStartViewSession>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getTaskStartViewSessionMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary End Task View Session Copy
+ */
+export const taskEndViewSession = (
+    id: string,
+    taskEndViewSessionBody: TaskEndViewSessionBody,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<TaskEndViewSession200>(
+      {url: `/api/task/${id}/view/session/end`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: taskEndViewSessionBody, signal
+    },
+      options);
+    }
+
+
+
+export const getTaskEndViewSessionMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskEndViewSession>>, TError,{id: string;data: TaskEndViewSessionBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof taskEndViewSession>>, TError,{id: string;data: TaskEndViewSessionBody}, TContext> => {
+
+const mutationKey = ['taskEndViewSession'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof taskEndViewSession>>, {id: string;data: TaskEndViewSessionBody}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  taskEndViewSession(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TaskEndViewSessionMutationResult = NonNullable<Awaited<ReturnType<typeof taskEndViewSession>>>
+    export type TaskEndViewSessionMutationBody = TaskEndViewSessionBody
+    export type TaskEndViewSessionMutationError = unknown
+
+    /**
+ * @summary End Task View Session Copy
+ */
+export const useTaskEndViewSession = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof taskEndViewSession>>, TError,{id: string;data: TaskEndViewSessionBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof taskEndViewSession>>,
+        TError,
+        {id: string;data: TaskEndViewSessionBody},
+        TContext
+      > => {
+      return useMutation(getTaskEndViewSessionMutationOptions(options), queryClient);
     }

@@ -20,7 +20,7 @@ import type { IndexShowParams } from "@/generated/api/models/indexShowParams";
 import type { StoreNoteBody } from "@/generated/api/models/storeNoteBody";
 import { useNoteDelete, useNoteUpdate, useStoreNote } from "@/generated/api/note/note";
 import { apiClient } from "@/lib/api-client";
-import { toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
+import { toast, toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
 import { cn } from "@/lib/utils";
 
 const inputClass =
@@ -199,9 +199,29 @@ export function NotesPage() {
 
   const deleteMutation = useNoteDelete({
     mutation: {
-      onSuccess: (res) => {
-        toastApiSuccessFromBody(res, "Nota excluída.");
+      onSuccess: (_res, variables) => {
+        const deletedId = variables.id;
         invalidateNotes();
+        toast.success("Nota excluída.", {
+          duration: 10_000,
+          action: {
+            label: "Desfazer",
+            onClick: () => {
+              void (async () => {
+                try {
+                  await apiClient<{ success?: boolean }>({
+                    url: `/api/note/${deletedId}/restore`,
+                    method: "PATCH",
+                  });
+                  invalidateNotes();
+                  toast.success("Nota restaurada.");
+                } catch (e) {
+                  toastApiError(e, "Não foi possível restaurar");
+                }
+              })();
+            },
+          },
+        });
       },
       onError: (error) => toastApiError(error),
     },

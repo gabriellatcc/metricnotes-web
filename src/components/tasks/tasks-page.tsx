@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { TaskKanbanBoard } from "@/components/tasks/task-kanban-board";
 import { getKanbanColumnId, type KanbanColumnId } from "@/components/tasks/task-kanban-types";
@@ -18,13 +18,21 @@ import { Input } from "@/components/ui/input";
 import type { TaskResource } from "@/generated/api/models";
 import type { TaskStoreBody } from "@/generated/api/models/taskStoreBody";
 import {
+  taskEndViewSession,
+  taskStartViewSession,
   useTaskDelete,
   useTaskIndex,
   useTaskStore,
   useTaskUpdate,
   useTaskUpdatePostpone,
 } from "@/generated/api/task/task";
-import { toastApiError, toastApiSuccessFromBody, toastApiWarning } from "@/lib/api-toast";
+import {
+  toast,
+  toastApiError,
+  toastApiSuccessFromBody,
+  toastApiWarning,
+} from "@/lib/api-toast";
+import { apiClient } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 
 const inputClass =
@@ -80,6 +88,11 @@ function formatTaskDateTime(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso.slice(0, 19).replace("T", " ");
   return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
+/** Tarefas concluídas não abrem sessão nem acumulam novo tempo neste fluxo de visualização. */
+function taskQualifiesForViewSession(task: TaskResource): boolean {
+  return task.status !== "completed" && (task.completed_at == null || task.completed_at === "");
 }
 
 function emptyForm(): TaskStoreBody {
@@ -171,13 +184,73 @@ export function TasksPage() {
 
   const deleteMutation = useTaskDelete({
     mutation: {
-      onSuccess: (res) => {
-        toastApiSuccessFromBody(res, "Tarefa excluída.");
+      onSuccess: (_res, variables) => {
+        const deletedId = variables.id;
         invalidateTasks();
+        toast.success("Tarefa excluída.", {
+          duration: 10_000,
+          action: {
+            label: "Desfazer",
+            onClick: () => {
+              void (async () => {
+                try {
+                  await apiClient<{ success?: boolean }>({
+                    url: `/api/task/${deletedId}/restore`,
+                    method: "PATCH",
+                  });
+                  invalidateTasks();
+                  toast.success("Tarefa restaurada.");
+                } catch (e) {
+                  toastApiError(e, "Não foi possível restaurar");
+                }
+              })();
+            },
+          },
+        });
       },
       onError: (error) => toastApiError(error),
     },
   });
+
+  const viewSessionRef = useRef<{ taskId: string; sessionId: string } | null>(null);
+
+  useEffect(() => {
+    if (!viewTask) {
+      return undefined;
+    }
+    if (!taskQualifiesForViewSession(viewTask)) {
+      return undefined;
+    }
+
+    const taskId = viewTask.id;
+    let cancelled = false;
+
+    void taskStartViewSession(taskId)
+      .then((res) => {
+        if (cancelled || res.success !== true) return;
+        const sid =
+          typeof res.data === "object" && res.data !== null && "session_id" in res.data
+            ? (res.data as { session_id?: unknown }).session_id
+            : undefined;
+        if (typeof sid === "string" && sid.length > 0) {
+          viewSessionRef.current = { taskId, sessionId: sid };
+        }
+      })
+      .catch(() => {
+        //
+      });
+
+    return () => {
+      cancelled = true;
+      const held = viewSessionRef.current;
+      if (held?.taskId === taskId && held.sessionId) {
+        void taskEndViewSession(taskId, { session_id: held.sessionId }).catch(() => {
+          //
+        });
+      }
+      viewSessionRef.current = null;
+    };
+  }, [viewTask]);
 
   const postponeMutation = useTaskUpdatePostpone({
     mutation: {
@@ -482,7 +555,12 @@ export function TasksPage() {
               <>
                 <DialogHeader>
                   <DialogTitle className="pr-2">{viewTask.name}</DialogTitle>
-                  <DialogDescription>Somente leitura</DialogDescription>
+                  <DialogDescription>
+                    Somente leitura.
+                    {taskQualifiesForViewSession(viewTask)
+                      ? " O tempo neste painel conta para suas estatísticas de foco na tarefa."
+                      : " Tarefas concluídas não registram novo tempo de visualização."}
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-[min(60vh,420px)] space-y-4 overflow-y-auto px-6 py-4">
                   <div>

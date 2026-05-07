@@ -1824,15 +1824,80 @@
         ]
       }
     },
-    "/task/{uuid}/view": {
-      "get": {
-        "summary": "View Task",
+    "/task/{id}/view": {
+      "post": {
+        "summary": "Record Task View",
         "deprecated": false,
         "description": "",
-        "tags": [],
+        "operationId": "taskRecordView",
+        "tags": [
+          "Task"
+        ],
         "parameters": [
           {
-            "name": "uuid",
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e02b7-9467-7340-a95e-14ee54a23e2f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Não autenticado."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/note/{id}/restore": {
+      "patch": {
+        "summary": "Restore Note",
+        "deprecated": false,
+        "description": "",
+        "operationId": "noteRestore",
+        "tags": [
+          "Note"
+        ],
+        "parameters": [
+          {
+            "name": "id",
             "in": "path",
             "description": "",
             "required": true,
@@ -1849,6 +1914,63 @@
                 "schema": {
                   "type": "object",
                   "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/view/session/start": {
+      "post": {
+        "summary": "Start Task View Session",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskStartViewSession",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e02b7-9467-7340-a95e-14ee54a23e2f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Session"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
                 },
                 "example": {
                   "success": false,
@@ -1856,10 +1978,98 @@
                   "message": "Não autenticado."
                 }
               }
-            }
+            },
+            "headers": {}
           }
         },
-        "security": []
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/view/session/end": {
+      "post": {
+        "summary": "End Task View Session Copy",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskEndViewSession",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e02b7-9467-7340-a95e-14ee54a23e2f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "session_id"
+                ]
+              },
+              "example": {
+                "session_id": "019e02ba-05be-733f-8e48-8bea39827d1f"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Session"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Não autenticado."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/tip": {
@@ -3276,6 +3486,9 @@
           "last_viewed_at": {
             "type": "null"
           },
+          "total_view_time_seconds": {
+            "type": "integer"
+          },
           "completed_at": {
             "type": "null"
           },
@@ -3329,7 +3542,8 @@
           "created_at",
           "updated_at",
           "user_id",
-          "tips"
+          "tips",
+          "total_view_time_seconds"
         ]
       },
       "Tip Resource": {
@@ -3399,6 +3613,25 @@
           "updated_at",
           "user",
           "tips"
+        ]
+      },
+      "Task Session": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string"
+          },
+          "task": {
+            "$ref": "#/components/schemas/Task%20Resource"
+          }
+        },
+        "required": [
+          "session_id",
+          "started_at",
+          "task"
         ]
       }
     },

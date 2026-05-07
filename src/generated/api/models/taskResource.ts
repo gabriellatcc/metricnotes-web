@@ -14,6 +14,7 @@ export interface TaskResource {
   is_being_viewed: boolean;
   /** @nullable */
   last_viewed_at: string | null;
+  total_view_time_seconds: number;
   /** @nullable */
   completed_at: string | null;
   original_due_date: string;

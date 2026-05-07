@@ -27,6 +27,7 @@ import type {
   IndexNote200,
   IndexNoteParams,
   NoteDelete200,
+  NoteRestore200,
   NoteUpdate200,
   NoteUpdateBody,
   StoreNote200,
@@ -41,6 +42,67 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
+ * @summary Restore Note
+ */
+export const noteRestore = (
+    id: string,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<NoteRestore200>(
+      {url: `/api/note/${id}/restore`, method: 'PATCH', signal
+    },
+      options);
+    }
+
+
+
+export const getNoteRestoreMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof noteRestore>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof noteRestore>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['noteRestore'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof noteRestore>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  noteRestore(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type NoteRestoreMutationResult = NonNullable<Awaited<ReturnType<typeof noteRestore>>>
+
+    export type NoteRestoreMutationError = unknown
+
+    /**
+ * @summary Restore Note
+ */
+export const useNoteRestore = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof noteRestore>>, TError,{id: string}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof noteRestore>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getNoteRestoreMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Store Note
  */
 export const storeNote = (

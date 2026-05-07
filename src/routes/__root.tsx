@@ -15,6 +15,7 @@ function RootLayout() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Toasts ~20vh abaixo do topo para não cobrir o cabeçalho */}
       <Toaster
         position="top-right"
         theme={theme}
@@ -22,6 +23,8 @@ function RootLayout() {
         closeButton={false}
         expand={false}
         duration={5200}
+        offset={{ top: "20vh", right: "1rem" }}
+        mobileOffset={{ top: "20vh", right: "1rem" }}
         className="z-[100]"
       />
       {!hideHeader ? <SiteHeader /> : null}

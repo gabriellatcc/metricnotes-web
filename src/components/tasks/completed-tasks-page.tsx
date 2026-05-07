@@ -209,7 +209,9 @@ export function CompletedTasksPage() {
             <>
               <DialogHeader>
                 <DialogTitle className="pr-2">{viewTask.name}</DialogTitle>
-                <DialogDescription>Concluída</DialogDescription>
+                <DialogDescription>
+                  Concluída. Tempo de foco na tarefa não é contabilizado após a conclusão.
+                </DialogDescription>
               </DialogHeader>
               <div className="max-h-[min(60vh,420px)] space-y-4 overflow-y-auto px-6 py-4">
                 <div>

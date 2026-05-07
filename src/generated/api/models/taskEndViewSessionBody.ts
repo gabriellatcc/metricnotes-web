@@ -5,4 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetApiTaskUuidView200 = { [key: string]: unknown };
+export type TaskEndViewSessionBody = {
+  session_id: string;
+};
