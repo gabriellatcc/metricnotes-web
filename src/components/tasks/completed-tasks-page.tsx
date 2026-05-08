@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { buttonVariants, Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -95,16 +95,11 @@ export function CompletedTasksPage() {
 
   return (
     <main className="min-h-full flex-1 bg-background">
-      <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Concluídas</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Histórico por data de conclusão. A listagem do servidor é paginada; em cada página mostramos só
-              tarefas concluídas.
-            </p>
-          </div>
-        </div>
+      <div className="w-full pt-2 pb-6 sm:pb-8">
+        <p className="mb-6 max-w-2xl text-pretty text-sm text-muted-foreground">
+          Nesta vista vês o histórico por data de conclusão. A listagem do servidor é paginada; em cada página mostramos
+          só tarefas concluídas.
+        </p>
 
         {indexQuery.isLoading ? (
           <p className="text-sm text-muted-foreground">A carregar…</p>

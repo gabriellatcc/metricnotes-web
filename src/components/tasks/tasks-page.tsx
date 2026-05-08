@@ -402,21 +402,11 @@ export function TasksPage() {
     : "Preencha para criar uma nova tarefa.";
 
   const boardShellClass =
-    "mx-auto w-full max-w-7xl rounded border border-border/30 bg-background px-4 py-3 sm:px-6 lg:px-8";
+    "w-full rounded border border-border/30 bg-background px-4 py-3 sm:px-6 lg:px-8";
 
   return (
     <main className="flex min-h-0 flex-1 flex-col bg-background">
-      <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
-        <header className="mb-3 border-b border-border pb-3 sm:mb-4 sm:pb-4">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Tarefas</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Arraste as cartas entre linhas. Crie, edite ou exclua, filtre, busque e o mais importante conclua.
-            </p>
-          </div>
-        </header>
-
-        <div className="flex w-full flex-col gap-3 sm:gap-4">
+      <div className="flex w-full flex-col gap-3 sm:gap-4">
           <div className="rounded-xl bg-muted/45 px-3 py-2 sm:px-3.5 sm:py-2.5">
             <label className="sr-only" htmlFor="task-search">
               Buscar tarefas
@@ -476,7 +466,6 @@ export function TasksPage() {
               Nova tarefa
             </Button>
           </div>
-        </div>
       </div>
 
       <section className="w-full px-0 pb-6" aria-label="Quadro de tarefas">
@@ -494,7 +483,7 @@ export function TasksPage() {
             </div>
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="mx-4 my-2 rounded-2xl border border-dashed bg-muted/20 px-6 py-10 text-center sm:mx-6 sm:my-3 lg:mx-8">
+          <div className="my-2 rounded-2xl border border-dashed bg-muted/20 px-6 py-10 text-center sm:my-3">
             <p className="text-sm font-medium text-foreground/80">
               {items.length === 0 ? "Nenhuma tarefa ainda." : "Nenhuma tarefa neste filtro."}
             </p>

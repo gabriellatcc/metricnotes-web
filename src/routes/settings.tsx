@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { ArrowLeft, KeyRound, Loader2, Moon, Palette, Sun, UserRound, type LucideIcon } from "lucide-react";
+import { KeyRound, Loader2, Moon, Palette, Sun, UserRound, X, type LucideIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/carousel";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { TgCreditsFooter } from "@/components/layout/tg-credits-footer";
 import { SettingsAvatarSection } from "@/components/settings/settings-avatar-section";
 import { SettingsPasswordSection } from "@/components/settings/settings-password-section";
 import type { Theme } from "@/components/providers/theme-provider";
@@ -127,30 +128,31 @@ function SettingsPage() {
   const themeDirty = pendingTheme !== theme;
 
   return (
-    <main className="min-h-full flex-1 bg-background">
-      <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="border-b border-border">
-          <div className="relative mx-auto max-w-2xl pb-2 text-center sm:max-w-none">
+    <main className="flex min-h-0 flex-1 flex-col bg-background">
+      <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <header className="mb-8 border-b border-border pb-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-0 flex-1 pr-2">
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground">Configurações</h1>
+              <p className="mt-1 max-w-2xl text-pretty text-sm text-muted-foreground">
+                Gerencie as informações da sua conta, senha e preferências de tema.
+              </p>
+            </div>
             <Link
               to="/dashboard"
-              aria-label="Voltar ao painel"
+              aria-label="Fechar configurações e voltar ao painel"
               className={cn(
                 buttonVariants({ variant: "outline" }),
-                "relative z-10 mb-3 inline-flex size-9 items-center justify-center rounded-full p-0 sm:absolute sm:mb-0 sm:left-0 sm:top-1.5 sm:-translate-x-[calc(100%+0.75rem)]",
+                "inline-flex size-9 shrink-0 items-center justify-center rounded-full p-0",
               )}
             >
-              <ArrowLeft className="size-4" />
+              <X className="size-4" aria-hidden />
             </Link>
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Configurações</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Gerencie as informações da sua conta, senha e preferências de tema.
-            </p>
           </div>
-
           <nav
             role="tablist"
             aria-label="Secções das configurações"
-            className="sticky top-[6.5rem] z-20 -mx-4 flex justify-center gap-1 overflow-x-auto border-t border-border/80 bg-background/95 px-2 py-1.5 backdrop-blur supports-[backdrop-filter]:bg-background/85 sm:-mx-6 sm:top-14 sm:px-3 lg:-mx-8 lg:px-4"
+            className="mt-6 flex flex-wrap justify-start gap-1 sm:gap-2"
           >
             {SETTINGS_TABS.map(({ panel, label, icon: Icon }) => {
               const selected = activePanel === panel;
@@ -177,7 +179,7 @@ function SettingsPage() {
           </nav>
         </header>
 
-        <div className="mt-5 flex w-full flex-col items-center">
+        <div className="flex w-full flex-col items-center">
           {activePanel === "profile" ? (
             <div
               role="tabpanel"
@@ -318,6 +320,8 @@ function SettingsPage() {
           ) : null}
         </div>
       </div>
+
+      <TgCreditsFooter className="mt-auto shrink-0" />
     </main>
   );
 }

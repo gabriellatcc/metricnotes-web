@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
+import { TgCreditsFooter } from "@/components/layout/tg-credits-footer";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -120,6 +121,8 @@ function MarketingHomePage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <TgCreditsFooter />
     </main>
   );
 }

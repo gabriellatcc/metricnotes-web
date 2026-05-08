@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /** Navegação entre vistas da área Tarefas (quadro / calendário / concluídas). */
-export function TasksSubNav() {
+export function TasksSubNav({ className }: { className?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const boardActive = pathname === "/tasks" || pathname === "/tasks/";
@@ -21,7 +21,8 @@ export function TasksSubNav() {
 
   return (
     <nav
-      className="border-border flex flex-wrap justify-center gap-1 border-b pb-3 sm:gap-2"
+      role="navigation"
+      className={cn("flex flex-wrap justify-start gap-1 sm:gap-2", className)}
       aria-label="Vistas de tarefas"
     >
       <Link to="/tasks" className={linkClass(boardActive)}>

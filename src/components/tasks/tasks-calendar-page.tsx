@@ -38,7 +38,7 @@ export function TasksCalendarPage() {
   if (tasksQuery.isLoading) {
     return (
       <main className="flex min-h-0 flex-1 flex-col bg-background">
-        <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-center gap-3 px-4 py-12 sm:px-6 lg:px-8">
+        <div className="flex min-h-[40vh] w-full flex-1 flex-col items-center justify-center gap-3 py-12">
           <Loader2 className="text-muted-foreground h-10 w-10 animate-spin" aria-hidden />
           <p className="text-muted-foreground text-sm">{m.loadingCalendar}</p>
         </div>
@@ -49,7 +49,7 @@ export function TasksCalendarPage() {
   if (tasksQuery.isError) {
     return (
       <main className="flex min-h-0 flex-1 flex-col bg-background">
-        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full py-6">
           <p className="text-muted-foreground text-sm">{m.calendarLoadError}</p>
         </div>
       </main>
@@ -58,14 +58,11 @@ export function TasksCalendarPage() {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col bg-background">
-      <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
-        <header className="mb-3 shrink-0 border-b border-border pb-3 sm:mb-4 sm:pb-4">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">{m.calendarPageTitle}</h1>
-          <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-            {m.calendarPageIntro}{" "}
-            {m.calendarPageFootnote}
-          </p>
-        </header>
+      <div className="flex min-h-0 w-full flex-1 flex-col">
+        <p className="mb-4 max-w-2xl text-pretty text-sm text-muted-foreground leading-relaxed">
+          {m.calendarPageIntro}{" "}
+          {m.calendarPageFootnote}
+        </p>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded border border-border/30 bg-background">
           <TasksCalendarShell events={events} users={[calendarUser]} view="month" />
         </div>
