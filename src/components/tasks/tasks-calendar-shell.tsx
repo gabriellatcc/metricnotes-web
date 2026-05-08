@@ -20,7 +20,7 @@ export function TasksCalendarShell({
   return (
     <CalendarProvider integrationsMode="tasks" badge="colored" events={events} users={users} view={view}>
       <DndProvider>
-        <div className="bg-card border-border flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-xl border shadow-sm">
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-background">
           <CalendarHeader />
           <CalendarBody />
         </div>

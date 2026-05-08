@@ -37,41 +37,39 @@ export function TasksCalendarPage() {
 
   if (tasksQuery.isLoading) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 py-12">
-        <Loader2 className="text-muted-foreground h-10 w-10 animate-spin" aria-hidden />
-        <p className="text-muted-foreground text-sm">{m.loadingCalendar}</p>
-      </div>
+      <main className="flex min-h-0 flex-1 flex-col bg-background">
+        <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-center gap-3 px-4 py-12 sm:px-6 lg:px-8">
+          <Loader2 className="text-muted-foreground h-10 w-10 animate-spin" aria-hidden />
+          <p className="text-muted-foreground text-sm">{m.loadingCalendar}</p>
+        </div>
+      </main>
     );
   }
 
   if (tasksQuery.isError) {
     return (
-      <div className="mx-auto w-full px-4 py-6 sm:px-6 lg:px-8">
-        <p className="text-muted-foreground text-sm">{m.calendarLoadError}</p>
-      </div>
+      <main className="flex min-h-0 flex-1 flex-col bg-background">
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <p className="text-muted-foreground text-sm">{m.calendarLoadError}</p>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col px-3 pb-3 pt-2 sm:px-5 lg:px-6">
-      <header className="mb-2 shrink-0 space-y-0.5">
-        <h1 className="text-foreground text-lg font-semibold tracking-tight sm:text-xl">{m.calendarPageTitle}</h1>
-        <p className="text-muted-foreground text-xs leading-snug sm:text-sm">
-          {m.calendarPageIntro}{" "}
-          <a
-            href="https://github.com/yassir-jeraidi/full-calendar"
-            className="text-primary font-medium underline underline-offset-2"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            full-calendar
-          </a>{" "}
-          {m.calendarPageFootnote}
-        </p>
-      </header>
-      <div className="min-h-0 flex-1">
-        <TasksCalendarShell events={events} users={[calendarUser]} view="month" />
+    <main className="flex min-h-0 flex-1 flex-col bg-background">
+      <div className="mx-auto flex min-h-0 w-full max-w-7xl flex-1 flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+        <header className="mb-3 shrink-0 border-b border-border pb-3 sm:mb-4 sm:pb-4">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">{m.calendarPageTitle}</h1>
+          <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+            {m.calendarPageIntro}{" "}
+            {m.calendarPageFootnote}
+          </p>
+        </header>
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded border border-border/30 bg-background">
+          <TasksCalendarShell events={events} users={[calendarUser]} view="month" />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

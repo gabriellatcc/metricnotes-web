@@ -119,7 +119,7 @@ export const calendarMessagesPt: CalendarMessages = {
   calendarPageIntro:
     "Cada marca corresponde ao prazo atual ou original de uma tarefa (dia completo, sem hora).",
   calendarPageFootnote:
-    "Interface baseada no projeto full-calendar para ShadCN. Arrastar no calendário só altera a vista local; para gravar, usa o quadro ou editar a tarefa.",
+    "",
   rangeFormatError: "Erro ao formatar datas",
   weekViewMobileHintLine1: "A vista semanal é pouco prática em ecrãs pequenos.",
   weekViewMobileHintLine2: "Usa um computador ou a vista diária.",

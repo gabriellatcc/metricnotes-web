@@ -98,13 +98,6 @@ export function CompletedTasksPage() {
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <Link
-              to="/tasks"
-              className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "mb-2 -ml-2 gap-1.5")}
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Quadro
-            </Link>
             <h1 className="text-2xl font-semibold tracking-tight text-foreground">Concluídas</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Histórico por data de conclusão. A listagem do servidor é paginada; em cada página mostramos só

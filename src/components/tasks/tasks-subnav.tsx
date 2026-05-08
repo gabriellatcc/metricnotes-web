@@ -20,7 +20,10 @@ export function TasksSubNav() {
     );
 
   return (
-    <nav className="border-border flex flex-wrap gap-2 border-b pb-3" aria-label="Vistas de tarefas">
+    <nav
+      className="border-border flex flex-wrap justify-center gap-1 border-b pb-3 sm:gap-2"
+      aria-label="Vistas de tarefas"
+    >
       <Link to="/tasks" className={linkClass(boardActive)}>
         <ClipboardList className="size-4 shrink-0 opacity-70" aria-hidden />
         Quadro

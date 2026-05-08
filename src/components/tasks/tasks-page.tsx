@@ -417,7 +417,7 @@ export function TasksPage() {
         </header>
 
         <div className="flex w-full flex-col gap-3 sm:gap-4">
-          <div className="rounded-2xl bg-muted/60 px-4 py-3 shadow-inner">
+          <div className="rounded-xl bg-muted/45 px-3 py-2 sm:px-3.5 sm:py-2.5">
             <label className="sr-only" htmlFor="task-search">
               Buscar tarefas
             </label>
@@ -426,7 +426,7 @@ export function TasksPage() {
               placeholder="Buscar por nome ou descrição…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-11 rounded-xl border-0 bg-background shadow-sm"
+              className="h-10 rounded-lg border-0 bg-transparent shadow-none ring-offset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
             />
           </div>
 
