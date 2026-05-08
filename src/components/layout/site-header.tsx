@@ -91,7 +91,7 @@ export function SiteHeader() {
                 className={cn(
                   buttonVariants({ variant: "ghost", size: "sm" }),
                   "gap-1.5",
-                  pathname === "/dashboard" && "bg-accent text-accent-foreground",
+                  pathname.startsWith("/dashboard") && "bg-accent text-accent-foreground",
                 )}
               >
                 <BarChart3 className="size-4" aria-hidden />
@@ -210,7 +210,7 @@ export function SiteHeader() {
               className={cn(
                 buttonVariants({ variant: "ghost", size: "sm" }),
                 "shrink-0",
-                pathname === "/dashboard" && "bg-accent",
+                pathname.startsWith("/dashboard") && "bg-accent",
               )}
             >
               Painel

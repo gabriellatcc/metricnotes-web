@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { Dashboard } from "@/components/dashboard/Dashboard";
+import { DashboardRouteLayout } from "@/components/dashboard/dashboard-route-layout";
 import { getAuthAccessToken } from "@/lib/api-client";
 
 export const Route = createFileRoute("/dashboard")({
@@ -10,9 +10,9 @@ export const Route = createFileRoute("/dashboard")({
       throw redirect({ to: "/login" });
     }
   },
-  component: DashboardRoute,
+  component: DashboardLayoutRoute,
 });
 
-function DashboardRoute() {
-  return <Dashboard />;
+function DashboardLayoutRoute() {
+  return <DashboardRouteLayout />;
 }

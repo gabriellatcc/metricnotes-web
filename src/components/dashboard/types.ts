@@ -32,6 +32,16 @@ export interface WeeklyPerformanceSummary {
   insights: string[];
 }
 
+/** Metadados para estados dos gráficos de “últimos 7 dias” (painel). */
+export interface WeeklyRecordingMeta {
+  /**
+   * Dias completos desde a última data em que existiu pelo menos uma conclusão
+   * registada nos agregados usados pelo painel (para heatmap/barra).
+   * `null`: sem registos válidos segundo o servidor.
+   */
+  daysSinceLastCompletion: number | null;
+}
+
 /**
  * Shape expected from a future `GET /analytics/weekly` (or similar) endpoint.
  */
@@ -42,4 +52,5 @@ export interface WeeklyAnalyticsData {
   tasksPerWeekday: WeekdayTaskTotal[];
   distributionByTimeBlock: TimeBlockDistribution[];
   summary: WeeklyPerformanceSummary;
+  recordingMeta: WeeklyRecordingMeta;
 }

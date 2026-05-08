@@ -8,11 +8,17 @@ import { useAuthMe } from "@/generated/api/auth/auth";
 import type { UserResource } from "@/generated/api/models/userResource";
 import { useTaskIndex } from "@/generated/api/task/task";
 import { calendarMessagesPt } from "@/lib/i18n/calendar";
+import { cn } from "@/lib/utils";
 
 const PER_PAGE = 250;
 
+export type TasksCalendarPageProps = {
+  /** Omitir envoltória de página inteira quando embutido noutra rota (ex.: Painel). */
+  embedded?: boolean;
+};
+
 /** Página calendário: prazos das tarefas usando o UI [full-calendar ShadCN](https://github.com/yassir-jeraidi/full-calendar). */
-export function TasksCalendarPage() {
+export function TasksCalendarPage({ embedded = false }: TasksCalendarPageProps) {
   const me = useAuthMe();
   const apiUser = me.data?.data?.user as UserResource | undefined;
   const m = calendarMessagesPt;
@@ -35,38 +41,39 @@ export function TasksCalendarPage() {
 
   const events = useMemo(() => taskDueEventsForCalendar(items, calendarUser), [items, calendarUser]);
 
+  const shell = cn("flex min-h-0 flex-1 flex-col", !embedded && "bg-background");
+
   if (tasksQuery.isLoading) {
     return (
-      <main className="flex min-h-0 flex-1 flex-col bg-background">
-        <div className="flex min-h-[40vh] w-full flex-1 flex-col items-center justify-center gap-3 py-12">
-          <Loader2 className="text-muted-foreground h-10 w-10 animate-spin" aria-hidden />
-          <p className="text-muted-foreground text-sm">{m.loadingCalendar}</p>
+      <div className={cn(shell)}>
+        <div className={cn("flex w-full flex-1 flex-col items-center justify-center gap-3 py-12", embedded ? "min-h-[36vh]" : "min-h-[40vh]")}>
+          <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" aria-hidden />
+          <p className="text-sm text-muted-foreground">{m.loadingCalendar}</p>
         </div>
-      </main>
+      </div>
     );
   }
 
   if (tasksQuery.isError) {
     return (
-      <main className="flex min-h-0 flex-1 flex-col bg-background">
+      <div className={shell}>
         <div className="w-full py-6">
-          <p className="text-muted-foreground text-sm">{m.calendarLoadError}</p>
+          <p className="text-sm text-muted-foreground">{m.calendarLoadError}</p>
         </div>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="flex min-h-0 flex-1 flex-col bg-background">
+    <div className={shell}>
       <div className="flex min-h-0 w-full flex-1 flex-col">
-        <p className="mb-4 max-w-2xl text-pretty text-sm text-muted-foreground leading-relaxed">
-          {m.calendarPageIntro}{" "}
-          {m.calendarPageFootnote}
+        <p className="mb-4 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground">
+          {m.calendarPageIntro} {m.calendarPageFootnote}
         </p>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded border border-border/30 bg-background">
           <TasksCalendarShell events={events} users={[calendarUser]} view="month" />
         </div>
       </div>
-    </main>
+    </div>
   );
 }

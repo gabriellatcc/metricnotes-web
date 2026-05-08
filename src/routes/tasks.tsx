@@ -22,8 +22,8 @@ function TasksLayout() {
             <div>
               <h1 className="text-2xl font-semibold tracking-tight text-foreground">Tarefas</h1>
               <p className="mt-1 max-w-2xl text-pretty text-sm text-muted-foreground">
-                Organize cartas no quadro, visualize prazos no calendário e consulte as concluídas. Crie, filtre e acompanhe
-                o fluxo das suas entregas.
+                Organize cartas no quadro e consulte as concluídas. Crie, filtre e acompanhe o fluxo das suas entregas. Para
+                prazos no calendário, use o Painel.
               </p>
             </div>
           </div>

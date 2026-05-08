@@ -8,6 +8,9 @@ import {
   YAxis,
 } from "recharts";
 
+import { LineChart } from "lucide-react";
+
+import { DashboardCardShell } from "./dashboard-card-shell";
 import type { WeeklyAnalyticsData } from "./types";
 
 const CHART = {
@@ -33,12 +36,12 @@ export function TaskDistributionAreaChart({ data }: TaskDistributionAreaChartPro
   }));
 
   return (
-    <div className="flex h-full min-h-[200px] flex-col rounded-xl border border-border bg-card p-3 text-card-foreground shadow-sm sm:p-4">
-      <div className="mb-1.5 shrink-0">
-        <h3 className="text-sm font-semibold">Volume de tarefas por faixa horária</h3>
-        <p className="text-xs text-muted-foreground">Soma na última semana (todos os dias somados)</p>
-      </div>
-      <div className="min-h-0 w-full flex-1 [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground">
+    <DashboardCardShell
+      icon={LineChart}
+      title="Volume por faixa horária"
+      subtitle="Soma na última semana (todos os dias somados)"
+    >
+      <div className="min-h-0 w-full flex-1 pb-px [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
             <defs>
@@ -76,6 +79,6 @@ export function TaskDistributionAreaChart({ data }: TaskDistributionAreaChartPro
           </AreaChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </DashboardCardShell>
   );
 }

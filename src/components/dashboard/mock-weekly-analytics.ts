@@ -72,6 +72,10 @@ export const MOCK_WEEKLY_ANALYTICS: WeeklyAnalyticsData = {
       "O fim de semana é mais tranquilo; agrupe tarefas pequenas no sábado à noite se precisar zerar o backlog.",
     ],
   },
+  recordingMeta: {
+    /** Altere para ≥7 para pré-visualizar estado vazio convite aos gráficos. */
+    daysSinceLastCompletion: 0,
+  },
 };
 
 async function fetchWeeklyAnalytics(): Promise<WeeklyAnalyticsData> {
