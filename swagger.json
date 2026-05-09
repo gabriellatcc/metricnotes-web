@@ -3103,6 +3103,245 @@
         ]
       }
     },
+    "/auth/forgot-password": {
+      "post": {
+        "summary": "Forgot Password",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userForgotPassword",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              },
+              "example": {
+                "email": "gabriellatccorrea@gmail.com"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": null,
+                  "message": "Se existir uma conta para este e-mail, enviamos um código para redefinição da senha."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/verify-reset-code": {
+      "post": {
+        "summary": "Verify Reset Code",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userVerifyResetCode",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "code"
+                ]
+              },
+              "example": {
+                "email": "gabriellatccorrea@gmail.com",
+                "code": "3504"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "reset_session_id": {
+                          "type": "string"
+                        },
+                        "reset_secret": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "reset_session_id",
+                        "reset_secret"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "reset_session_id": "019e09ec-3051-7069-b61d-c09f16a3f401",
+                    "reset_secret": "KHvJjbZ7z79aQ9ZWJdPWyumK5l6fwY5VVvUZyhXsE6t3v7vEocuDvPdiPDguEMNs"
+                  },
+                  "message": "Código confirmado."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/recover-password": {
+      "post": {
+        "summary": "Recover Password",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userRecoverPassword",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reset_session_id": {
+                    "type": "string"
+                  },
+                  "reset_secret": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "password_confirmation": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reset_session_id",
+                  "reset_secret",
+                  "password",
+                  "password_confirmation"
+                ]
+              },
+              "example": {
+                "reset_session_id": "019e09ec-3051-7069-b61d-c09f16a3f401",
+                "reset_secret": "KHvJjbZ7z79aQ9ZWJdPWyumK5l6fwY5VVvUZyhXsE6t3v7vEocuDvPdiPDguEMNs",
+                "password": "senha1234",
+                "password_confirmation": "senha1234"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": null,
+                  "message": "Senha redefinida com sucesso! Faça login com a nova senha."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
     "/notification/task-due": {
       "get": {
         "summary": "Index Task Due",

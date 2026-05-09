@@ -10,7 +10,10 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const hideHeader = pathname === "/login" || pathname === "/signup";
+  const hideHeader =
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname.startsWith("/forgot-password");
   const { theme } = useTheme();
 
   return (

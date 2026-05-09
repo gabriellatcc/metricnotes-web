@@ -18,7 +18,13 @@ import type {
   UserChangeAvatar200,
   UserChangeAvatarBody,
   UserChangePassword200,
-  UserChangePasswordBody
+  UserChangePasswordBody,
+  UserForgotPassword200,
+  UserForgotPasswordBody,
+  UserRecoverPassword200,
+  UserRecoverPasswordBody,
+  UserVerifyResetCode200,
+  UserVerifyResetCodeBody
 } from '../models';
 
 import { apiClient } from '../../../lib/api-client';
@@ -158,4 +164,193 @@ export const useUserChangePassword = <TError = unknown,
         TContext
       > => {
       return useMutation(getUserChangePasswordMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Forgot Password
+ */
+export const userForgotPassword = (
+    userForgotPasswordBody: UserForgotPasswordBody,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<UserForgotPassword200>(
+      {url: `/api/auth/forgot-password`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userForgotPasswordBody, signal
+    },
+      options);
+    }
+
+
+
+export const getUserForgotPasswordMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userForgotPassword>>, TError,{data: UserForgotPasswordBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof userForgotPassword>>, TError,{data: UserForgotPasswordBody}, TContext> => {
+
+const mutationKey = ['userForgotPassword'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof userForgotPassword>>, {data: UserForgotPasswordBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  userForgotPassword(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UserForgotPasswordMutationResult = NonNullable<Awaited<ReturnType<typeof userForgotPassword>>>
+    export type UserForgotPasswordMutationBody = UserForgotPasswordBody
+    export type UserForgotPasswordMutationError = unknown
+
+    /**
+ * @summary Forgot Password
+ */
+export const useUserForgotPassword = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userForgotPassword>>, TError,{data: UserForgotPasswordBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof userForgotPassword>>,
+        TError,
+        {data: UserForgotPasswordBody},
+        TContext
+      > => {
+      return useMutation(getUserForgotPasswordMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Verify Reset Code
+ */
+export const userVerifyResetCode = (
+    userVerifyResetCodeBody: UserVerifyResetCodeBody,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<UserVerifyResetCode200>(
+      {url: `/api/auth/verify-reset-code`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userVerifyResetCodeBody, signal
+    },
+      options);
+    }
+
+
+
+export const getUserVerifyResetCodeMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userVerifyResetCode>>, TError,{data: UserVerifyResetCodeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof userVerifyResetCode>>, TError,{data: UserVerifyResetCodeBody}, TContext> => {
+
+const mutationKey = ['userVerifyResetCode'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof userVerifyResetCode>>, {data: UserVerifyResetCodeBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  userVerifyResetCode(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UserVerifyResetCodeMutationResult = NonNullable<Awaited<ReturnType<typeof userVerifyResetCode>>>
+    export type UserVerifyResetCodeMutationBody = UserVerifyResetCodeBody
+    export type UserVerifyResetCodeMutationError = unknown
+
+    /**
+ * @summary Verify Reset Code
+ */
+export const useUserVerifyResetCode = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userVerifyResetCode>>, TError,{data: UserVerifyResetCodeBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof userVerifyResetCode>>,
+        TError,
+        {data: UserVerifyResetCodeBody},
+        TContext
+      > => {
+      return useMutation(getUserVerifyResetCodeMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Recover Password
+ */
+export const userRecoverPassword = (
+    userRecoverPasswordBody: UserRecoverPasswordBody,
+ options?: SecondParameter<typeof apiClient>,signal?: AbortSignal
+) => {
+
+
+      return apiClient<UserRecoverPassword200>(
+      {url: `/api/auth/recover-password`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userRecoverPasswordBody, signal
+    },
+      options);
+    }
+
+
+
+export const getUserRecoverPasswordMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userRecoverPassword>>, TError,{data: UserRecoverPasswordBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof userRecoverPassword>>, TError,{data: UserRecoverPasswordBody}, TContext> => {
+
+const mutationKey = ['userRecoverPassword'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof userRecoverPassword>>, {data: UserRecoverPasswordBody}> = (props) => {
+          const {data} = props ?? {};
+
+          return  userRecoverPassword(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UserRecoverPasswordMutationResult = NonNullable<Awaited<ReturnType<typeof userRecoverPassword>>>
+    export type UserRecoverPasswordMutationBody = UserRecoverPasswordBody
+    export type UserRecoverPasswordMutationError = unknown
+
+    /**
+ * @summary Recover Password
+ */
+export const useUserRecoverPassword = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof userRecoverPassword>>, TError,{data: UserRecoverPasswordBody}, TContext>, request?: SecondParameter<typeof apiClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof userRecoverPassword>>,
+        TError,
+        {data: UserRecoverPasswordBody},
+        TContext
+      > => {
+      return useMutation(getUserRecoverPasswordMutationOptions(options), queryClient);
     }

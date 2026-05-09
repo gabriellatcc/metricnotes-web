@@ -24,6 +24,10 @@ import { Route as DashboardMonthRouteImport } from './routes/dashboard.month'
 import { Route as DashboardCalendarRouteImport } from './routes/dashboard.calendar'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as authForgotPasswordIndexRouteImport } from './routes/(auth)/forgot-password.index'
+import { Route as authForgotPasswordVerifyRouteImport } from './routes/(auth)/forgot-password.verify'
+import { Route as authForgotPasswordResetRouteImport } from './routes/(auth)/forgot-password.reset'
 
 const TasksRoute = TasksRouteImport.update({
   id: '/tasks',
@@ -100,6 +104,27 @@ const authLoginRoute = authLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
+  id: '/(auth)/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authForgotPasswordIndexRoute = authForgotPasswordIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => authForgotPasswordRoute,
+} as any)
+const authForgotPasswordVerifyRoute =
+  authForgotPasswordVerifyRouteImport.update({
+    id: '/verify',
+    path: '/verify',
+    getParentRoute: () => authForgotPasswordRoute,
+  } as any)
+const authForgotPasswordResetRoute = authForgotPasswordResetRouteImport.update({
+  id: '/reset',
+  path: '/reset',
+  getParentRoute: () => authForgotPasswordRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -108,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRouteWithChildren
+  '/forgot-password': typeof authForgotPasswordRouteWithChildren
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
   '/dashboard/calendar': typeof DashboardCalendarRoute
@@ -117,6 +143,9 @@ export interface FileRoutesByFullPath {
   '/tasks/completed': typeof TasksCompletedRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/tasks/': typeof TasksIndexRoute
+  '/forgot-password/reset': typeof authForgotPasswordResetRoute
+  '/forgot-password/verify': typeof authForgotPasswordVerifyRoute
+  '/forgot-password/': typeof authForgotPasswordIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -132,6 +161,9 @@ export interface FileRoutesByTo {
   '/tasks/completed': typeof TasksCompletedRoute
   '/dashboard': typeof DashboardIndexRoute
   '/tasks': typeof TasksIndexRoute
+  '/forgot-password/reset': typeof authForgotPasswordResetRoute
+  '/forgot-password/verify': typeof authForgotPasswordVerifyRoute
+  '/forgot-password': typeof authForgotPasswordIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,6 +173,7 @@ export interface FileRoutesById {
   '/notes': typeof NotesRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRouteWithChildren
+  '/(auth)/forgot-password': typeof authForgotPasswordRouteWithChildren
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signup': typeof authSignupRoute
   '/dashboard/calendar': typeof DashboardCalendarRoute
@@ -150,6 +183,9 @@ export interface FileRoutesById {
   '/tasks/completed': typeof TasksCompletedRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/tasks/': typeof TasksIndexRoute
+  '/(auth)/forgot-password/reset': typeof authForgotPasswordResetRoute
+  '/(auth)/forgot-password/verify': typeof authForgotPasswordVerifyRoute
+  '/(auth)/forgot-password/': typeof authForgotPasswordIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -160,6 +196,7 @@ export interface FileRouteTypes {
     | '/notes'
     | '/settings'
     | '/tasks'
+    | '/forgot-password'
     | '/login'
     | '/signup'
     | '/dashboard/calendar'
@@ -169,6 +206,9 @@ export interface FileRouteTypes {
     | '/tasks/completed'
     | '/dashboard/'
     | '/tasks/'
+    | '/forgot-password/reset'
+    | '/forgot-password/verify'
+    | '/forgot-password/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,6 +224,9 @@ export interface FileRouteTypes {
     | '/tasks/completed'
     | '/dashboard'
     | '/tasks'
+    | '/forgot-password/reset'
+    | '/forgot-password/verify'
+    | '/forgot-password'
   id:
     | '__root__'
     | '/'
@@ -192,6 +235,7 @@ export interface FileRouteTypes {
     | '/notes'
     | '/settings'
     | '/tasks'
+    | '/(auth)/forgot-password'
     | '/(auth)/login'
     | '/(auth)/signup'
     | '/dashboard/calendar'
@@ -201,6 +245,9 @@ export interface FileRouteTypes {
     | '/tasks/completed'
     | '/dashboard/'
     | '/tasks/'
+    | '/(auth)/forgot-password/reset'
+    | '/(auth)/forgot-password/verify'
+    | '/(auth)/forgot-password/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -210,6 +257,7 @@ export interface RootRouteChildren {
   NotesRoute: typeof NotesRoute
   SettingsRoute: typeof SettingsRoute
   TasksRoute: typeof TasksRouteWithChildren
+  authForgotPasswordRoute: typeof authForgotPasswordRouteWithChildren
   authLoginRoute: typeof authLoginRoute
   authSignupRoute: typeof authSignupRoute
 }
@@ -321,6 +369,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/forgot-password': {
+      id: '/(auth)/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/forgot-password/': {
+      id: '/(auth)/forgot-password/'
+      path: '/'
+      fullPath: '/forgot-password/'
+      preLoaderRoute: typeof authForgotPasswordIndexRouteImport
+      parentRoute: typeof authForgotPasswordRoute
+    }
+    '/(auth)/forgot-password/verify': {
+      id: '/(auth)/forgot-password/verify'
+      path: '/verify'
+      fullPath: '/forgot-password/verify'
+      preLoaderRoute: typeof authForgotPasswordVerifyRouteImport
+      parentRoute: typeof authForgotPasswordRoute
+    }
+    '/(auth)/forgot-password/reset': {
+      id: '/(auth)/forgot-password/reset'
+      path: '/reset'
+      fullPath: '/forgot-password/reset'
+      preLoaderRoute: typeof authForgotPasswordResetRouteImport
+      parentRoute: typeof authForgotPasswordRoute
+    }
   }
 }
 
@@ -356,6 +432,21 @@ const TasksRouteChildren: TasksRouteChildren = {
 
 const TasksRouteWithChildren = TasksRoute._addFileChildren(TasksRouteChildren)
 
+interface authForgotPasswordRouteChildren {
+  authForgotPasswordResetRoute: typeof authForgotPasswordResetRoute
+  authForgotPasswordVerifyRoute: typeof authForgotPasswordVerifyRoute
+  authForgotPasswordIndexRoute: typeof authForgotPasswordIndexRoute
+}
+
+const authForgotPasswordRouteChildren: authForgotPasswordRouteChildren = {
+  authForgotPasswordResetRoute: authForgotPasswordResetRoute,
+  authForgotPasswordVerifyRoute: authForgotPasswordVerifyRoute,
+  authForgotPasswordIndexRoute: authForgotPasswordIndexRoute,
+}
+
+const authForgotPasswordRouteWithChildren =
+  authForgotPasswordRoute._addFileChildren(authForgotPasswordRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
@@ -363,6 +454,7 @@ const rootRouteChildren: RootRouteChildren = {
   NotesRoute: NotesRoute,
   SettingsRoute: SettingsRoute,
   TasksRoute: TasksRouteWithChildren,
+  authForgotPasswordRoute: authForgotPasswordRouteWithChildren,
   authLoginRoute: authLoginRoute,
   authSignupRoute: authSignupRoute,
 }
