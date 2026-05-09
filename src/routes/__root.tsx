@@ -11,6 +11,7 @@ export const Route = createRootRoute({
 function RootLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const hideHeader =
+    pathname === "/" ||
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname.startsWith("/forgot-password");

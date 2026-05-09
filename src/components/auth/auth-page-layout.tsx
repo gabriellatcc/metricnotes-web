@@ -19,7 +19,7 @@ export function AuthPageLayout({ children, variant = "login" }: AuthPageLayoutPr
     </div>
   );
 }
-
 export function authFormCardClassName(extra?: string) {
   return cn("border-border/80 bg-card/95 shadow-sm backdrop-blur-sm lg:bg-card", extra);
 }
+
