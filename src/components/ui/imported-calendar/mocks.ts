@@ -67,7 +67,7 @@ const events = [
 	"Tax filing deadline",
 	"Investor relations update",
 	"Partnership negotiation",
-	"Medical check-up",
+	"Metipol check-up",
 	"Vaccination appointment",
 	"Blood donation",
 	"Gym workout",

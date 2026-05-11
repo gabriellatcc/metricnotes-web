@@ -17,8 +17,11 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TasksIndexRouteImport } from './routes/tasks.index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as TasksTypesRouteImport } from './routes/tasks.types'
+import { Route as TasksTrashRouteImport } from './routes/tasks.trash'
 import { Route as TasksCompletedRouteImport } from './routes/tasks.completed'
 import { Route as TasksCalendarRouteImport } from './routes/tasks.calendar'
+import { Route as TasksAllRouteImport } from './routes/tasks.all'
 import { Route as DashboardWeekRouteImport } from './routes/dashboard.week'
 import { Route as DashboardMonthRouteImport } from './routes/dashboard.month'
 import { Route as DashboardCalendarRouteImport } from './routes/dashboard.calendar'
@@ -69,6 +72,16 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const TasksTypesRoute = TasksTypesRouteImport.update({
+  id: '/types',
+  path: '/types',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksTrashRoute = TasksTrashRouteImport.update({
+  id: '/trash',
+  path: '/trash',
+  getParentRoute: () => TasksRoute,
+} as any)
 const TasksCompletedRoute = TasksCompletedRouteImport.update({
   id: '/completed',
   path: '/completed',
@@ -77,6 +90,11 @@ const TasksCompletedRoute = TasksCompletedRouteImport.update({
 const TasksCalendarRoute = TasksCalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksAllRoute = TasksAllRouteImport.update({
+  id: '/all',
+  path: '/all',
   getParentRoute: () => TasksRoute,
 } as any)
 const DashboardWeekRoute = DashboardWeekRouteImport.update({
@@ -139,8 +157,11 @@ export interface FileRoutesByFullPath {
   '/dashboard/calendar': typeof DashboardCalendarRoute
   '/dashboard/month': typeof DashboardMonthRoute
   '/dashboard/week': typeof DashboardWeekRoute
+  '/tasks/all': typeof TasksAllRoute
   '/tasks/calendar': typeof TasksCalendarRoute
   '/tasks/completed': typeof TasksCompletedRoute
+  '/tasks/trash': typeof TasksTrashRoute
+  '/tasks/types': typeof TasksTypesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/tasks/': typeof TasksIndexRoute
   '/forgot-password/reset': typeof authForgotPasswordResetRoute
@@ -157,8 +178,11 @@ export interface FileRoutesByTo {
   '/dashboard/calendar': typeof DashboardCalendarRoute
   '/dashboard/month': typeof DashboardMonthRoute
   '/dashboard/week': typeof DashboardWeekRoute
+  '/tasks/all': typeof TasksAllRoute
   '/tasks/calendar': typeof TasksCalendarRoute
   '/tasks/completed': typeof TasksCompletedRoute
+  '/tasks/trash': typeof TasksTrashRoute
+  '/tasks/types': typeof TasksTypesRoute
   '/dashboard': typeof DashboardIndexRoute
   '/tasks': typeof TasksIndexRoute
   '/forgot-password/reset': typeof authForgotPasswordResetRoute
@@ -179,8 +203,11 @@ export interface FileRoutesById {
   '/dashboard/calendar': typeof DashboardCalendarRoute
   '/dashboard/month': typeof DashboardMonthRoute
   '/dashboard/week': typeof DashboardWeekRoute
+  '/tasks/all': typeof TasksAllRoute
   '/tasks/calendar': typeof TasksCalendarRoute
   '/tasks/completed': typeof TasksCompletedRoute
+  '/tasks/trash': typeof TasksTrashRoute
+  '/tasks/types': typeof TasksTypesRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/tasks/': typeof TasksIndexRoute
   '/(auth)/forgot-password/reset': typeof authForgotPasswordResetRoute
@@ -202,8 +229,11 @@ export interface FileRouteTypes {
     | '/dashboard/calendar'
     | '/dashboard/month'
     | '/dashboard/week'
+    | '/tasks/all'
     | '/tasks/calendar'
     | '/tasks/completed'
+    | '/tasks/trash'
+    | '/tasks/types'
     | '/dashboard/'
     | '/tasks/'
     | '/forgot-password/reset'
@@ -220,8 +250,11 @@ export interface FileRouteTypes {
     | '/dashboard/calendar'
     | '/dashboard/month'
     | '/dashboard/week'
+    | '/tasks/all'
     | '/tasks/calendar'
     | '/tasks/completed'
+    | '/tasks/trash'
+    | '/tasks/types'
     | '/dashboard'
     | '/tasks'
     | '/forgot-password/reset'
@@ -241,8 +274,11 @@ export interface FileRouteTypes {
     | '/dashboard/calendar'
     | '/dashboard/month'
     | '/dashboard/week'
+    | '/tasks/all'
     | '/tasks/calendar'
     | '/tasks/completed'
+    | '/tasks/trash'
+    | '/tasks/types'
     | '/dashboard/'
     | '/tasks/'
     | '/(auth)/forgot-password/reset'
@@ -320,6 +356,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/tasks/types': {
+      id: '/tasks/types'
+      path: '/types'
+      fullPath: '/tasks/types'
+      preLoaderRoute: typeof TasksTypesRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/trash': {
+      id: '/tasks/trash'
+      path: '/trash'
+      fullPath: '/tasks/trash'
+      preLoaderRoute: typeof TasksTrashRouteImport
+      parentRoute: typeof TasksRoute
+    }
     '/tasks/completed': {
       id: '/tasks/completed'
       path: '/completed'
@@ -332,6 +382,13 @@ declare module '@tanstack/react-router' {
       path: '/calendar'
       fullPath: '/tasks/calendar'
       preLoaderRoute: typeof TasksCalendarRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/all': {
+      id: '/tasks/all'
+      path: '/all'
+      fullPath: '/tasks/all'
+      preLoaderRoute: typeof TasksAllRouteImport
       parentRoute: typeof TasksRoute
     }
     '/dashboard/week': {
@@ -419,14 +476,20 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 )
 
 interface TasksRouteChildren {
+  TasksAllRoute: typeof TasksAllRoute
   TasksCalendarRoute: typeof TasksCalendarRoute
   TasksCompletedRoute: typeof TasksCompletedRoute
+  TasksTrashRoute: typeof TasksTrashRoute
+  TasksTypesRoute: typeof TasksTypesRoute
   TasksIndexRoute: typeof TasksIndexRoute
 }
 
 const TasksRouteChildren: TasksRouteChildren = {
+  TasksAllRoute: TasksAllRoute,
   TasksCalendarRoute: TasksCalendarRoute,
   TasksCompletedRoute: TasksCompletedRoute,
+  TasksTrashRoute: TasksTrashRoute,
+  TasksTypesRoute: TasksTypesRoute,
   TasksIndexRoute: TasksIndexRoute,
 }
 

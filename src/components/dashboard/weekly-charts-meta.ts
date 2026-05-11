@@ -25,7 +25,7 @@ export function deriveWeeklyChartsStatus(data: WeeklyAnalyticsData): WeeklyChart
   const meta = data.recordingMeta.daysSinceLastCompletion;
   const sum = totalCompletionsAcrossWeekCharts(data);
 
-  /** Sem marcação há ≥ threshold OU backend não indica marcação quando a série já veio vazia */
+  /** Sem marcação há ≥ threshold OU backend não intipo marcação quando a série já veio vazia */
   const staleByMeta = meta !== null && meta >= STALE_ANALYTICS_AFTER_DAYS;
   const staleByEmptySeriesWithoutSignal = meta === null && sum === 0;
 

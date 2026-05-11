@@ -9,4 +9,7 @@ export type TaskIndexParams = {
 search?: string;
 per_page?: number;
 page?: number;
+only_trashed?: string;
+tip_id?: string;
+status?: string;
 };

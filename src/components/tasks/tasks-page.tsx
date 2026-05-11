@@ -1,9 +1,22 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, Plus } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
+import {
+  emptyForm,
+  formatTaskDateTime,
+  inputClass,
+  parseEmbeddedTips,
+  PRIORITY_OPTIONS,
+  STATUS_OPTIONS,
+  statusLabel,
+  taskDueParts,
+  taskToUpdateBody,
+} from "@/components/tasks/task-ui-constants";
+import { TaskFormTipsPicker } from "@/components/tasks/task-form-tips-picker";
+import { useRegisterOpenNewTaskFromHeader } from "@/components/tasks/tasks-new-task-context";
 import { TaskKanbanBoard } from "@/components/tasks/task-kanban-board";
-import { getKanbanColumnId, type KanbanColumnId } from "@/components/tasks/task-kanban-types";
+import { getKanbanColumnId, KANBAN_COLUMNS, type KanbanColumnId } from "@/components/tasks/task-kanban-types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,25 +39,10 @@ import {
   useTaskUpdate,
   useTaskUpdatePostpone,
 } from "@/generated/api/task/task";
-import {
-  toast,
-  toastApiError,
-  toastApiSuccessFromBody,
-  toastApiWarning,
-} from "@/lib/api-toast";
+import { toast, toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
 import { apiClient } from "@/lib/api-client";
+import { assignTaskTipIds } from "@/lib/task-assign-tips";
 import { cn } from "@/lib/utils";
-
-const inputClass =
-  "flex min-h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50";
-
-const STATUS_OPTIONS = [
-  { value: "in_progress", label: "Em progresso" },
-  { value: "completed", label: "Concluída" },
-  { value: "postponed", label: "Adiada" },
-];
-
-const PRIORITY_OPTIONS = ["1", "2", "3", "4", "5"];
 
 function nextPostponeDueDate(task: TaskResource): string {
   const raw = task.current_due_date || task.original_due_date;
@@ -62,7 +60,10 @@ function nextPostponeDueDate(task: TaskResource): string {
 
 function applyPostponedResponse(
   work: TaskResource,
-  data: { priority: number | string; current_due_date: string; postponed_count: number; status: string } & Record<string, unknown>,
+  data: { priority: number | string; current_due_date: string; postponed_count: number; status: string } & Record<
+    string,
+    unknown
+  >,
 ): TaskResource {
   return { ...work, ...data, priority: String(data.priority) } as TaskResource;
 }
@@ -73,97 +74,28 @@ function targetPostponedCountForColumn(to: "p1" | "p2" | "p3"): 1 | 2 | 3 {
   return 3;
 }
 
-const FILTER_TABS = [
-  { id: "all" as const, label: "Todas" },
-  { id: "in_progress" as const, label: "Em progresso" },
-  { id: "completed" as const, label: "Concluídas" },
-  { id: "postponed" as const, label: "Adiadas" },
-];
-
-function statusLabel(status: string): string {
-  return STATUS_OPTIONS.find((o) => o.value === status)?.label ?? status;
-}
-
-function formatTaskDateTime(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso.slice(0, 19).replace("T", " ");
-  return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
-}
-
-/** Tarefas concluídas não abrem sessão nem acumulam novo tempo neste fluxo de visualização. */
 function taskQualifiesForViewSession(task: TaskResource): boolean {
   return task.status !== "completed" && (task.completed_at == null || task.completed_at === "");
-}
-
-function emptyForm(): TaskStoreBody {
-  const d = new Date();
-  const due = `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
-  return {
-    name: "",
-    description: "",
-    status: "in_progress",
-    priority: "2",
-    due_date: due,
-  };
 }
 
 export function TasksPage() {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const perPage = 100;
-  const [filterTab, setFilterTab] = useState<(typeof FILTER_TABS)[number]["id"]>("all");
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [viewTask, setViewTask] = useState<TaskResource | null>(null);
-
-  useEffect(() => {
-    const id = window.setTimeout(() => setDebouncedSearch(search.trim()), 350);
-    return () => window.clearTimeout(id);
-  }, [search]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [debouncedSearch]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [filterTab]);
 
   const invalidateTasks = useCallback(() => {
     void queryClient.invalidateQueries({ queryKey: ["/api/task"] });
   }, [queryClient]);
 
-  const indexQuery = useTaskIndex(
-    {
-      page,
-      per_page: perPage,
-      ...(debouncedSearch.length > 0 ? { search: debouncedSearch } : {}),
-    },
-    {
-      query: {
-        onError: (error) => {
-          toastApiError(error, "Não foi possível carregar as tarefas");
-        },
-        onSuccess: (res) => {
-          if (res.success === false) {
-            toastApiWarning(res.message ?? "A API indicou falha ao listar tarefas.");
-          } else if (res.data == null) {
-            toastApiWarning("Resposta sem dados de tarefas.");
-          }
-        },
-      },
-    },
-  );
+  const indexQuery = useTaskIndex({ page, per_page: perPage });
 
   const storeMutation = useTaskStore({
     mutation: {
       onSuccess: (res) => {
         toastApiSuccessFromBody(res, "Tarefa criada.");
         invalidateTasks();
-        setForm(emptyForm());
-        setEditingId(null);
-        setCreateOpen(false);
       },
       onError: (error) => toastApiError(error),
     },
@@ -174,9 +106,6 @@ export function TasksPage() {
       onSuccess: (res) => {
         toastApiSuccessFromBody(res, "Tarefa atualizada.");
         invalidateTasks();
-        setEditingId(null);
-        setForm(emptyForm());
-        setCreateOpen(false);
       },
       onError: (error) => toastApiError(error),
     },
@@ -187,8 +116,8 @@ export function TasksPage() {
       onSuccess: (_res, variables) => {
         const deletedId = variables.id;
         invalidateTasks();
-        toast.success("Tarefa excluída.", {
-          duration: 10_000,
+        toast.success("Tarefa enviada para a lixeira.", {
+          duration: 8000,
           action: {
             label: "Desfazer",
             onClick: () => {
@@ -263,14 +192,15 @@ export function TasksPage() {
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<TaskStoreBody>(() => emptyForm());
+  const [selectedTipIds, setSelectedTipIds] = useState<string[]>([]);
+  const [pendingPostpone, setPendingPostpone] = useState<{ task: TaskResource; to: KanbanColumnId } | null>(
+    null,
+  );
+  const [postponeBusy, setPostponeBusy] = useState(false);
+  const [savingTaskAndTips, setSavingTaskAndTips] = useState(false);
 
   const items = indexQuery.data?.data?.items ?? [];
   const pagination = indexQuery.data?.data?.pagination;
-
-  const filteredItems = useMemo(() => {
-    if (filterTab === "all") return items;
-    return items.filter((t) => t.status === filterTab);
-  }, [items, filterTab]);
 
   const openViewTask = useCallback((task: TaskResource) => {
     setViewTask(task);
@@ -281,80 +211,63 @@ export function TasksPage() {
     setViewTask(null);
     setEditingId(task.id);
     setCreateOpen(true);
-    const raw = task.current_due_date || task.original_due_date || "";
-    let due = emptyForm().due_date;
-    if (raw) {
-      const iso = raw.slice(0, 10);
-      if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
-        const [y, m, d] = iso.split("-");
-        due = `${d}-${m}-${y}`;
-      } else if (raw.match(/^\d{2}-\d{2}-\d{4}$/)) {
-        due = raw.slice(0, 10);
-      }
-    }
+    const { due_date, due_time } = taskDueParts(task);
     setForm({
       name: task.name,
       description: task.description,
       status: task.status,
       priority: String(task.priority),
-      due_date: due,
+      due_date,
+      due_time,
     });
+    setSelectedTipIds(parseEmbeddedTips(task.tips).map((x) => x.id));
   }, []);
 
   const cancelEdit = useCallback(() => {
     setEditingId(null);
     setForm(emptyForm());
+    setSelectedTipIds([]);
     setCreateOpen(false);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editingId) {
-      updateMutation.mutate({
-        id: editingId,
-        data: {
-          name: form.name,
-          description: form.description,
-          status: form.status,
-          priority: form.priority,
-          current_due_date: form.due_date,
-        },
-      });
-    } else {
-      storeMutation.mutate({ data: form });
-    }
-  };
+  const openNewTaskDialog = useCallback(() => {
+    setViewTask(null);
+    setEditingId(null);
+    setForm(emptyForm());
+    setSelectedTipIds([]);
+    setCreateOpen(true);
+  }, []);
 
-  const toggleComplete = useCallback(
-    (task: TaskResource) => {
-      const next = task.status === "completed" ? "in_progress" : "completed";
-      updateMutation.mutate({
-        id: task.id,
-        data: { status: next },
-      });
-    },
-    [updateMutation],
-  );
+  useRegisterOpenNewTaskFromHeader(openNewTaskDialog);
 
-  const moveTaskOnBoard = useCallback(
+  const applyKanbanMove = useCallback(
     async (task: TaskResource, to: KanbanColumnId) => {
       const from = getKanbanColumnId(task);
       if (from === to) return;
       let work: TaskResource = { ...task };
 
       if (to === "done") {
-        await updateMutation.mutateAsync({ id: work.id, data: { status: "completed" } });
+        await updateMutation.mutateAsync({
+          id: work.id,
+          data: taskToUpdateBody(work, { status: "completed" }),
+        });
         return;
       }
 
       if (to === "progress") {
         if (work.status === "in_progress") return;
-        await updateMutation.mutateAsync({ id: work.id, data: { status: "in_progress" } });
+        await updateMutation.mutateAsync({
+          id: work.id,
+          data: taskToUpdateBody(work, { status: "in_progress" }),
+        });
         return;
       }
 
       if (work.status === "completed") {
-        const u = await updateMutation.mutateAsync({ id: work.id, data: { status: "in_progress" } });
+        const u = await updateMutation.mutateAsync({
+          id: work.id,
+          data: taskToUpdateBody(work, { status: "in_progress" }),
+        });
         if (u.success && u.data) work = u.data;
       }
 
@@ -363,7 +276,10 @@ export function TasksPage() {
       let need = want - eff;
 
       if (need < 0) {
-        const u = await updateMutation.mutateAsync({ id: work.id, data: { status: "in_progress" } });
+        const u = await updateMutation.mutateAsync({
+          id: work.id,
+          data: taskToUpdateBody(work, { status: "in_progress" }),
+        });
         if (u.success && u.data) work = u.data;
         const eff2 = work.status === "postponed" ? Math.max(0, work.postponed_count) : 0;
         need = want - eff2;
@@ -376,11 +292,93 @@ export function TasksPage() {
           data: { current_due_date: due },
         });
         if (p.success && p.data) {
-          work = applyPostponedResponse(work, p.data as { priority: number; current_due_date: string; postponed_count: number; status: string } & Record<string, unknown>);
+          work = applyPostponedResponse(
+            work,
+            p.data as {
+              priority: number;
+              current_due_date: string;
+              postponed_count: number;
+              status: string;
+            } & Record<string, unknown>,
+          );
         }
       }
     },
     [postponeMutation, updateMutation],
+  );
+
+  const moveTaskOnBoard = useCallback(
+    async (task: TaskResource, to: KanbanColumnId) => {
+      const from = getKanbanColumnId(task);
+      if (from === to) return;
+
+      if (task.status === "in_progress" && (to === "p1" || to === "p2" || to === "p3")) {
+        setPendingPostpone({ task, to });
+        return;
+      }
+
+      await applyKanbanMove(task, to);
+    },
+    [applyKanbanMove],
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingTaskAndTips(true);
+    try {
+      if (editingId) {
+        await updateMutation.mutateAsync({
+          id: editingId,
+          data: {
+            name: form.name,
+            description: form.description,
+            status: form.status,
+            priority: form.priority,
+            due_date: form.due_date,
+            due_time: form.due_time,
+          },
+        });
+        try {
+          await assignTaskTipIds(editingId, selectedTipIds);
+        } catch (err) {
+          toastApiError(err, "Tarefa guardada, mas falhou associar tipos.");
+          return;
+        }
+        setForm(emptyForm());
+        setEditingId(null);
+        setSelectedTipIds([]);
+        setCreateOpen(false);
+        return;
+      }
+
+      const res = await storeMutation.mutateAsync({ data: form });
+      const newId = res.success && res.data?.id ? res.data.id : null;
+      if (newId) {
+        try {
+          await assignTaskTipIds(newId, selectedTipIds);
+        } catch (err) {
+          toastApiError(err, "Tarefa criada, mas falhou associar tipos.");
+          return;
+        }
+      }
+      setForm(emptyForm());
+      setEditingId(null);
+      setSelectedTipIds([]);
+      setCreateOpen(false);
+    } finally {
+      setSavingTaskAndTips(false);
+    }
+  };
+
+  const toggleComplete = useCallback(
+    (task: TaskResource) => {
+      const next = task.status === "completed" ? "in_progress" : "completed";
+      updateMutation.mutate({
+        id: task.id,
+        data: taskToUpdateBody(task, { status: next }),
+      });
+    },
+    [updateMutation],
   );
 
   const handleDelete = useCallback(
@@ -394,80 +392,22 @@ export function TasksPage() {
     storeMutation.isPending ||
     updateMutation.isPending ||
     deleteMutation.isPending ||
-    postponeMutation.isPending;
+    postponeMutation.isPending ||
+    savingTaskAndTips ||
+    postponeBusy;
 
   const formTitle = editingId ? "Editar tarefa" : "Nova tarefa";
-  const formDesc = editingId
-    ? "Atualize os campos e salve."
-    : "Preencha para criar uma nova tarefa.";
+  const formDesc = editingId ? "Atualize os campos e salve." : "Preencha para criar uma nova tarefa.";
+
+  const postponeColumnTitle = pendingPostpone
+    ? (KANBAN_COLUMNS.find((c) => c.id === pendingPostpone.to)?.title ?? "Coluna de adiamento")
+    : "";
 
   const boardShellClass =
-    "w-full rounded border border-border/30 bg-background px-4 py-3 sm:px-6 lg:px-8";
+    "w-full bg-background ";
 
   return (
     <main className="flex min-h-0 flex-1 flex-col bg-background">
-      <div className="flex w-full flex-col gap-3 sm:gap-4">
-          <div className="rounded-xl bg-muted/45 px-3 py-2 sm:px-3.5 sm:py-2.5">
-            <label className="sr-only" htmlFor="task-search">
-              Buscar tarefas
-            </label>
-            <Input
-              id="task-search"
-              placeholder="Buscar por nome ou descrição…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="h-10 rounded-lg border-0 bg-transparent shadow-none ring-offset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
-            />
-          </div>
-
-          <div
-            className="flex flex-wrap gap-2"
-            role="tablist"
-            aria-label="Filtrar por status"
-          >
-            {FILTER_TABS.map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                role="tab"
-                aria-selected={filterTab === tab.id}
-                onClick={() => setFilterTab(tab.id)}
-                className={cn(
-                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                  filterTab === tab.id
-                    ? "bg-foreground text-background"
-                    : "bg-muted/80 text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs text-muted-foreground">
-              {pagination
-                ? `${pagination.total} tarefa(s) — página ${pagination.current_page} de ${pagination.last_page}`
-                : indexQuery.isLoading
-                  ? "Carregando…"
-                  : ""}
-            </p>
-            <Button
-              type="button"
-              className="rounded-full gap-2"
-              onClick={() => {
-                setViewTask(null);
-                setEditingId(null);
-                setForm(emptyForm());
-                setCreateOpen(true);
-              }}
-            >
-              <Plus className="h-4 w-4" />
-              Nova tarefa
-            </Button>
-          </div>
-      </div>
-
       <section className="w-full px-0 pb-6" aria-label="Quadro de tarefas">
         {indexQuery.isLoading ? (
           <div className={`${boardShellClass} flex flex-col items-center justify-center gap-3 py-20`}>
@@ -482,21 +422,15 @@ export function TasksPage() {
               </p>
             </div>
           </div>
-        ) : filteredItems.length === 0 ? (
+        ) : items.length === 0 ? (
           <div className="my-2 rounded-2xl border border-dashed bg-muted/20 px-6 py-10 text-center sm:my-3">
-            <p className="text-sm font-medium text-foreground/80">
-              {items.length === 0 ? "Nenhuma tarefa ainda." : "Nenhuma tarefa neste filtro."}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {items.length === 0
-                ? "Crie uma tarefa ou ajuste a busca."
-                : "Tente outro filtro ou limpe a busca."}
-            </p>
+            <p className="text-sm font-medium text-foreground/80">Nenhuma tarefa ainda nesta página.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Crie uma tarefa ou avance páginas se existirem mais.</p>
           </div>
         ) : (
           <div className={boardShellClass}>
             <TaskKanbanBoard
-              tasks={filteredItems}
+              tasks={items}
               busy={busy}
               isLoading={false}
               onView={openViewTask}
@@ -508,7 +442,17 @@ export function TasksPage() {
           </div>
         )}
       </section>
-
+      <div className="self-end gap-3 sm:gap-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="text-xs text-muted-foreground">
+            {pagination
+              ? `${pagination.total} no quadro (página ${pagination.current_page} de ${pagination.last_page})`
+              : indexQuery.isLoading
+                ? "Carregando…"
+                : ""}
+          </p>
+        </div>
+      </div>
       {pagination && pagination.last_page > 1 ? (
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-2 border-t border-border px-4 py-3 sm:px-6 lg:px-8">
           <Button
@@ -559,9 +503,7 @@ export function TasksPage() {
                 <div className="max-h-[min(60vh,420px)] space-y-4 overflow-y-auto px-6 py-4">
                   <div>
                     <p className="text-xs font-medium uppercase text-muted-foreground">Descrição</p>
-                    <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-foreground">
-                      {viewTask.description}
-                    </p>
+                    <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-foreground">{viewTask.description}</p>
                   </div>
                   <dl className="grid gap-2 text-sm">
                     <div className="flex flex-wrap justify-between gap-2">
@@ -635,7 +577,7 @@ export function TasksPage() {
                       />
                     </FieldContent>
                   </Field>
-                  <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <Field>
                       <FieldLabel htmlFor="task-status">Status</FieldLabel>
                       <FieldContent>
@@ -671,7 +613,7 @@ export function TasksPage() {
                       </FieldContent>
                     </Field>
                     <Field>
-                      <FieldLabel htmlFor="task-due">Prazo</FieldLabel>
+                      <FieldLabel htmlFor="task-due">Prazo (data)</FieldLabel>
                       <FieldContent>
                         <Input
                           id="task-due"
@@ -683,27 +625,103 @@ export function TasksPage() {
                         />
                       </FieldContent>
                     </Field>
+                    <Field>
+                      <FieldLabel htmlFor="task-due-time">Hora</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          id="task-due-time"
+                          type="time"
+                          value={form.due_time}
+                          onChange={(e) => setForm((f) => ({ ...f, due_time: e.target.value }))}
+                          required
+                          className="rounded-xl"
+                        />
+                      </FieldContent>
+                    </Field>
                   </div>
+                  <TaskFormTipsPicker selectedIds={selectedTipIds} onChange={setSelectedTipIds} disabled={busy} />
                 </FieldGroup>
               </div>
               <DialogFooter className="gap-2 sm:gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="rounded-full"
-                  onClick={cancelEdit}
-                  disabled={busy}
-                >
+                <Button type="button" variant="outline" className="rounded-full" onClick={cancelEdit} disabled={busy}>
                   Cancelar
                 </Button>
                 <Button type="submit" disabled={busy} className="rounded-full">
-                  {editingId ? "Salvar alterações" : "Criar tarefa"}
+                  {savingTaskAndTips ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" aria-hidden />
+                      A guardar…
+                    </>
+                  ) : editingId ? (
+                    "Salvar alterações"
+                  ) : (
+                    "Criar tarefa"
+                  )}
                 </Button>
               </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
+
+        <Dialog
+          open={pendingPostpone != null}
+          onOpenChange={(open) => {
+            if (!open && !postponeBusy) setPendingPostpone(null);
+          }}
+        >
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Confirmar adiamento</DialogTitle>
+              <DialogDescription asChild>
+                <div className="space-y-2 text-muted-foreground">
+                  <p>
+                    A tarefa <span className="font-medium text-foreground">&quot;{pendingPostpone?.task.name}&quot;</span> está{" "}
+                    <span className="font-medium text-foreground">em progresso</span>. Ao mover para{" "}
+                    <span className="font-medium text-foreground">{postponeColumnTitle}</span>, o estado passa a{" "}
+                    <span className="font-medium text-foreground">Adiada</span> e o prazo atual é prolongado segundo as regras do
+                    quadro (até ao limite de adiamentos).
+                  </p>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2 sm:gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-full"
+                disabled={postponeBusy}
+                onClick={() => {
+                  if (!postponeBusy) setPendingPostpone(null);
+                }}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                className="rounded-full gap-2"
+                disabled={postponeBusy}
+                onClick={() => {
+                  const p = pendingPostpone;
+                  if (!p) return;
+                  setPostponeBusy(true);
+                  void (async () => {
+                    try {
+                      await applyKanbanMove(p.task, p.to);
+                    } finally {
+                      setPostponeBusy(false);
+                      setPendingPostpone(null);
+                    }
+                  })();
+                }}
+              >
+                {postponeBusy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+                Confirmar adiamento
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
+      
     </main>
   );
 }

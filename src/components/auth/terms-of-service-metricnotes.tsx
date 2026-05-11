@@ -108,7 +108,7 @@ export function TermsOfServiceMetricnotesContent() {
           através dos meios de contato que você nos forneceu.
         </p>
         <p>
-          Continuar a acessar o site após essas mudanças indica que você concorda com os novos termos. Se, por qualquer
+          Continuar a acessar o site após essas mudanças intipo que você concorda com os novos termos. Se, por qualquer
           motivo, você não concordar com as atualizações, pedimos que não continue utilizando nosso site e serviços.
         </p>
       </section>

@@ -904,6 +904,9 @@
                   },
                   "due_date": {
                     "type": "string"
+                  },
+                  "due_time": {
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -911,7 +914,8 @@
                   "description",
                   "status",
                   "priority",
-                  "due_date"
+                  "due_date",
+                  "due_time"
                 ]
               },
               "example": {
@@ -919,7 +923,8 @@
                 "description": "estou testando criar o método store para tarefa",
                 "status": "in_progress",
                 "priority": "2",
-                "due_date": "08-05-2026"
+                "due_date": "08-05-2026",
+                "due_time": "00:00"
               }
             }
           },
@@ -992,14 +997,42 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "properties": {}
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "type": "string"
+                  },
+                  "due_date": {
+                    "type": "string"
+                  },
+                  "due_time": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "status",
+                  "priority",
+                  "due_date",
+                  "due_time"
+                ]
               },
               "example": {
-                "name": "edicao de titulo teste",
+                "name": "etipoo de titulo teste",
                 "description": "estou testando editar a tarefa",
                 "status": "in_progress",
                 "priority": "5",
-                "due_date": "17-04-2026"
+                "due_date": "17-04-2026",
+                "due_time": "00:00"
               }
             }
           },
@@ -1033,7 +1066,7 @@
                   "success": true,
                   "data": {
                     "id": "019d96a6-c486-712e-99d5-38de6fb80b69",
-                    "name": "edicao de titulo teste",
+                    "name": "etipoo de titulo teste",
                     "description": "estou testando editar a tarefa",
                     "status": "in_progress",
                     "priority": "5",
@@ -1243,6 +1276,33 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "only_trashed",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tip_id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1310,7 +1370,7 @@
                     "items": [
                       {
                         "id": "019d96a6-c486-712e-99d5-38de6fb80b69",
-                        "name": "edicao de titulo teste",
+                        "name": "etipoo de titulo teste",
                         "description": "estou testando editar a tarefa",
                         "status": "in_progress",
                         "priority": 5,

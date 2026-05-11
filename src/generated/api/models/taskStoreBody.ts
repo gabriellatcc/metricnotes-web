@@ -11,4 +11,5 @@ export type TaskStoreBody = {
   status: string;
   priority: string;
   due_date: string;
+  due_time: string;
 };

@@ -50,7 +50,7 @@ export function DashboardTodayPage() {
       <DashboardSectionHeading
         id="painel-tab-hoje"
         title="Hoje"
-        description="Cartões KPI de exemplo sobre a série semanal, hábitos e o que já carregou das suas tarefas: prazos, progresso e dicas rápidas de bem‑estar."
+        description="Cartões KPI de exemplo sobre a série semanal, hábitos e o que já carregou das suas tarefas: prazos, progresso e tipos rápidas de bem‑estar."
       />
       <DashboardOverviewCards weeklySummary={data.summary} />
     </section>

@@ -5,4 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type TaskUpdateBody = { [key: string]: unknown };
+export type TaskUpdateBody = {
+  name: string;
+  description: string;
+  status: string;
+  priority: string;
+  due_date: string;
+  due_time: string;
+};
