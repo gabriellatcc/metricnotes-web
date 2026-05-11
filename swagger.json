@@ -1,0 +1,3887 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Módulo predefinido",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "User"
+    },
+    {
+      "name": "Task"
+    },
+    {
+      "name": "Tip"
+    },
+    {
+      "name": "Note"
+    },
+    {
+      "name": "UserOperation"
+    },
+    {
+      "name": "Notification"
+    }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login",
+        "deprecated": false,
+        "description": "Sessão de usuário, retorna o token e o usuário.",
+        "operationId": "authLogin",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              },
+              "example": {
+                "email": "admin@metricnotes.com",
+                "password": "admin123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User%20Resource"
+                        },
+                        "access_token": {
+                          "type": "string"
+                        },
+                        "token_type": {
+                          "type": "string"
+                        },
+                        "expires_in": {
+                          "type": "integer"
+                        },
+                        "authorization": {
+                          "$ref": "#/components/schemas/Authorization%20Resource"
+                        }
+                      },
+                      "required": [
+                        "user",
+                        "access_token",
+                        "token_type",
+                        "expires_in",
+                        "authorization"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "user": {
+                      "id": "019d7fa0-5ee3-7262-9710-a302cfc22409",
+                      "name": "Gabriella",
+                      "email": "me01@example.com",
+                      "email_verified_at": null,
+                      "is_admin": false,
+                      "created_at": "2026-04-12T02:58:29.000000Z",
+                      "updated_at": "2026-04-12T02:58:29.000000Z"
+                    },
+                    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NzYwODA0MjUsImV4cCI6MTc3NjA4NDAyNSwibmJmIjoxNzc2MDgwNDI1LCJqdGkiOiJ1TG1ObnZkTGZkR082aXdrIiwic3ViIjoiMDE5ZDdmYTAtNWVlMy03MjYyLTk3MTAtYTMwMmNmYzIyNDA5IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.nGz1IPp-5VdTmN1OQOhuiTPyKnU3HWpToL2O_pQ8g3o",
+                    "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NzYwODA0MjUsImV4cCI6MTc3NjA4NDAyNSwibmJmIjoxNzc2MDgwNDI1LCJqdGkiOiJ1TG1ObnZkTGZkR082aXdrIiwic3ViIjoiMDE5ZDdmYTAtNWVlMy03MjYyLTk3MTAtYTMwMmNmYzIyNDA5IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.nGz1IPp-5VdTmN1OQOhuiTPyKnU3HWpToL2O_pQ8g3o",
+                    "token_type": "Bearer",
+                    "expires_in": 3600
+                  },
+                  "message": "Login successful."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Me",
+        "deprecated": false,
+        "description": "Retorna o usuário autenticando o token.",
+        "operationId": "authMe",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "created_at": {
+                              "type": "string"
+                            },
+                            "updated_at": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "email",
+                            "created_at",
+                            "updated_at"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "user"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "user": {
+                      "id": "a185da68-faf8-400b-95f0-f7b64e9b35c6",
+                      "name": "Admin",
+                      "email": "admin@metricnotes.com",
+                      "created_at": "2026-04-09T13:24:18.000000Z",
+                      "updated_at": "2026-04-09T13:24:18.000000Z"
+                    }
+                  },
+                  "message": "Autenticação feita com sucesso."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "summary": "Refresh Token",
+        "deprecated": false,
+        "description": "Atualiza o token.",
+        "operationId": "authRefreshToken",
+        "tags": [
+          "Auth"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refresh_token": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "refresh_token"
+                ]
+              },
+              "example": {
+                "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3NzYxNzYwMjUsImV4cCI6MTc3NjE3OTYyNSwibmJmIjoxNzc2MTc2MDI1LCJqdGkiOiJmVGlZZTJkM21FOHd4VHNaIiwic3ViIjoiYTE4NWRhNjgtZmFmOC00MDBiLTk1ZjAtZjdiNjRlOWIzNWM2IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.z9NVVegCUteMlEM_gEvz4Jk-4MOcAbFATPH7lCbiV68"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "created_at": {
+                              "type": "string"
+                            },
+                            "updated_at": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "email",
+                            "created_at",
+                            "updated_at"
+                          ]
+                        },
+                        "authorization": {
+                          "type": "object",
+                          "properties": {
+                            "access_token": {
+                              "type": "string"
+                            },
+                            "token_type": {
+                              "type": "string"
+                            },
+                            "expires_in": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "access_token",
+                            "token_type",
+                            "expires_in"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "user",
+                        "authorization"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Não foi possível atualizar o token."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/user/{id}": {
+      "put": {
+        "summary": "Update User",
+        "deprecated": false,
+        "description": "Atualiza o usuário.",
+        "operationId": "userUpdate",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d86af-d56f-72d7-bcfe-6bd78057507d",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "name": "Gabrielllaaaaaa",
+                "email": "me0747@example.com",
+                "password": "password"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/User%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "message": "The PUT method is not supported for route api/user. Supported methods: GET, HEAD, POST.",
+                  "data": {
+                    "file": "C:\\Users\\gabri\\OneDrive\\Desktop\\repositoriosGithubLocal\\metricnotes-api\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\AbstractRouteCollection.php",
+                    "line": 130
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete User",
+        "deprecated": false,
+        "description": "Exclui o usuário",
+        "operationId": "userDelete",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d86af-d56f-72d7-bcfe-6bd78057507d",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": true,
+                  "message": "Usuário excluído com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Show User",
+        "deprecated": false,
+        "description": "Mostra os dados de um usuário",
+        "operationId": "userShow",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "a185da68-faf8-400b-95f0-f7b64e9b35c6",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "email",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "a185da68-faf8-400b-95f0-f7b64e9b35c6",
+                    "name": "Admin",
+                    "email": "admin@metricnotes.com",
+                    "created_at": "2026-04-09T13:24:18.000000Z",
+                    "updated_at": "2026-04-09T13:24:18.000000Z"
+                  },
+                  "message": "Usuário exibido com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/user/": {
+      "post": {
+        "summary": "Store User",
+        "deprecated": false,
+        "description": "Método de criação/cadastro de usuário",
+        "operationId": "storeUser",
+        "tags": [
+          "User"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "password_confirmation": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "password",
+                  "password_confirmation"
+                ]
+              },
+              "example": {
+                "name": "Gabriella",
+                "email": "me07@example.com",
+                "password": "password",
+                "password_confirmation": "password"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User%20Resource"
+                        },
+                        "authorization": {
+                          "$ref": "#/components/schemas/Authorization%20Resource"
+                        }
+                      },
+                      "required": [
+                        "user",
+                        "authorization"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Internal server error."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "get": {
+        "summary": "Index User",
+        "deprecated": false,
+        "description": "Listagem de usuários.",
+        "operationId": "userIndex",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "admin",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/User%20Resource"
+                          }
+                        },
+                        "pagination": {
+                          "type": "object",
+                          "properties": {
+                            "current_page": {
+                              "type": "integer"
+                            },
+                            "per_page": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "last_page": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "current_page",
+                            "per_page",
+                            "total",
+                            "last_page"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "items",
+                        "pagination"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "items": [
+                      {
+                        "id": "019d86a7-bbc4-73ba-a91d-d8bcd6a825fa",
+                        "name": "Gabriella",
+                        "email": "me05@example.com",
+                        "created_at": "2026-04-13T11:43:52.000000Z",
+                        "updated_at": "2026-04-13T11:43:52.000000Z"
+                      },
+                      {
+                        "id": "019d86a1-ac2f-7199-9174-a5271541340a",
+                        "name": "Gabriella",
+                        "email": "me04@example.com",
+                        "created_at": "2026-04-13T11:37:15.000000Z",
+                        "updated_at": "2026-04-13T11:37:15.000000Z"
+                      },
+                      {
+                        "id": "019d7fa0-5ee3-7262-9710-a302cfc22409",
+                        "name": "Gabriella",
+                        "email": "me01@example.com",
+                        "created_at": "2026-04-12T02:58:29.000000Z",
+                        "updated_at": "2026-04-12T02:58:29.000000Z"
+                      },
+                      {
+                        "id": "a185da69-01dc-4510-8286-b09071338e55",
+                        "name": "Gabriella",
+                        "email": "me4@example.com",
+                        "created_at": "2026-04-12T02:50:08.000000Z",
+                        "updated_at": "2026-04-12T02:50:08.000000Z"
+                      },
+                      {
+                        "id": "a185da69-014e-4da2-b542-ec2938f2fff2",
+                        "name": "Gabriella",
+                        "email": "me2@example.com",
+                        "created_at": "2026-04-12T02:18:02.000000Z",
+                        "updated_at": "2026-04-12T02:18:02.000000Z"
+                      },
+                      {
+                        "id": "a185da69-00b2-4b71-a920-59ba02825242",
+                        "name": "Gabriella",
+                        "email": "me1@example.com",
+                        "created_at": "2026-04-12T02:11:14.000000Z",
+                        "updated_at": "2026-04-12T02:11:14.000000Z"
+                      },
+                      {
+                        "id": "a185da69-0014-4cbe-a014-c0cd36245ef1",
+                        "name": "Gabriella",
+                        "email": "me@example.com",
+                        "created_at": "2026-04-12T02:02:10.000000Z",
+                        "updated_at": "2026-04-12T02:02:10.000000Z"
+                      },
+                      {
+                        "id": "a185da68-faf8-400b-95f0-f7b64e9b35c6",
+                        "name": "Admin",
+                        "email": "admin@metricnotes.com",
+                        "created_at": "2026-04-09T13:24:18.000000Z",
+                        "updated_at": "2026-04-09T13:24:18.000000Z"
+                      },
+                      {
+                        "id": "a185da68-ff5f-488c-8ab8-d7bf11d63350",
+                        "name": "Test User",
+                        "email": "test@example.com",
+                        "created_at": "2026-04-09T13:24:18.000000Z",
+                        "updated_at": "2026-04-09T13:24:18.000000Z"
+                      }
+                    ],
+                    "pagination": {
+                      "current_page": 1,
+                      "per_page": 15,
+                      "total": 9,
+                      "last_page": 1
+                    }
+                  },
+                  "message": "Lista de usuários exibida com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/": {
+      "post": {
+        "summary": "Store Task",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskStore",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "type": "string"
+                  },
+                  "due_date": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "status",
+                  "priority",
+                  "due_date"
+                ]
+              },
+              "example": {
+                "name": "tarefa teste",
+                "description": "estou testando criar o método store para tarefa",
+                "status": "in_progress",
+                "priority": "2",
+                "due_date": "08-05-2026"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Unauthorized."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}": {
+      "put": {
+        "summary": "Update Task",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskUpdate",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d96a6-c486-712e-99d5-38de6fb80b69",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": {
+                "name": "edicao de titulo teste",
+                "description": "estou testando editar a tarefa",
+                "status": "in_progress",
+                "priority": "5",
+                "due_date": "17-04-2026"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019d96a6-c486-712e-99d5-38de6fb80b69",
+                    "name": "edicao de titulo teste",
+                    "description": "estou testando editar a tarefa",
+                    "status": "in_progress",
+                    "priority": "5",
+                    "is_being_viewed": false,
+                    "last_viewed_at": null,
+                    "completed_at": null,
+                    "original_due_date": "2026-04-16T00:00:00.000000Z",
+                    "current_due_date": "2026-04-16T00:00:00.000000Z",
+                    "postponed_count": 0,
+                    "postponed_date_1": null,
+                    "postponed_date_2": null,
+                    "postponed_date_3": null,
+                    "created_at": "2026-04-16T14:16:44.000000Z",
+                    "updated_at": "2026-04-16T14:36:14.000000Z",
+                    "user_id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                    "task_type_id": null
+                  },
+                  "message": "Tarefa atualizada com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Show Task",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskShow",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d96a6-c486-712e-99d5-38de6fb80b69",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019d96a6-c486-712e-99d5-38de6fb80b69",
+                    "name": "tarefa teste",
+                    "description": "estou testando criar o método store para tarefa",
+                    "status": "in_progress",
+                    "priority": 2,
+                    "is_being_viewed": false,
+                    "last_viewed_at": null,
+                    "completed_at": null,
+                    "original_due_date": "2026-04-16T00:00:00.000000Z",
+                    "current_due_date": "2026-04-16T00:00:00.000000Z",
+                    "postponed_count": 0,
+                    "postponed_date_1": null,
+                    "postponed_date_2": null,
+                    "postponed_date_3": null,
+                    "created_at": "2026-04-16T14:16:44.000000Z",
+                    "updated_at": "2026-04-16T14:16:44.000000Z",
+                    "user_id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                    "task_type_id": null
+                  },
+                  "message": "Tarefa exibida com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Task",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskDelete",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d96a6-c486-712e-99d5-38de6fb80b69",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": true,
+                  "message": "Tarefa excluída com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task": {
+      "get": {
+        "summary": "Index Task",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskIndex",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Task%20Resource"
+                          }
+                        },
+                        "pagination": {
+                          "type": "object",
+                          "properties": {
+                            "current_page": {
+                              "type": "integer"
+                            },
+                            "per_page": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "last_page": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "current_page",
+                            "per_page",
+                            "total",
+                            "last_page"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "items",
+                        "pagination"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "items": [
+                      {
+                        "id": "019d96a6-c486-712e-99d5-38de6fb80b69",
+                        "name": "edicao de titulo teste",
+                        "description": "estou testando editar a tarefa",
+                        "status": "in_progress",
+                        "priority": 5,
+                        "is_being_viewed": false,
+                        "last_viewed_at": null,
+                        "completed_at": null,
+                        "original_due_date": "2026-04-16T00:00:00.000000Z",
+                        "current_due_date": "2026-04-16T00:00:00.000000Z",
+                        "postponed_count": 0,
+                        "postponed_date_1": null,
+                        "postponed_date_2": null,
+                        "postponed_date_3": null,
+                        "created_at": "2026-04-16T14:16:44.000000Z",
+                        "updated_at": "2026-04-16T14:36:14.000000Z",
+                        "user_id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                        "task_type_id": null
+                      }
+                    ],
+                    "pagination": {
+                      "current_page": 1,
+                      "per_page": 1,
+                      "total": 2,
+                      "last_page": 2
+                    }
+                  },
+                  "message": "Lista de tarefas exibida com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/type": {
+      "patch": {
+        "summary": "Assign Tip",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskAssignTip",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d9632-9ae9-7361-81e1-cc50fa3bbe80",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tips_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "tips_ids"
+                ]
+              },
+              "example": {
+                "task_type_ids": [
+                  "019d9c05-5417-7380-87ce-0681f89211ea"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019d9632-9ae9-7361-81e1-cc50fa3bbe80",
+                    "name": "tarefa teste",
+                    "description": "estou testando criar o método store para tarefa",
+                    "status": "in_progress",
+                    "priority": 2,
+                    "is_being_viewed": false,
+                    "last_viewed_at": null,
+                    "completed_at": null,
+                    "original_due_date": "2026-04-16T00:00:00.000000Z",
+                    "current_due_date": "2026-04-16T00:00:00.000000Z",
+                    "postponed_count": 0,
+                    "postponed_date_1": null,
+                    "postponed_date_2": null,
+                    "postponed_date_3": null,
+                    "created_at": "2026-04-16T12:09:52.000000Z",
+                    "updated_at": "2026-04-17T13:23:03.000000Z",
+                    "user_id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                    "task_types": [
+                      {
+                        "id": "019d9c05-5417-7380-87ce-0681f89211ea",
+                        "name": "Mudança de nome teste",
+                        "color": "#111111",
+                        "created_at": "2026-04-17T15:18:08.000000Z",
+                        "updated_at": "2026-04-17T15:26:57.000000Z"
+                      }
+                    ]
+                  },
+                  "message": "Tipos de tarefa atribuídos à tarefa com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/complete": {
+      "patch": {
+        "summary": "Update Completion",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskUpdateCompletion",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d9632-9ae9-7361-81e1-cc50fa3bbe80",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "priority": {
+                          "type": "integer"
+                        },
+                        "is_being_viewed": {
+                          "type": "boolean"
+                        },
+                        "last_viewed_at": {
+                          "type": "null"
+                        },
+                        "completed_at": {
+                          "type": "string"
+                        },
+                        "original_due_date": {
+                          "type": "string"
+                        },
+                        "current_due_date": {
+                          "type": "string"
+                        },
+                        "postponed_count": {
+                          "type": "integer"
+                        },
+                        "postponed_date_1": {
+                          "type": "null"
+                        },
+                        "postponed_date_2": {
+                          "type": "null"
+                        },
+                        "postponed_date_3": {
+                          "type": "null"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "user_id": {
+                          "type": "string"
+                        },
+                        "task_types": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "color": {
+                                "type": "string"
+                              },
+                              "created_at": {
+                                "type": "string"
+                              },
+                              "updated_at": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "status",
+                        "priority",
+                        "is_being_viewed",
+                        "last_viewed_at",
+                        "completed_at",
+                        "original_due_date",
+                        "current_due_date",
+                        "postponed_count",
+                        "postponed_date_1",
+                        "postponed_date_2",
+                        "postponed_date_3",
+                        "created_at",
+                        "updated_at",
+                        "user_id",
+                        "task_types"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019d9632-9ae9-7361-81e1-cc50fa3bbe80",
+                    "name": "tarefa teste",
+                    "description": "estou testando criar o método store para tarefa",
+                    "status": "completed",
+                    "priority": 2,
+                    "is_being_viewed": false,
+                    "last_viewed_at": null,
+                    "completed_at": "2026-04-19T22:49:43.000000Z",
+                    "original_due_date": "2026-04-16T00:00:00.000000Z",
+                    "current_due_date": "2026-04-16T00:00:00.000000Z",
+                    "postponed_count": 0,
+                    "postponed_date_1": null,
+                    "postponed_date_2": null,
+                    "postponed_date_3": null,
+                    "created_at": "2026-04-16T12:09:52.000000Z",
+                    "updated_at": "2026-04-19T22:49:43.000000Z",
+                    "user_id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                    "task_types": [
+                      {
+                        "id": "019d9c05-5417-7380-87ce-0681f89211ea",
+                        "name": "Mudança de nome teste",
+                        "color": "#111111",
+                        "created_at": "2026-04-17T15:18:08.000000Z",
+                        "updated_at": "2026-04-17T15:26:57.000000Z"
+                      }
+                    ]
+                  },
+                  "message": "Tarefa concluída com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/postpone": {
+      "patch": {
+        "summary": "Update Postpone",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskUpdatePostpone",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019da7f2-33cc-7024-a662-1e88a8ffd811",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "example": {
+                "current_due_date": "2026-04-25"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "priority": {
+                          "type": "integer"
+                        },
+                        "is_being_viewed": {
+                          "type": "boolean"
+                        },
+                        "last_viewed_at": {
+                          "type": "null"
+                        },
+                        "completed_at": {
+                          "type": "null"
+                        },
+                        "original_due_date": {
+                          "type": "string"
+                        },
+                        "current_due_date": {
+                          "type": "string"
+                        },
+                        "postponed_count": {
+                          "type": "integer"
+                        },
+                        "postponed_date_1": {
+                          "type": "string"
+                        },
+                        "postponed_date_2": {
+                          "type": "null"
+                        },
+                        "postponed_date_3": {
+                          "type": "null"
+                        },
+                        "created_at": {
+                          "type": "string"
+                        },
+                        "updated_at": {
+                          "type": "string"
+                        },
+                        "user_id": {
+                          "type": "string"
+                        },
+                        "task_types": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "status",
+                        "priority",
+                        "is_being_viewed",
+                        "last_viewed_at",
+                        "completed_at",
+                        "original_due_date",
+                        "current_due_date",
+                        "postponed_count",
+                        "postponed_date_1",
+                        "postponed_date_2",
+                        "postponed_date_3",
+                        "created_at",
+                        "updated_at",
+                        "user_id",
+                        "task_types"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019da7f2-33cc-7024-a662-1e88a8ffd811",
+                    "name": "tarefa teste",
+                    "description": "estou testando criar o método store para tarefa",
+                    "status": "postponed",
+                    "priority": 2,
+                    "is_being_viewed": false,
+                    "last_viewed_at": null,
+                    "completed_at": null,
+                    "original_due_date": "2026-04-19T00:00:00.000000Z",
+                    "current_due_date": "2026-04-25T00:00:00.000000Z",
+                    "postponed_count": 1,
+                    "postponed_date_1": "2026-04-19T22:52:51.000000Z",
+                    "postponed_date_2": null,
+                    "postponed_date_3": null,
+                    "created_at": "2026-04-19T22:52:41.000000Z",
+                    "updated_at": "2026-04-19T22:52:51.000000Z",
+                    "user_id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                    "task_types": []
+                  },
+                  "message": "Tarefa adiada com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/view": {
+      "post": {
+        "summary": "Record Task View",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskRecordView",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e02b7-9467-7340-a95e-14ee54a23e2f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Não autenticado."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/note/{id}/restore": {
+      "patch": {
+        "summary": "Restore Note",
+        "deprecated": false,
+        "description": "",
+        "operationId": "noteRestore",
+        "tags": [
+          "Note"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/view/session/start": {
+      "post": {
+        "summary": "Start Task View Session",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskStartViewSession",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e02b7-9467-7340-a95e-14ee54a23e2f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Session"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Não autenticado."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/task/{id}/view/session/end": {
+      "post": {
+        "summary": "End Task View Session Copy",
+        "deprecated": false,
+        "description": "",
+        "operationId": "taskEndViewSession",
+        "tags": [
+          "Task"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e02b7-9467-7340-a95e-14ee54a23e2f",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "session_id"
+                ]
+              },
+              "example": {
+                "session_id": "019e02ba-05be-733f-8e48-8bea39827d1f"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task%20Session"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": null,
+                  "message": "Não autenticado."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/tip": {
+      "post": {
+        "summary": "Store Tip",
+        "deprecated": false,
+        "description": "",
+        "operationId": "tipStore",
+        "tags": [
+          "Tip"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "color"
+                ]
+              },
+              "example": {
+                "name": "Tipo teste",
+                "color": "#3B82F6"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tip%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019d9c05-5417-7380-87ce-0681f89211ea",
+                    "user": {
+                      "id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                      "name": "Admin",
+                      "email": "admin@metricnotes.com",
+                      "created_at": "2026-04-16T11:54:33.000000Z",
+                      "updated_at": "2026-04-16T11:54:33.000000Z"
+                    },
+                    "name": "Trabalho",
+                    "color": "#3B82F6",
+                    "created_at": "2026-04-17T15:18:08.000000Z",
+                    "updated_at": "2026-04-17T15:18:08.000000Z"
+                  },
+                  "message": "Tipo de tarefa criado com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Index Tip",
+        "deprecated": false,
+        "description": "",
+        "operationId": "tipIndex",
+        "tags": [
+          "Tip"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Tip%20Resource"
+                          }
+                        },
+                        "pagination": {
+                          "type": "object",
+                          "properties": {
+                            "current_page": {
+                              "type": "integer"
+                            },
+                            "per_page": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "last_page": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "current_page",
+                            "per_page",
+                            "total",
+                            "last_page"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "items",
+                        "pagination"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "items": [
+                      {
+                        "id": "019d9c05-5417-7380-87ce-0681f89211ea",
+                        "user": {
+                          "id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                          "name": "Admin",
+                          "email": "admin@metricnotes.com",
+                          "created_at": "2026-04-16T11:54:33.000000Z",
+                          "updated_at": "2026-04-16T11:54:33.000000Z"
+                        },
+                        "name": "Mudança de nome teste",
+                        "color": "#111111",
+                        "created_at": "2026-04-17T15:18:08.000000Z",
+                        "updated_at": "2026-04-17T15:26:57.000000Z"
+                      }
+                    ],
+                    "pagination": {
+                      "current_page": 1,
+                      "per_page": 1,
+                      "total": 3,
+                      "last_page": 3
+                    }
+                  },
+                  "message": "Lista de tipos de tarefas exibida com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/tip/{id}": {
+      "put": {
+        "summary": "Update Tip",
+        "deprecated": false,
+        "description": "",
+        "operationId": "tipUpdate",
+        "tags": [
+          "Tip"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d9c05-5417-7380-87ce-0681f89211ea",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "color"
+                ]
+              },
+              "example": {
+                "name": "Mudança de nome teste",
+                "color": "#111111"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tip%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019d9c05-5417-7380-87ce-0681f89211ea",
+                    "user": {
+                      "id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                      "name": "Admin",
+                      "email": "admin@metricnotes.com",
+                      "created_at": "2026-04-16T11:54:33.000000Z",
+                      "updated_at": "2026-04-16T11:54:33.000000Z"
+                    },
+                    "name": "Mudança de nome teste",
+                    "color": "#111111",
+                    "created_at": "2026-04-17T15:18:08.000000Z",
+                    "updated_at": "2026-04-17T15:26:57.000000Z"
+                  },
+                  "message": "Tipo de tarefa atualizada com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "summary": " Show Tip",
+        "deprecated": false,
+        "description": "",
+        "operationId": "tipShow",
+        "tags": [
+          "Tip"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019d9c05-5417-7380-87ce-0681f89211ea",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Tip%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019d9c05-5417-7380-87ce-0681f89211ea",
+                    "user": {
+                      "id": "019d9624-95aa-7124-b7d1-22d77c1d5517",
+                      "name": "Admin",
+                      "email": "admin@metricnotes.com",
+                      "created_at": "2026-04-16T11:54:33.000000Z",
+                      "updated_at": "2026-04-16T11:54:33.000000Z"
+                    },
+                    "name": "Mudança de nome teste",
+                    "color": "#111111",
+                    "created_at": "2026-04-17T15:18:08.000000Z",
+                    "updated_at": "2026-04-17T15:26:57.000000Z"
+                  },
+                  "message": "Tipo de tarefa exibido com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete Tip",
+        "deprecated": false,
+        "description": "",
+        "operationId": "tipDelete",
+        "tags": [
+          "Tip"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": true,
+                  "message": "Tipo de tarefa excluída com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/note": {
+      "post": {
+        "summary": "Store Note",
+        "deprecated": false,
+        "description": "",
+        "operationId": "storeNote",
+        "tags": [
+          "Note"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "tips": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ]
+              },
+              "example": {
+                "title": "Ideia de produto",
+                "body": "Descrição opcional da nota."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Note%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": false,
+                  "data": {
+                    "title": [
+                      "O campo título é obrigatório."
+                    ]
+                  },
+                  "message": "Validação falhou."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/note/{id}": {
+      "put": {
+        "summary": "Update",
+        "deprecated": false,
+        "description": "",
+        "operationId": "noteUpdate",
+        "tags": [
+          "Note"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019db24e-b55d-72fb-b89d-60fcf9e82b51",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "body": {
+                    "type": "string"
+                  },
+                  "tips": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "title",
+                  "body"
+                ]
+              },
+              "example": {
+                "title": "Mudança Ideia de produto",
+                "body": "Descrição opcional da nota."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Note%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019db24e-b55d-72fb-b89d-60fcf9e82b51",
+                    "title": "Mudança Ideia de produto",
+                    "body": "Descrição opcional da nota.",
+                    "created_at": "2026-04-21T23:09:55.000000Z",
+                    "updated_at": "2026-04-21T23:11:49.000000Z",
+                    "user": {
+                      "id": "019db24d-77e2-707b-a96d-406c0d05af61",
+                      "name": "Admin",
+                      "email": "admin@metricnotes.com",
+                      "created_at": "2026-04-21T23:08:34.000000Z",
+                      "updated_at": "2026-04-21T23:09:33.000000Z"
+                    },
+                    "tips": []
+                  },
+                  "message": "Nota atualizada com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "summary": "Index Note",
+        "deprecated": false,
+        "description": "",
+        "operationId": "indexNote",
+        "tags": [
+          "Note"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Note%20Resource"
+                          }
+                        },
+                        "pagination": {
+                          "type": "object",
+                          "properties": {
+                            "current_page": {
+                              "type": "integer"
+                            },
+                            "per_page": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "last_page": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "current_page",
+                            "per_page",
+                            "total",
+                            "last_page"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "items",
+                        "pagination"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "items": [
+                      {
+                        "id": "019db253-3638-707d-b2ec-f5ddea130623",
+                        "title": "Ideia de produto",
+                        "body": "Descrição opcional da nota.",
+                        "created_at": "2026-04-21T23:14:51.000000Z",
+                        "updated_at": "2026-04-21T23:14:51.000000Z",
+                        "user": {
+                          "id": "019db24d-77e2-707b-a96d-406c0d05af61",
+                          "name": "Admin",
+                          "email": "admin@metricnotes.com",
+                          "created_at": "2026-04-21T23:08:34.000000Z",
+                          "updated_at": "2026-04-21T23:09:33.000000Z"
+                        },
+                        "tips": []
+                      }
+                    ],
+                    "pagination": {
+                      "current_page": 1,
+                      "per_page": 10,
+                      "total": 1,
+                      "last_page": 1
+                    }
+                  },
+                  "message": "Lista de notas exibida com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Show Note Copy",
+        "deprecated": false,
+        "description": "",
+        "operationId": "noteDelete",
+        "tags": [
+          "Note"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019db24e-b55d-72fb-b89d-60fcf9e82b51",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{id}/avatar": {
+      "post": {
+        "summary": "Upload Avatar",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userChangeAvatar",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019df827-a4b8-71e2-89a9-656d1361a79d",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "format": "binary",
+                    "type": "string",
+                    "example": "file://C:\\Users\\gabri\\Downloads\\icon-mouse-cursor-pointer-arrow-260nw-1287656104.jpg"
+                  }
+                }
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/User%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019df827-a4b8-71e2-89a9-656d1361a79d",
+                    "name": "Admin",
+                    "email": "admin@metricnotes.com",
+                    "is_admin": true,
+                    "avatar_url": "http://localhost/storage/avatars/019df827-a4b8-71e2-89a9-656d1361a79d/abf5c436-2608-4136-9fb2-2f7792c6bf9a.jpg",
+                    "created_at": "2026-05-05T12:40:40.000000Z",
+                    "updated_at": "2026-05-07T12:22:48.000000Z"
+                  },
+                  "message": "Foto de perfil atualizada com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/user/{id}/password": {
+      "put": {
+        "summary": "Change Password",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userChangePassword",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019df827-a4b8-71e2-89a9-656d1361a79d",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "current_password": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "password_confirmation": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "current_password",
+                  "password",
+                  "password_confirmation"
+                ]
+              },
+              "example": {
+                "current_password": "nova_senha",
+                "password": "admin123456",
+                "password_confirmation": "admin123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/User%20Resource"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": "019df827-a4b8-71e2-89a9-656d1361a79d",
+                    "name": "Admin",
+                    "email": "admin@metricnotes.com",
+                    "avatar_url": null,
+                    "created_at": "2026-05-05T12:40:40.000000Z",
+                    "updated_at": "2026-05-07T12:14:27.000000Z"
+                  },
+                  "message": "Senha alterada com sucesso!"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "summary": "Forgot Password",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userForgotPassword",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ]
+              },
+              "example": {
+                "email": "gabriellatccorrea@gmail.com"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": null,
+                  "message": "Se existir uma conta para este e-mail, enviamos um código para redefinição da senha."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/verify-reset-code": {
+      "post": {
+        "summary": "Verify Reset Code",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userVerifyResetCode",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "code"
+                ]
+              },
+              "example": {
+                "email": "gabriellatccorrea@gmail.com",
+                "code": "3504"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "reset_session_id": {
+                          "type": "string"
+                        },
+                        "reset_secret": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "reset_session_id",
+                        "reset_secret"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "reset_session_id": "019e09ec-3051-7069-b61d-c09f16a3f401",
+                    "reset_secret": "KHvJjbZ7z79aQ9ZWJdPWyumK5l6fwY5VVvUZyhXsE6t3v7vEocuDvPdiPDguEMNs"
+                  },
+                  "message": "Código confirmado."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/recover-password": {
+      "post": {
+        "summary": "Recover Password",
+        "deprecated": false,
+        "description": "",
+        "operationId": "userRecoverPassword",
+        "tags": [
+          "UserOperation"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reset_session_id": {
+                    "type": "string"
+                  },
+                  "reset_secret": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "password_confirmation": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reset_session_id",
+                  "reset_secret",
+                  "password",
+                  "password_confirmation"
+                ]
+              },
+              "example": {
+                "reset_session_id": "019e09ec-3051-7069-b61d-c09f16a3f401",
+                "reset_secret": "KHvJjbZ7z79aQ9ZWJdPWyumK5l6fwY5VVvUZyhXsE6t3v7vEocuDvPdiPDguEMNs",
+                "password": "senha1234",
+                "password_confirmation": "senha1234"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "null"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": null,
+                  "message": "Senha redefinida com sucesso! Faça login com a nova senha."
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/notification/task-due": {
+      "get": {
+        "summary": "Index Task Due",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationIndex",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "unread_count": {
+                          "type": "integer"
+                        },
+                        "unread": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "task_id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "due_summary": {
+                                "type": "string"
+                              },
+                              "is_read": {
+                                "type": "boolean"
+                              },
+                              "read_at": {
+                                "type": "null"
+                              },
+                              "current_due_date": {
+                                "type": "string"
+                              },
+                              "days_until_due": {
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        },
+                        "read": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "unread_count",
+                        "unread",
+                        "read"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "unread_count": 1,
+                    "unread": [
+                      {
+                        "task_id": "019e029a-db9b-72d5-9c6e-a66adbd7dd44",
+                        "title": "tarefa teste",
+                        "due_summary": "Vence amanhã às 00:00",
+                        "is_read": false,
+                        "read_at": null,
+                        "current_due_date": "2026-05-08T00:00:00+00:00",
+                        "days_until_due": 1
+                      }
+                    ],
+                    "read": []
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/notification/task-due/read-all": {
+      "patch": {
+        "summary": "Read All Task Due",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationReadAll",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updated": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "updated"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "updated": 4
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/notification/task-due/clear": {
+      "patch": {
+        "summary": "Clear Task Due List",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationClearAll",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "updated": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "updated"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "updated": 4
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/notification/task-due/{task}/read": {
+      "patch": {
+        "summary": "Read Task Due",
+        "deprecated": false,
+        "description": "",
+        "operationId": "notificationRead",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "task",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "019e029a-db9b-72d5-9c6e-a66adbd7dd44",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "task_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "task_id"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "message"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "task_id": "019e029a-db9b-72d5-9c6e-a66adbd7dd44"
+                  },
+                  "message": ""
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "is_admin": {
+            "type": "boolean"
+          },
+          "avatar_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "Authorization Resource": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "access_token",
+          "token_type",
+          "expires_in"
+        ]
+      },
+      "Task Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "is_being_viewed": {
+            "type": "boolean"
+          },
+          "last_viewed_at": {
+            "type": "null"
+          },
+          "total_view_time_seconds": {
+            "type": "integer"
+          },
+          "completed_at": {
+            "type": "null"
+          },
+          "original_due_date": {
+            "type": "string"
+          },
+          "current_due_date": {
+            "type": "string"
+          },
+          "postponed_count": {
+            "type": "integer"
+          },
+          "postponed_date_1": {
+            "type": "null"
+          },
+          "postponed_date_2": {
+            "type": "null"
+          },
+          "postponed_date_3": {
+            "type": "null"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "tips": {
+            "type": "array",
+            "items": {}
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "status",
+          "priority",
+          "is_being_viewed",
+          "last_viewed_at",
+          "completed_at",
+          "original_due_date",
+          "current_due_date",
+          "postponed_count",
+          "postponed_date_1",
+          "postponed_date_2",
+          "postponed_date_3",
+          "created_at",
+          "updated_at",
+          "user_id",
+          "tips",
+          "total_view_time_seconds"
+        ]
+      },
+      "Tip Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User%20Resource"
+          },
+          "name": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "user",
+          "name",
+          "color",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "Note Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User%20Resource"
+          },
+          "tips": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "body",
+          "created_at",
+          "updated_at",
+          "user",
+          "tips"
+        ]
+      },
+      "Task Session": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string"
+          },
+          "task": {
+            "$ref": "#/components/schemas/Task%20Resource"
+          }
+        },
+        "required": [
+          "session_id",
+          "started_at",
+          "task"
+        ]
+      }
+    },
+    "responses": {},
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [],
+  "security": []
+}
