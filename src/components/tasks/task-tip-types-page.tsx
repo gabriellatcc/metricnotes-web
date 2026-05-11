@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
-import { useState, type CSSProperties, type FormEvent } from "react";
+import { Loader2, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { TipResource } from "@/generated/api/models";
@@ -99,7 +106,7 @@ export function TaskTipTypesPage() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-background">
-      <main className="flex min-h-0 flex-1 flex-col gap-6 pb-0">
+      <main className="flex min-h-0 flex-1 flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
             Defina tipos de tarefa com cor para identificação rápida no quadro e nas listas.
@@ -127,7 +134,7 @@ export function TaskTipTypesPage() {
               {tips.map((tip) => (
                 <li
                   key={tip.id}
-                  className="flex flex-col gap-3 rounded-2xl border-2 bg-card/30 p-4 shadow-sm transition-shadow hover:shadow-md"
+                  className="flex flex-col gap-3 rounded-2xl border-2 bg-card p-4 shadow-sm ring-1 ring-border/60 transition-shadow hover:shadow-md"
                   style={{ borderColor: tip.color }}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -138,36 +145,48 @@ export function TaskTipTypesPage() {
                       />
                       <p className="truncate font-semibold text-foreground">{tip.name}</p>
                     </div>
-                    <code className="shrink-0 rounded bg-muted/80 px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                      {tip.color}
-                    </code>
-                  </div>
-                  <div className="mt-auto flex flex-wrap gap-2">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      className="rounded-full gap-1"
-                      onClick={() => openEdit(tip)}
-                      disabled={busy}
-                    >
-                      <Pencil className="size-3.5" />
-                      Editar
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      className="rounded-full gap-1 border-destructive text-destructive hover:bg-destructive/10"
-                      onClick={() => {
-                        if (window.confirm(`Remover o tipo "${tip.name}"?`)) {
-                          deleteMutation.mutate({ id: tip.id });
-                        }
-                      }}
-                      disabled={busy}
-                    >
-                      <Trash2 className="size-3.5" />
-                    </Button>
+                    <div className="flex shrink-0 items-center gap-1">
+                      <code className="rounded bg-muted/80 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                        {tip.color}
+                      </code>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="size-8 rounded-lg text-muted-foreground"
+                            disabled={busy}
+                            aria-label={`Ações para o tipo ${tip.name}`}
+                          >
+                            <MoreHorizontal className="size-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-44">
+                          <DropdownMenuItem
+                            className="gap-2"
+                            onSelect={() => openEdit(tip)}
+                            disabled={busy}
+                          >
+                            <Pencil className="size-3.5 opacity-70" aria-hidden />
+                            Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="gap-2 text-destructive focus:bg-destructive/10 focus:text-destructive"
+                            disabled={busy}
+                            onSelect={() => {
+                              if (window.confirm(`Remover o tipo "${tip.name}"?`)) {
+                                deleteMutation.mutate({ id: tip.id });
+                              }
+                            }}
+                          >
+                            <Trash2 className="size-3.5 opacity-70" aria-hidden />
+                            Excluir
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
                 </li>
               ))}
@@ -176,41 +195,13 @@ export function TaskTipTypesPage() {
         </section>
       </main>
 
-      {tips.length > 0 ? (
-        <footer className="relative mt-10 h-[5.5rem] w-full overflow-hidden rounded-b-xl border-x border-t border-border/30 bg-muted/15">
-          {tips.map((tip, idx) => {
-            const stagger = `${idx * 10}px`;
-            const layerStyle: CSSProperties = {
-              bottom: stagger,
-              height: "56px",
-              width: "200%",
-              left: "-50%",
-              opacity: Math.max(0.22, 0.55 - idx * 0.09),
-              background: `repeating-linear-gradient(108deg, ${tip.color ?? "#94a3b8"} 0px, ${tip.color ?? "#94a3b8"} 5px, transparent 5px, transparent 32px)`,
-              animationDuration: `${11 + idx * 2}s`,
-            };
-            return (
-              <div
-                key={tip.id}
-                className={cn(
-                  "pointer-events-none absolute",
-                  idx % 2 === 0 ? "tip-type-wave-layer tip-type-wave-layer--ltr" : "tip-type-wave-layer tip-type-wave-layer--rtl",
-                )}
-                style={layerStyle}
-              />
-            );
-          })}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-2">
-            <p className="text-[11px] text-muted-foreground/80">Uma camada por tipo • ondas em sentidos alternados</p>
-          </div>
-        </footer>
-      ) : null}
-
       <Dialog open={dialogOpen} onOpenChange={(open) => !open && closeDialog()}>
         <DialogContent className="gap-0 p-0 sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{editingTip ? "Editar tipo" : "Novo tipo de tarefa"}</DialogTitle>
-            <DialogDescription>Nome e cor do tipo aparecem nas tarefas; com tipos criados o rodapé desta página mostra ondas nas cores definidas.</DialogDescription>
+            <DialogDescription>
+              Nome e cor do tipo aparecem nas tarefas e no quadro para identificação rápida.
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="space-y-4 px-6 py-4">

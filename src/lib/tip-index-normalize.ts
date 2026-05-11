@@ -1,12 +1,14 @@
 import type { TipResource } from "@/generated/api/models";
 
 /**
- * `GET /api/tip`: o backend (Laravel `ResourceCollection` + paginação) expõe
- * `{ success, data: { data: TipResource[], links?, meta? } }`. O modelo Orval
- * segue o padrão de tarefas com `items`. Aceitamos os dois formatos.
+ * `GET /api/tip`: o Laravel pode responder com
+ * `{ success, data: TipResource[] }` (coleção simples), ou `{ data: { items, pagination } }`
+ * quando paginado. O Orval tipa `items`; em runtime aceitamos também o array direto.
  */
 export function tipListFromIndexPayload(data: unknown): TipResource[] {
-  if (!data || typeof data !== "object") return [];
+  if (data == null) return [];
+  if (Array.isArray(data)) return data as TipResource[];
+  if (typeof data !== "object") return [];
   const o = data as Record<string, unknown>;
   if (Array.isArray(o.items)) return o.items as TipResource[];
   const inner = o.data;
