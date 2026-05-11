@@ -1,6 +1,8 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
+import { TermsOfServiceMetricnotesContent } from "@/components/auth/terms-of-service-metricnotes";
+import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,10 +12,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { authFormCardClassName } from "@/components/auth/auth-page-layout";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PasswordStrengthBar } from "@/components/ui/password-strength-bar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStoreUser } from "@/generated/api/user/user";
 import { setAuthAccessToken } from "@/lib/api-client";
 import { toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
@@ -27,6 +37,8 @@ export function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [termsDialogOpen, setTermsDialogOpen] = useState(false);
 
   const showConfirmMismatch = confirmPassword.length > 0 && password !== confirmPassword;
 
@@ -54,6 +66,13 @@ export function SignupForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!acceptedTerms) {
+      toastApiError(
+        new Error("É preciso ler e aceitar os Termos de Uso para criar a conta."),
+        "Termos obrigatórios",
+      );
+      return;
+    }
     if (password.length < 6) {
       toastApiError(new Error("A senha deve ter pelo menos 6 caracteres."), "Validação");
       return;
@@ -69,7 +88,7 @@ export function SignupForm() {
     <Card className={authFormCardClassName("w-full max-w-md")}>
       <CardHeader className="space-y-2">
         <CardTitle>Criar conta</CardTitle>
-        <CardDescription>Nome, e-mail e senha.</CardDescription>
+        <CardDescription>Nome, e-mail, senha e aceite dos termos.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -167,10 +186,71 @@ export function SignupForm() {
             </Field>
           </FieldGroup>
 
-          <Button type="submit" className="w-full" disabled={signup.isPending}>
+          <div className="space-y-3 rounded-xl border border-border/60 bg-muted/30 px-3 py-3">
+            <div className="flex gap-3 text-sm leading-snug">
+              <input
+                id="signup-accept-terms"
+                name="acceptedTerms"
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(event) => setAcceptedTerms(event.target.checked)}
+                className="peer mt-1 size-[1.0625rem] shrink-0 cursor-pointer rounded border border-input accent-primary bg-background outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+              <div className="min-w-0 flex-1 space-y-2">
+                <label htmlFor="signup-accept-terms" className="block cursor-pointer text-muted-foreground">
+                  Li e aceito os Termos de Uso e Serviço da MetricNotes.
+                </label>
+                <button
+                  type="button"
+                  className="text-xs font-medium text-foreground underline decoration-primary/70 underline-offset-2 hover:no-underline"
+                  onClick={() => setTermsDialogOpen(true)}
+                >
+                  Ler termos completos
+                </button>
+              </div>
+            </div>
+            {!acceptedTerms ? (
+              <p className="text-xs text-muted-foreground">
+                Você só poderá clicar em &quot;Criar conta&quot; após marcar a aceitação acima.
+              </p>
+            ) : null}
+          </div>
+
+          <Button type="submit" className="w-full" disabled={signup.isPending || !acceptedTerms}>
             {signup.isPending ? "Criando…" : "Criar conta"}
           </Button>
         </form>
+
+        <Dialog open={termsDialogOpen} onOpenChange={setTermsDialogOpen}>
+          <DialogContent className="gap-0 p-0 sm:max-w-2xl" showClose>
+            <DialogHeader>
+              <DialogTitle>Termos de Uso e Serviço da MetricNotes</DialogTitle>
+              <DialogDescription className="text-left">
+                Leia com atenção antes de aceitar ao criar sua conta.
+              </DialogDescription>
+            </DialogHeader>
+            <ScrollArea className="max-h-[min(65vh,32rem)] border-y border-border/60">
+              <div className="px-6 py-4">
+                <TermsOfServiceMetricnotesContent />
+              </div>
+            </ScrollArea>
+            <DialogFooter className="sm:justify-between">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setTermsDialogOpen(false)}>
+                Fechar
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => {
+                  setAcceptedTerms(true);
+                  setTermsDialogOpen(false);
+                }}
+              >
+                Concordo — marcar aceite
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </CardContent>
       <CardFooter className="text-sm text-muted-foreground">
         <p>
