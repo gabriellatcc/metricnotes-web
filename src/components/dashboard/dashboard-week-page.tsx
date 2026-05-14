@@ -10,7 +10,7 @@ import { STALE_ANALYTICS_AFTER_DAYS, deriveWeeklyChartsStatus } from "./weekly-c
 
 function DashboardSectionHeading({ id, title, description }: { id: string; title: string; description: string }) {
   return (
-    <header className="mb-6">
+    <header className="mb-4">
       <h2 id={id} className="text-lg font-semibold tracking-tight text-foreground">
         {title}
       </h2>
@@ -51,11 +51,8 @@ export function DashboardWeekPage() {
     chartsStatus.kind === "stale_empty" ? chartsStatus.staleDays : STALE_ANALYTICS_AFTER_DAYS;
 
   return (
-    <section
-      className="rounded-2xl border border-border/60 bg-card/40 p-5 sm:p-6"
-      aria-labelledby="painel-tab-sete"
-    >
-      <div className="mb-2 flex flex-wrap items-center justify-end gap-2">
+    <section className="flex min-h-0 flex-1 flex-col" aria-labelledby="painel-tab-sete">
+      <div className="mb-1 flex flex-wrap items-center justify-end gap-2">
         {isFetching ? (
           <span className="flex items-center gap-2 text-xs text-muted-foreground">
             <Loader2 className="size-3.5 animate-spin text-primary" aria-hidden />
@@ -73,7 +70,7 @@ export function DashboardWeekPage() {
         <SparseWeekInsightsBanner recordedWeekdays={chartsStatus.recordedWeekdayCount} />
       ) : null}
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:items-stretch">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-stretch lg:gap-5">
         <div className="min-h-0 lg:min-h-[320px]">
           <HeatmapChart data={data} chartsStale={chartsStale} staleDays={staleDays} />
         </div>

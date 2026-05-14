@@ -15,7 +15,7 @@ const TASKS_TAB_COPY: Record<"board" | "all" | "trash" | "types" | "completed", 
     types:
       "Crie tipos com nome e cor para identificar tarefas no quadro e nas listas. Edite ou remova quando as convenções mudarem.",
     completed:
-      "Só tarefas já concluídas: revisão do histórico recente sem misturar com o trabalho em aberto.",
+      "Aqui pode ver o histórico por data das tarefas já concluídas recentemente, sem misturar com o trabalho em aberto.",
   };
 
 function tasksDescriptionSegment(pathname: string): keyof typeof TASKS_TAB_COPY {

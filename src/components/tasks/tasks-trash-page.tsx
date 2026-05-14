@@ -55,23 +55,11 @@ export function TasksTrashPage() {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-6 bg-background">
-      <p className="text-sm text-muted-foreground">
-        Tarefas enviadas para a lixeira permanecem aqui até serem restauradas.
-      </p>
-
-      <p className="text-xs text-muted-foreground">
-        {pagination
-          ? `${pagination.total} na lixeira — página ${pagination.current_page} de ${pagination.last_page}`
-          : indexQuery.isLoading
-            ? "Carregando…"
-            : ""}
-      </p>
-
       <section className="min-h-0 flex-1">
         {indexQuery.isLoading ? (
           <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border/40 py-20">
             <Loader2 className="h-9 w-9 animate-spin text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">A carregar lixeira…</p>
+            <p className="text-sm text-muted-foreground">A carregando as tarefas na lixeira…</p>
           </div>
         ) : indexQuery.isError ? (
           <p className="text-sm text-muted-foreground">Não foi possível carregar. Veja a notificação.</p>

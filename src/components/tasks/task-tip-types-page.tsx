@@ -4,6 +4,16 @@ import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -29,6 +39,7 @@ import { cn } from "@/lib/utils";
 export function TaskTipTypesPage() {
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [tipPendingDelete, setTipPendingDelete] = useState<TipResource | null>(null);
   const [editingTip, setEditingTip] = useState<TipResource | null>(null);
   const [name, setName] = useState("");
   const [color, setColor] = useState("#6366f1");
@@ -121,7 +132,7 @@ export function TaskTipTypesPage() {
           {tipsQuery.isLoading ? (
             <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border/40 py-20">
               <Loader2 className="h-9 w-9 animate-spin text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">A carregar tipos…</p>
+              <p className="text-sm text-muted-foreground">Carregando os tipos…</p>
             </div>
           ) : tipsQuery.isError ? (
             <p className="text-sm text-muted-foreground">Não foi possível carregar. Veja a notificação.</p>
@@ -134,22 +145,35 @@ export function TaskTipTypesPage() {
               {tips.map((tip) => (
                 <li
                   key={tip.id}
-                  className="flex flex-col gap-3 rounded-2xl border-2 bg-card p-4 shadow-sm ring-1 ring-border/60 transition-shadow hover:shadow-md"
+                  className={cn(
+                    "relative flex flex-col rounded-2xl border-2 bg-card shadow-sm ring-1 ring-border/60 transition-shadow",
+                    !busy && "hover:shadow-md",
+                  )}
                   style={{ borderColor: tip.color }}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex min-w-0 items-center gap-2">
-                      <span
-                        className="size-3 shrink-0 rounded-full ring-2 ring-background"
-                        style={{ backgroundColor: tip.color }}
-                      />
-                      <p className="truncate font-semibold text-foreground">{tip.name}</p>
-                    </div>
-                    <div className="flex shrink-0 items-center gap-1">
-                      <code className="rounded bg-muted/80 px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                        {tip.color}
-                      </code>
-                      <DropdownMenu>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    className={cn(
+                      "absolute inset-0 z-0 rounded-[15px] hover:bg-accent/15 focus-visible:bg-accent/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    )}
+                    aria-label={`Editar tipo ${tip.name}`}
+                    onClick={() => openEdit(tip)}
+                  />
+                  <div className="relative z-10 flex flex-col gap-3 p-4 pointer-events-none">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <span
+                          className="size-3 shrink-0 rounded-full ring-2 ring-background"
+                          style={{ backgroundColor: tip.color }}
+                        />
+                        <p className="truncate font-semibold text-foreground">{tip.name}</p>
+                      </div>
+                      <div className="pointer-events-auto flex shrink-0 items-center gap-1">
+                        <code className="rounded bg-muted/80 px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                          {tip.color}
+                        </code>
+                        <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
                             type="button"
@@ -176,9 +200,7 @@ export function TaskTipTypesPage() {
                             className="gap-2 text-destructive focus:bg-destructive/10 focus:text-destructive"
                             disabled={busy}
                             onSelect={() => {
-                              if (window.confirm(`Remover o tipo "${tip.name}"?`)) {
-                                deleteMutation.mutate({ id: tip.id });
-                              }
+                              setTipPendingDelete(tip);
                             }}
                           >
                             <Trash2 className="size-3.5 opacity-70" aria-hidden />
@@ -188,6 +210,7 @@ export function TaskTipTypesPage() {
                       </DropdownMenu>
                     </div>
                   </div>
+                </div>
                 </li>
               ))}
             </ul>
@@ -253,6 +276,36 @@ export function TaskTipTypesPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog
+        open={tipPendingDelete != null}
+        onOpenChange={(open) => {
+          if (!open) setTipPendingDelete(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir tipo de tarefa?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Isto remove permanentemente o tipo “{tipPendingDelete?.name ?? ""}”. As tarefas que o usam podem deixar de mostrar
+              esta etiqueta; esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel type="button">Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              type="button"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (tipPendingDelete) deleteMutation.mutate({ id: tipPendingDelete.id });
+                setTipPendingDelete(null);
+              }}
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

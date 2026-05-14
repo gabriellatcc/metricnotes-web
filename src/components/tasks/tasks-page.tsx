@@ -412,7 +412,7 @@ export function TasksPage() {
         {indexQuery.isLoading ? (
           <div className={`${boardShellClass} flex flex-col items-center justify-center gap-3 py-20`}>
             <Loader2 className="h-9 w-9 animate-spin text-muted-foreground" aria-hidden />
-            <p className="text-sm text-muted-foreground">A carregar quadro…</p>
+            <p className="text-sm text-muted-foreground">Carregando o quadro…</p>
           </div>
         ) : indexQuery.isError ? (
           <div className={boardShellClass}>

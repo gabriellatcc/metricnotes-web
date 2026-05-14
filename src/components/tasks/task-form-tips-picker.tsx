@@ -110,7 +110,7 @@ export function TaskFormTipsPicker({ selectedIds, onChange, disabled }: TaskForm
             {tipsQuery.isLoading ? (
               <div className="flex items-center gap-2 py-4 text-muted-foreground">
                 <Loader2 className="size-4 animate-spin" />
-                <span className="text-xs">A carregar…</span>
+                <span className="text-xs">Carregando os tipos…</span>
               </div>
             ) : tips.length === 0 ? (
               <div className="flex flex-col gap-2 rounded-lg border border-dashed bg-muted/20 p-3">

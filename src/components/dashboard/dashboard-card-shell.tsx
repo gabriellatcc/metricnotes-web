@@ -12,6 +12,11 @@ type DashboardCardShellProps = {
   className?: string;
   /** Conteúdo opcional à direita do cabeçalho (filtros, ações). */
   headerAside?: ReactNode;
+  /**
+   * `plain` — título + conteúdo sem caixa (sem borda/fundo próprios).
+   * Útil quando o bloco já está dentro de um layout alinhado à largura da página.
+   */
+  variant?: "card" | "plain";
 };
 
 /** Cartão padrão do painel estilo shadcn: ícone + título numa linha, descrição e corpo por baixo. */
@@ -22,15 +27,21 @@ export function DashboardCardShell({
   children,
   className,
   headerAside,
+  variant = "card",
 }: DashboardCardShellProps) {
+  const isPlain = variant === "plain";
+
   return (
     <div
       className={cn(
-        "flex h-full min-h-[200px] flex-col rounded-xl border border-border/70 bg-card p-4 text-card-foreground shadow-none",
+        "flex h-full min-h-[200px] flex-col text-card-foreground shadow-none",
+        isPlain
+          ? "border-0 bg-transparent p-0"
+          : "rounded-xl border border-border/70 bg-card p-4",
         className,
       )}
     >
-      <div className="mb-4 flex shrink-0 items-start justify-between gap-3">
+      <div className={cn("flex shrink-0 items-start justify-between gap-3", isPlain ? "mb-3" : "mb-4")}>
         <div className="min-w-0 space-y-1">
           <div className="flex items-center gap-2">
             {Icon ? <Icon className="size-4 shrink-0 stroke-[2] text-muted-foreground" aria-hidden /> : null}

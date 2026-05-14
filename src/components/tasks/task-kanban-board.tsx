@@ -327,7 +327,7 @@ export function TaskKanbanBoard({
   };
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">A carregar quadro…</p>;
+    return <p className="text-sm text-muted-foreground">Carregando o quadro…</p>;
   }
 
   if (tasks.length === 0) {

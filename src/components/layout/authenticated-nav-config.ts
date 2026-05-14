@@ -32,6 +32,12 @@ export const APP_TASK_LEAVES: AppNavLeaf[] = [
   { to: "/tasks/completed", label: "Concluídas", icon: ClipboardCheck },
 ];
 
+/** Rótulo da aba do painel para a rota actual; `undefined` se não for uma folha conhecida. */
+export function getDashboardLeafLabel(pathname: string): string | undefined {
+  const leaf = APP_DASHBOARD_LEAVES.find((l) => pathnameMatchesDashboardLeaf(pathname, l.to));
+  return leaf?.label;
+}
+
 /** Match rules mirror previous SubNav helpers (exact paths vs prefix where needed). */
 export function pathnameMatchesDashboardLeaf(pathname: string, to: string): boolean {
   if (to === "/dashboard") return pathname === "/dashboard" || pathname === "/dashboard/";

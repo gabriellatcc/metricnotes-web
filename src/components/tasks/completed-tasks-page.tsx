@@ -95,14 +95,9 @@ export function CompletedTasksPage() {
 
   return (
     <main className="min-h-full flex-1 bg-background">
-      <div className="w-full pt-2 pb-6 sm:pb-8">
-        <p className="mb-6 max-w-2xl text-pretty text-sm text-muted-foreground">
-          Nesta vista vês o histórico por data de conclusão. A listagem do servidor é paginada; em cada página mostramos
-          só tarefas concluídas.
-        </p>
-
+      <div className="w-full pb-6 sm:pb-8">
         {indexQuery.isLoading ? (
-          <p className="text-sm text-muted-foreground">A carregar…</p>
+          <p className="text-sm text-muted-foreground">Carregando as tarefas concluídas…</p>
         ) : indexQuery.isError ? (
           <p className="text-sm text-muted-foreground">Não foi possível carregar. Tenta de novo.</p>
         ) : completed.length === 0 ? (

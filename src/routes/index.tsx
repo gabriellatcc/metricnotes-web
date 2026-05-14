@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
   ArrowRight,
   BarChart3,
@@ -19,6 +19,12 @@ import { cn } from "@/lib/utils";
 import { getAuthAccessToken } from "@/lib/api-client";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    if (typeof window === "undefined") return;
+    if (getAuthAccessToken()) {
+      throw redirect({ to: "/dashboard", replace: true });
+    }
+  },
   component: MarketingHomePage,
 });
 

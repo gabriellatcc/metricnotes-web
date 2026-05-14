@@ -113,7 +113,7 @@ export const calendarMessagesPt: CalendarMessages = {
   eventCreateFailed: "Não foi possível criar o evento.",
   selectUserPlaceholder: "Utilizador",
   allUsers: "Todos",
-  loadingCalendar: "A carregar calendário…",
+  loadingCalendar: "Carregando o calendário…",
   calendarLoadError: "Não foi possível carregar as tarefas para o calendário.",
   calendarPageTitle: "Calendário de tarefas",
   calendarPageIntro:

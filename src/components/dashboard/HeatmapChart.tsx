@@ -23,7 +23,7 @@ type HeatmapChartProps = {
 
 function DensityLegendHeatmapFooter() {
   return (
-    <div className="mt-5 flex flex-col gap-2 border-t border-border/50 pt-4">
+    <div className="mt-4 flex flex-col gap-2">
       <p className="text-[10px] leading-snug text-muted-foreground">
         <span className="font-medium text-foreground">Legendas das cores:</span> cada quadradinho mostra quantas tarefas foram
         concluídas naquele dia e faixa horária na semana atual. A intensidade da cor é sempre relativa ao{" "}
@@ -66,6 +66,7 @@ export function HeatmapChart({ data, chartsStale = false, staleDays = 7 }: Heatm
 
   return (
     <DashboardCardShell
+      variant="plain"
       icon={LayoutGrid}
       title="Densidade de conclusões"
       subtitle="Dia da semana × faixa horária · série dos últimos 7 dias (Seg–Dom)"

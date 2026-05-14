@@ -1,6 +1,6 @@
 function DashboardSectionHeading({ id, title, description }: { id: string; title: string; description: string }) {
   return (
-    <header className="mb-6">
+    <header className="mb-4">
       <h2 id={id} className="text-lg font-semibold tracking-tight text-foreground">
         {title}
       </h2>
@@ -11,10 +11,7 @@ function DashboardSectionHeading({ id, title, description }: { id: string; title
 
 export function DashboardMonthPlaceholderPage() {
   return (
-    <section
-      className="rounded-2xl border border-dashed border-border/70 bg-muted/10 p-8 sm:p-10"
-      aria-labelledby="painel-tab-mes"
-    >
+    <section className="flex min-h-0 flex-1 flex-col" aria-labelledby="painel-tab-mes">
       <DashboardSectionHeading
         id="painel-tab-mes"
         title="Último mês"

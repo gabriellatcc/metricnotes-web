@@ -42,6 +42,7 @@ export function WeeklyBarChart({ data, chartsStale = false, staleDays = 7 }: Wee
 
   return (
     <DashboardCardShell
+      variant="plain"
       icon={BarChart3}
       title="Tarefas concluídas por dia"
       subtitle="Barras agrupadas por dia da série semanal atual (Seg–Dom)"
