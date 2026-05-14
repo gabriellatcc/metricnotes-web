@@ -1,72 +1,61 @@
-import { ChevronRight } from "lucide-react";
-import { Fragment } from "react";
+
 import { Link, useRouterState } from "@tanstack/react-router";
 
-import { APP_DASHBOARD_LEAVES, APP_TASK_LEAVES, pathnameMatchesDashboardLeaf, pathnameMatchesTaskLeaf } from "@/components/layout/authenticated-nav-config";
+import { getAppShellTitleSegments } from "@/components/layout/authenticated-nav-config";
 import { cn } from "@/lib/utils";
 
-export type Crumb = { readonly to?: string; readonly label: string };
-
-function breadcrumbsForPath(pathname: string): Crumb[] {
-  if (pathname === "/" || pathname === "") return [{ to: "/", label: "Início" }];
-
-  if (pathname.startsWith("/dashboard")) {
-    const leaf = APP_DASHBOARD_LEAVES.find((l) => pathnameMatchesDashboardLeaf(pathname, l.to));
-    if (leaf)
-      return [
-        { to: "/dashboard", label: "Painel" },
-        { to: leaf.to, label: leaf.label },
-      ];
-    return [{ to: "/dashboard", label: "Painel" }];
-  }
-
-  if (pathname.startsWith("/tasks")) {
-    const leaf = APP_TASK_LEAVES.find((l) => pathnameMatchesTaskLeaf(pathname, l.to));
-    if (leaf)
-      return [
-        { to: "/tasks", label: "Tarefas" },
-        { to: leaf.to, label: leaf.label },
-      ];
-    return [{ to: "/tasks", label: "Tarefas" }];
-  }
-
-  if (pathname.startsWith("/notes")) return [{ to: "/notes", label: "Notas" }];
-
-  if (pathname.startsWith("/settings")) return [{ to: "/settings", label: "Configurações" }];
-
-  return [{ label: "MetricNotes" }];
-}
-
-export function AppBreadcrumbs({ className }: { className?: string }) {
+/**
+ * Título contextual da app (substitui migalhas): **Painel** · Vista actual, alinhado à sidebar.
+ */
+export function AppShellTitle({ className }: { className?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const items = breadcrumbsForPath(pathname);
+  const segments = getAppShellTitleSegments(pathname);
+
+  if (segments.length === 1) {
+    const s = segments[0];
+    const body = s.href ? (
+      <Link
+        to={s.href}
+        className="truncate font-semibold text-foreground transition-colors hover:text-foreground/90"
+      >
+        {s.label}
+      </Link>
+    ) : (
+      <span className="truncate font-semibold text-foreground">{s.label}</span>
+    );
+    return (
+      <div className={cn("min-w-0", className)}>
+        <h1 className="flex min-h-10 min-w-0 items-center truncate text-base font-semibold tracking-tight sm:text-lg">{body}</h1>
+      </div>
+    );
+  }
+
+  const [first, leaf] = segments;
 
   return (
-    <nav aria-label="Navegação estrutural" className={cn("flex flex-wrap items-center gap-1 text-sm", className)}>
-      <ol className="flex flex-wrap items-center gap-1">
-        {items.map((item, idx) => {
-          const last = idx === items.length - 1;
-          return (
-            <Fragment key={`${item.label}-${idx}`}>
-              {idx > 0 ? <ChevronRight className="mx-0.5 size-3.5 shrink-0 text-muted-foreground" aria-hidden /> : null}
-              <li className="min-w-0">
-                {!last && item.to ? (
-                  <Link
-                    to={item.to}
-                    className="max-w-[12rem] truncate text-muted-foreground transition-colors hover:text-foreground sm:max-w-none"
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span className="max-w-[14rem] truncate font-medium text-foreground sm:max-w-none" aria-current={last ? "page" : undefined}>
-                    {item.label}
-                  </span>
-                )}
-              </li>
-            </Fragment>
-          );
-        })}
-      </ol>
-    </nav>
+    <div className={cn("min-w-0", className)}>
+      <h1 className="flex min-h-10 min-w-0 flex-wrap items-center gap-x-2 text-base font-semibold tracking-tight sm:text-lg md:text-xl">
+        {first.href ? (
+          <Link
+            to={first.href}
+            className="shrink-0 font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {first.label}
+          </Link>
+        ) : (
+          <span className="shrink-0 font-medium text-muted-foreground">{first.label}</span>
+        )}
+        {leaf ? (
+          <>
+            <span className="mx-0.5 shrink-0 font-medium text-muted-foreground/60" aria-hidden>
+              ·
+            </span>
+            <span className="min-w-0 truncate font-semibold text-foreground" aria-current="page">
+              {leaf.label}
+            </span>
+          </>
+        ) : null}
+      </h1>
+    </div>
   );
 }

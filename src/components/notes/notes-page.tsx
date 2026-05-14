@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { MoreHorizontal, Pencil, Plus, StickyNote, Trash2, LayoutGrid, List } from "lucide-react";
+import { MoreHorizontal, Pencil, Plus, StickyNote, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -48,13 +48,12 @@ function formatNoteDateTime(iso: string): string {
 
 type NoteCardProps = {
   note: NoteResource;
-  layout: "strip" | "grid";
   onView: (note: NoteResource) => void;
   onEdit: (note: NoteResource) => void;
   onDelete: (note: NoteResource) => void;
 };
 
-function NoteCard({ note, layout, onView, onEdit, onDelete }: NoteCardProps) {
+function NoteCard({ note, onView, onEdit, onDelete }: NoteCardProps) {
   const menuRef = useRef<HTMLDetailsElement>(null);
   const closeMenu = () => {
     if (menuRef.current) menuRef.current.open = false;
@@ -63,11 +62,9 @@ function NoteCard({ note, layout, onView, onEdit, onDelete }: NoteCardProps) {
   return (
     <li
       className={cn(
-        "flex min-h-0 cursor-pointer flex-col rounded-2xl border border-border/80 bg-card p-4 shadow-sm transition-all duration-200",
+        "flex min-h-0 h-full cursor-pointer flex-col rounded-2xl border border-border/80 bg-card p-4 shadow-sm transition-all duration-200",
         "hover:-translate-y-px hover:border-primary/45 hover:shadow-md hover:ring-2 hover:ring-primary/15",
         "active:scale-[0.998]",
-        layout === "strip" && "w-full",
-        layout === "grid" && "h-full",
       )}
       title="Abrir para ler a nota completa"
       onClick={() => onView(note)}
@@ -136,7 +133,6 @@ export function NotesPage() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [viewNote, setViewNote] = useState<NoteResource | null>(null);
-  const [layout, setLayout] = useState<"strip" | "grid">("strip");
 
   useEffect(() => {
     const id = window.setTimeout(() => setDebouncedSearch(search.trim()), 350);
@@ -273,15 +269,14 @@ export function NotesPage() {
   const formTitle = editingId ? "Editar nota" : "Nova nota";
   const formDesc = editingId ? "Atualize título e conteúdo." : "Crie um cartão de nota.";
 
-  const listKey = `${layout}-${page}-${debouncedSearch}`;
+  const listKey = `${page}-${debouncedSearch}`;
 
   return (
     <main className="min-h-full flex-1 bg-background">
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8 border-b border-border pb-6">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Notas</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Lista em rolagem vertical — ou mude para grade quando preferir.
+          <p className="max-w-2xl text-pretty text-sm text-muted-foreground">
+            Vista em grade: cartões com título e detalhes; clique num cartão para ler a nota completa.
           </p>
         </header>
 
@@ -297,31 +292,7 @@ export function NotesPage() {
               onChange={(e) => setSearch(e.target.value)}
               className="h-11 max-w-lg rounded-xl border-0 bg-muted/60 shadow-inner"
             />
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="inline-flex rounded-full border border-border/80 bg-muted/40 p-0.5">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setLayout("strip")}
-                  className={cn("gap-1.5 rounded-full", layout === "strip" && "bg-background shadow-sm")}
-                  aria-pressed={layout === "strip"}
-                >
-                  <List className="h-4 w-4" />
-                  <span className="hidden sm:inline">Lista</span>
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setLayout("grid")}
-                  className={cn("gap-1.5 rounded-full", layout === "grid" && "bg-background shadow-sm")}
-                  aria-pressed={layout === "grid"}
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                  <span className="hidden sm:inline">Grade</span>
-                </Button>
-              </div>
+            <div className="flex shrink-0 items-center gap-2">
               <Button
                 type="button"
                 className="rounded-full gap-2"
@@ -356,32 +327,12 @@ export function NotesPage() {
                 <p className="text-sm font-medium text-foreground/80">Nenhuma nota ainda.</p>
                 <p className="mt-1 text-xs text-muted-foreground">Crie a primeira ou ajuste a busca.</p>
               </div>
-            ) : layout === "strip" ? (
-              <ul
-                key={listKey}
-                className="mx-auto flex w-full max-w-2xl flex-col gap-3"
-              >
-                {items.map((note) => (
-                  <NoteCard
-                    key={note.id}
-                    note={note}
-                    layout="strip"
-                    onView={openViewNote}
-                    onEdit={startEdit}
-                    onDelete={handleDelete}
-                  />
-                ))}
-              </ul>
             ) : (
-              <ul
-                key={listKey + "-g"}
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
-              >
+              <ul key={listKey} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((note) => (
                   <NoteCard
                     key={note.id}
                     note={note}
-                    layout="grid"
                     onView={openViewNote}
                     onEdit={startEdit}
                     onDelete={handleDelete}

@@ -8,16 +8,8 @@ import { useWeeklyAnalytics } from "./mock-weekly-analytics";
 import { WeeklyBarChart } from "./WeeklyBarChart";
 import { STALE_ANALYTICS_AFTER_DAYS, deriveWeeklyChartsStatus } from "./weekly-charts-meta";
 
-function DashboardSectionHeading({ id, title, description }: { id: string; title: string; description: string }) {
-  return (
-    <header className="mb-4">
-      <h2 id={id} className="text-lg font-semibold tracking-tight text-foreground">
-        {title}
-      </h2>
-      <p className="mt-1 max-w-3xl text-pretty text-sm text-muted-foreground">{description}</p>
-    </header>
-  );
-}
+const WEEK_INTRO =
+  "Mapa por dia × faixa horária e barras por dia da semanal. Se não há conclusões registadas há pelo menos 7 dias, estes espaços ficam por preencher com um convite a voltar ao quadro de tarefas.";
 
 export function DashboardWeekPage() {
   const { data, isLoading, isError, error, refetch, isFetching } = useWeeklyAnalytics();
@@ -51,7 +43,7 @@ export function DashboardWeekPage() {
     chartsStatus.kind === "stale_empty" ? chartsStatus.staleDays : STALE_ANALYTICS_AFTER_DAYS;
 
   return (
-    <section className="flex min-h-0 flex-1 flex-col" aria-labelledby="painel-tab-sete">
+    <section className="flex min-h-0 flex-1 flex-col">
       <div className="mb-1 flex flex-wrap items-center justify-end gap-2">
         {isFetching ? (
           <span className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -60,11 +52,7 @@ export function DashboardWeekPage() {
           </span>
         ) : null}
       </div>
-      <DashboardSectionHeading
-        id="painel-tab-sete"
-        title="Últimos 7 dias"
-        description="Mapa por dia × faixa horária e barras por dia da semanal. Se não há conclusões registadas há pelo menos 7 dias, estes espaços ficam por preencher com um convite a voltar ao quadro de tarefas."
-      />
+      <p className="mb-6 max-w-3xl text-pretty text-sm text-muted-foreground">{WEEK_INTRO}</p>
 
       {chartsStatus.kind === "active_sparse" ? (
         <SparseWeekInsightsBanner recordedWeekdays={chartsStatus.recordedWeekdayCount} />

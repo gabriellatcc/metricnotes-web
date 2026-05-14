@@ -3,10 +3,12 @@ import { Menu, StickyNote, X } from "lucide-react";
 import { type ReactNode, useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 
-import { AppBreadcrumbs } from "@/components/layout/app-breadcrumbs";
+import { AppShellTitle } from "@/components/layout/app-breadcrumbs";
 import {
   APP_DASHBOARD_LEAVES,
+  APP_DOCUMENT_TITLE_BRAND,
   APP_TASK_LEAVES,
+  documentTitleFromPath,
   pathnameMatchesDashboardLeaf,
   pathnameMatchesTaskLeaf,
 } from "@/components/layout/authenticated-nav-config";
@@ -54,6 +56,16 @@ function SidebarLeafLink({
 export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = documentTitleFromPath(pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      document.title = APP_DOCUMENT_TITLE_BRAND;
+    };
+  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -166,7 +178,7 @@ export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
               <Menu className="size-5" aria-hidden />
             </Button>
 
-            <AppBreadcrumbs className="min-w-0 flex-1" />
+            <AppShellTitle className="min-w-0 flex-1" />
 
             <div className="flex shrink-0 items-center gap-2">
               {pathname.startsWith("/tasks") ? <TasksHeaderNewTaskButton /> : null}

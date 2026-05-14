@@ -3,6 +3,7 @@ import {
   ArrowRight,
   BarChart3,
   Bell,
+  BookOpen,
   ClipboardList,
   ExternalLink,
   Layers,
@@ -47,6 +48,8 @@ function tokenServerSnapshot() {
 }
 
 const GITHUB_HREF = "https://github.com/gabriellatcc";
+const GITHUB_WEB_REPO_HREF = "https://github.com/gabriellatcc/metricnotes-web";
+const GITHUB_API_REPO_HREF = "https://github.com/gabriellatcc/metricnotes-api";
 const LINKEDIN_HREF = "https://www.linkedin.com/in/gabriellacorrea";
 const EMAIL = "gabriellatccorrea@gmail.com";
 
@@ -223,6 +226,9 @@ function MarketingHomePage() {
               </a>
               <a href="#benefits" className="transition-colors hover:text-slate-900">
                 Benefícios
+              </a>
+              <a href="#documentacao" className="transition-colors hover:text-slate-900">
+                Documentação
               </a>
               <a href="#manifesto" className="transition-colors hover:text-slate-900">
                 Começar
@@ -454,6 +460,74 @@ function MarketingHomePage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </section>
+
+          {/* Documentação (GitHub) */}
+          <section id="documentacao" className="scroll-mt-24 border-y border-slate-200/80 bg-slate-50/90 px-4 py-20 sm:py-24">
+            <div className="mx-auto max-w-6xl">
+              <div className="landing-fade-in-up mb-10 text-center" style={{ animationDelay: "0s" }}>
+                <div className="mx-auto mb-4 inline-flex size-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+                  <BookOpen className="size-6 text-blue-600" aria-hidden />
+                </div>
+                <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                  Documentação no GitHub
+                </h2>
+                <p className="mx-auto mt-3 max-w-2xl text-pretty text-slate-600">
+                  Requisitos, passo a passo para desenvolvimento local e organização dos repositórios estão nos README do
+                  front-end e da API — código aberto para consulta acadêmica e evolução do projeto.
+                </p>
+              </div>
+
+              <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-2 sm:gap-5">
+                <a
+                  href={GITHUB_WEB_REPO_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/10"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Front-end</p>
+                      <p className="mt-2 text-lg font-semibold text-slate-900">metricnotes-web</p>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                        App React/Vite: instalação, scripts e contribuições.
+                      </p>
+                    </div>
+                    <ExternalLink className="size-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-600" aria-hidden />
+                  </div>
+                </a>
+                <a
+                  href={GITHUB_API_REPO_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/10"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">API</p>
+                      <p className="mt-2 text-lg font-semibold text-slate-900">metricnotes-api</p>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                        Backend Laravel: ambiente, migrate e JWT.
+                      </p>
+                    </div>
+                    <ExternalLink className="size-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-600" aria-hidden />
+                  </div>
+                </a>
+              </div>
+
+              <p className="mt-8 text-center text-sm text-slate-500">
+                Perfil da autora ·{" "}
+                <a
+                  href={GITHUB_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 font-medium text-indigo-600 underline decoration-indigo-200 underline-offset-4 hover:text-indigo-700"
+                >
+                  gabriellatcc no GitHub
+                  <ExternalLink className="size-3.5 opacity-70" aria-hidden />
+                </a>
+              </p>
             </div>
           </section>
 

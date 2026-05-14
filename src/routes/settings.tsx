@@ -133,8 +133,7 @@ function SettingsPage() {
         <header className="mb-8 border-b border-border pb-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="min-w-0 flex-1 pr-2">
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">Configurações</h1>
-              <p className="mt-1 max-w-2xl text-pretty text-sm text-muted-foreground">
+              <p className="max-w-2xl text-pretty text-sm text-muted-foreground">
                 Gerencie as informações da sua conta, senha e preferências de tema.
               </p>
             </div>

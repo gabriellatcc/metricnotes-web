@@ -32,10 +32,55 @@ export const APP_TASK_LEAVES: AppNavLeaf[] = [
   { to: "/tasks/completed", label: "Concluídas", icon: ClipboardCheck },
 ];
 
-/** Rótulo da aba do painel para a rota actual; `undefined` se não for uma folha conhecida. */
-export function getDashboardLeafLabel(pathname: string): string | undefined {
-  const leaf = APP_DASHBOARD_LEAVES.find((l) => pathnameMatchesDashboardLeaf(pathname, l.to));
-  return leaf?.label;
+export type AppShellTitleSegment = {
+  readonly label: string;
+  /** Ligação até à raíz da área (só aplicada aos segmentos que não são o último). */
+  readonly href?: string;
+};
+
+/**
+ * Segmentos para o título da barra (estilo Painel · Hoje).
+ * O último segmento é sempre a página actual; os anteriores ligam à raíz da secção quando `href` está definido.
+ */
+export function getAppShellTitleSegments(pathname: string): AppShellTitleSegment[] {
+  const p = pathname || "";
+  if (p === "/" || p === "") {
+    return [{ label: "Início", href: "/" }];
+  }
+  if (p.startsWith("/dashboard")) {
+    const leaf = APP_DASHBOARD_LEAVES.find((l) => pathnameMatchesDashboardLeaf(p, l.to));
+    if (leaf) {
+      return [{ label: "Painel", href: "/dashboard" }, { label: leaf.label }];
+    }
+    return [{ label: "Painel", href: "/dashboard" }];
+  }
+  if (p.startsWith("/tasks")) {
+    const leaf = APP_TASK_LEAVES.find((l) => pathnameMatchesTaskLeaf(p, l.to));
+    if (leaf) {
+      return [{ label: "Tarefas", href: "/tasks" }, { label: leaf.label }];
+    }
+    return [{ label: "Tarefas", href: "/tasks" }];
+  }
+  if (p.startsWith("/notes")) {
+    return [{ label: "Notas" }];
+  }
+  if (p.startsWith("/settings")) {
+    return [{ label: "Configurações" }];
+  }
+  return [{ label: "MetricNotes" }];
+}
+
+export const APP_DOCUMENT_TITLE_BRAND = "MetricNotes";
+
+/** Para `<title>` da página — espelha os segmentos do cabeçalho (aba · área · app). */
+export function documentTitleFromPath(pathname: string): string {
+  const segments = getAppShellTitleSegments(pathname);
+  if (segments.length >= 2) {
+    const root = segments[0];
+    const leaf = segments[segments.length - 1];
+    return `${leaf.label} · ${root.label} · ${APP_DOCUMENT_TITLE_BRAND}`;
+  }
+  return `${segments[0].label} · ${APP_DOCUMENT_TITLE_BRAND}`;
 }
 
 /** Match rules mirror previous SubNav helpers (exact paths vs prefix where needed). */
