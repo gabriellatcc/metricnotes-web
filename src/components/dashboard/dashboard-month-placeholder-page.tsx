@@ -2,7 +2,7 @@ export function DashboardMonthPlaceholderPage() {
   return (
     <section className="flex min-h-0 flex-1 flex-col">
       <p className="mb-6 max-w-3xl text-pretty text-sm text-muted-foreground">
-        Vista agregada mensal com os mesmos princípios do painel — ainda em construção.
+        Tela agregada mensal com os mesmos princípios do painel — ainda em construção.
       </p>
       <p className="text-sm font-medium text-foreground">Em construção.</p>
       <p className="mt-2 max-w-xl text-sm text-muted-foreground">

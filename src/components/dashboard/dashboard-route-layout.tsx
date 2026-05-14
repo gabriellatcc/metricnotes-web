@@ -9,7 +9,7 @@ export function DashboardRouteLayout() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="max-w-2xl text-pretty text-sm text-muted-foreground">
-                Explore o que pode fazer já, visualize padrões dos últimos sete dias, veja uma vista mensal quando estiver
+                Explore o que pode fazer já, visualize padrões dos últimos sete dias, veja o progresso mensal quando estiver
                 pronta ou use o calendário de prazos.
               </p>
             </div>

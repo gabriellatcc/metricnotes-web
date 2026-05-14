@@ -23,6 +23,7 @@ import { addDaysLocal, parseTaskDueDate, startOfTodayLocal } from "@/lib/parse-t
 import { cn } from "@/lib/utils";
 
 import { DashboardCardShell } from "./dashboard-card-shell";
+import { DashboardTaskStatusSummary } from "./dashboard-task-status-summary";
 import type { WeeklyPerformanceSummary } from "./types";
 
 const TASKS_PAGE_SIZE = 100;
@@ -181,6 +182,10 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
 
   return (
     <>
+      {!taskFailed ? (
+        <DashboardTaskStatusSummary items={items} loading={taskLoading} className="mb-6" />
+      ) : null}
+
       <div className="space-y-4">
         <WeeklyPerformanceMiniCards summary={weeklySummary} />
         <WeeklyInsightsBulletsCard insights={weeklySummary.insights} />
