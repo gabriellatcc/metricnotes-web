@@ -1,5 +1,5 @@
 import { ChevronRight, Loader2 } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import { Link } from "@tanstack/react-router";
 
 import type { TaskResource } from "@/generated/api/models";
@@ -14,7 +14,6 @@ function isCompleted(t: TaskResource): boolean {
   return t.status === "completed" || (t.completed_at != null && t.completed_at !== "");
 }
 
-/** Contagens para o mesmo conjunto já carregado no painel (`per_page` limitado pela API). */
 function computeBuckets(items: TaskResource[]) {
   const today0 = startOfTodayLocal();
   let inProgress = 0;
@@ -37,55 +36,31 @@ function computeBuckets(items: TaskResource[]) {
   return { inProgress, postponed, completed, overdue };
 }
 
-type RowTone = {
-  ring: string;
-  numBg: string;
-  text: string;
-  bar: string;
-};
+type ChartVar = "--chart-1" | "--chart-2" | "--chart-3" | "--chart-4";
 
-const ROWS: { key: keyof ReturnType<typeof computeBuckets>; label: string; tone: RowTone }[] = [
-  {
-    key: "inProgress",
-    label: "Em progresso",
-    tone: {
-      ring: "ring-emerald-500/35",
-      numBg: "bg-emerald-500/18 text-emerald-700 dark:text-emerald-300",
-      text: "text-emerald-700 dark:text-emerald-300",
-      bar: "from-emerald-500/55",
-    },
-  },
-  {
-    key: "postponed",
-    label: "Adiadas",
-    tone: {
-      ring: "ring-amber-500/35",
-      numBg: "bg-amber-500/18 text-amber-800 dark:text-amber-200",
-      text: "text-amber-800 dark:text-amber-200",
-      bar: "from-amber-500/55",
-    },
-  },
-  {
-    key: "completed",
-    label: "Concluídas",
-    tone: {
-      ring: "ring-sky-500/35",
-      numBg: "bg-sky-500/18 text-sky-800 dark:text-sky-200",
-      text: "text-sky-800 dark:text-sky-200",
-      bar: "from-sky-500/55",
-    },
-  },
-  {
-    key: "overdue",
-    label: "Atrasadas",
-    tone: {
-      ring: "ring-rose-500/40",
-      numBg: "bg-rose-500/18 text-rose-700 dark:text-rose-300",
-      text: "text-rose-700 dark:text-rose-300",
-      bar: "from-rose-500/55",
-    },
-  },
+const ROWS: { key: keyof ReturnType<typeof computeBuckets>; label: string; chart: ChartVar }[] = [
+  { key: "inProgress", label: "Em progresso", chart: "--chart-1" },
+  { key: "postponed", label: "Adiadas", chart: "--chart-3" },
+  { key: "completed", label: "Concluídas", chart: "--chart-4" },
+  { key: "overdue", label: "Atrasadas", chart: "--chart-2" },
 ];
+
+function chartInk(chart: ChartVar): CSSProperties {
+  const v = `var(${chart})`;
+  return {
+    color: v,
+    backgroundImage: `linear-gradient(to right, ${v} 0%, transparent 72%)`,
+  };
+}
+
+function chartChipStyle(chart: ChartVar): CSSProperties {
+  const v = `var(${chart})`;
+  return {
+    color: v,
+    backgroundColor: `color-mix(in oklch, ${v} 18%, transparent)`,
+    boxShadow: `inset 0 0 0 2px color-mix(in oklch, ${v} 42%, transparent)`,
+  };
+}
 
 export function DashboardTaskStatusSummary({
   items,
@@ -101,12 +76,12 @@ export function DashboardTaskStatusSummary({
   return (
     <section
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-b from-muted/50 to-muted/25 p-3 shadow-sm dark:border-slate-800 dark:from-slate-900/90 dark:to-slate-950/95",
+        "relative overflow-hidden rounded-xl border border-border/70 bg-card p-4 text-card-foreground shadow-none",
         className,
       )}
       aria-labelledby="dashboard-task-status-heading"
     >
-      <div className="mb-2.5 flex items-center justify-between gap-2 px-1">
+      <div className="mb-2.5 flex items-center justify-between gap-2 px-0.5">
         <h2 id="dashboard-task-status-heading" className="text-sm font-semibold tracking-tight text-foreground">
           Resumo das tarefas
         </h2>
@@ -124,38 +99,37 @@ export function DashboardTaskStatusSummary({
           ? ROWS.map((row) => (
               <div
                 key={row.key}
-                className="flex animate-pulse flex-col items-center gap-2 rounded-xl bg-muted/80 px-4 py-5 dark:bg-slate-800/80"
+                className="flex animate-pulse flex-col items-center gap-2 rounded-xl border border-border/50 bg-muted/30 px-4 py-5"
               >
-                <div className="size-11 rounded-full bg-muted dark:bg-slate-700" />
-                <div className="h-3 w-24 rounded-md bg-muted dark:bg-slate-700" />
+                <div className="size-11 rounded-full bg-muted" />
+                <div className="h-3 w-24 rounded-md bg-muted" />
               </div>
             ))
           : ROWS.map((row) => {
               const n = counts[row.key];
-              const { tone } = row;
+              const { chart } = row;
               return (
                 <div
                   key={row.key}
                   className={cn(
-                    "relative flex flex-col items-center gap-1.5 rounded-xl border border-border/40 bg-card/80 px-4 py-3 shadow-sm ring-1 ring-inset backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-800/70",
-                    tone.ring,
+                    "relative flex flex-col items-center gap-1.5 overflow-hidden rounded-xl border border-border/60 bg-muted/[0.08] px-4 py-3",
                   )}
                 >
                   <div
-                    className={cn(
-                      "flex size-11 items-center justify-center rounded-full text-lg font-bold tabular-nums ring-2 ring-background/80",
-                      tone.numBg,
-                    )}
+                    className="flex size-11 items-center justify-center rounded-full text-lg font-bold tabular-nums"
+                    style={chartChipStyle(chart)}
                   >
                     {n}
                   </div>
-                  <p className={cn("text-center text-xs font-semibold uppercase tracking-wide", tone.text)}>{row.label}</p>
+                  <p
+                    className="text-center text-xs font-semibold uppercase tracking-wide"
+                    style={{ color: `var(${chart})` }}
+                  >
+                    {row.label}
+                  </p>
                   <div
-                    className={cn(
-                      "pointer-events-none absolute inset-x-0 bottom-0 h-0.5 rounded-b-xl bg-gradient-to-r opacity-90",
-                      tone.bar,
-                      "via-transparent to-transparent",
-                    )}
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-px opacity-85"
+                    style={chartInk(chart)}
                     aria-hidden
                   />
                 </div>
@@ -169,7 +143,7 @@ export function DashboardTaskStatusSummary({
           A carregar totais…
         </p>
       ) : (
-        <p className="mt-2 px-1 text-center text-[10px] leading-snug text-muted-foreground">
+        <p className="mt-2 px-0.5 text-center text-[10px] leading-snug text-muted-foreground">
           {items.length === 0
             ? "Sem tarefas neste lote. Abra o quadro para criar ou carregar mais."
             : `Com base nas primeiras ${items.length} tarefas carregadas. Abra o quadro para o conjunto completo.`}

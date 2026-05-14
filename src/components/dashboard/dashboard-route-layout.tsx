@@ -1,6 +1,8 @@
 import { Outlet } from "@tanstack/react-router";
 
-/** Layout partilhado pelas vistas do painel (sub-rotas). Introduções no corpo; título na barra superior. */
+import { DashboardAreaDescription } from "@/components/dashboard/dashboard-area-description";
+
+/** Layout partilhado pelas visulizações do painel (sub-rotas). Introduções no corpo; título na barra superior. */
 export function DashboardRouteLayout() {
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-background">
@@ -8,10 +10,7 @@ export function DashboardRouteLayout() {
         <header className="mb-8 border-b border-border/70 pb-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="max-w-2xl text-pretty text-sm text-muted-foreground">
-                Explore o que pode fazer já, visualize padrões dos últimos sete dias, veja o progresso mensal quando estiver
-                pronta ou use o calendário de prazos.
-              </p>
+              <DashboardAreaDescription />
             </div>
           </div>
         </header>

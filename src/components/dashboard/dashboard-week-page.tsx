@@ -8,9 +8,6 @@ import { useWeeklyAnalytics } from "./mock-weekly-analytics";
 import { WeeklyBarChart } from "./WeeklyBarChart";
 import { STALE_ANALYTICS_AFTER_DAYS, deriveWeeklyChartsStatus } from "./weekly-charts-meta";
 
-const WEEK_INTRO =
-  "Mapa por dia × faixa horária e barras por dia da semanal. Se não há conclusões registadas há pelo menos 7 dias, estes espaços ficam por preencher com um convite a voltar ao quadro de tarefas.";
-
 export function DashboardWeekPage() {
   const { data, isLoading, isError, error, refetch, isFetching } = useWeeklyAnalytics();
 
@@ -52,7 +49,6 @@ export function DashboardWeekPage() {
           </span>
         ) : null}
       </div>
-      <p className="mb-6 max-w-3xl text-pretty text-sm text-muted-foreground">{WEEK_INTRO}</p>
 
       {chartsStatus.kind === "active_sparse" ? (
         <SparseWeekInsightsBanner recordedWeekdays={chartsStatus.recordedWeekdayCount} />

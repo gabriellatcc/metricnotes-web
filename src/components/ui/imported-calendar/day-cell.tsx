@@ -112,7 +112,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
     () => (
       <motion.div
         className={cn(
-          "flex h-full lg:min-h-40 flex-col gap-1 border-l border-t",
+          "flex h-full lg:min-h-20 flex-col gap-1 border-l border-t",
           isSunday(date) && "border-l-0",
         )}
         initial={{ opacity: 0, y: 10 }}
@@ -133,7 +133,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
 
           <motion.div
             className={cn(
-              "flex h-fit gap-1 px-2 mt-1 lg:h-[94px] lg:flex-col lg:gap-2 lg:px-0",
+              "flex h-fit gap-1 px-2 mt-1 lg:h-[47px] lg:flex-col lg:gap-1 lg:px-0",
               !currentMonth && "opacity-50",
             )}
           >

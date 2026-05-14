@@ -8,12 +8,7 @@ export const Route = createFileRoute("/dashboard/calendar")({
 
 function DashboardCalendarRoute() {
   return (
-    <section className="rounded-2xl" aria-labelledby="painel-cal-intro">
-      <header className="mb-6">
-        <p id="painel-cal-intro" className="max-w-2xl text-pretty text-sm text-muted-foreground">
-          Prazos das tarefas no calendário mensal. As alterações refletem o mesmo conjunto de tarefas do quadro.
-        </p>
-      </header>
+    <section className="rounded-2xl">
       <TasksCalendarPage embedded />
     </section>
   );

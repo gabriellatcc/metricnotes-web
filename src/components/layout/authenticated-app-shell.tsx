@@ -115,7 +115,7 @@ export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
 
           <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-2 py-3">
             <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Painel</p>
-            <nav className="flex flex-col gap-0.5" aria-label="Vistas do painel">
+            <nav className="flex flex-col gap-0.5" aria-label="Visualizações do painel">
               {APP_DASHBOARD_LEAVES.map((item) => (
                 <SidebarLeafLink
                   key={item.to}
@@ -132,7 +132,7 @@ export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
             <p className="mt-3 px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               Tarefas
             </p>
-            <nav className="flex flex-col gap-0.5" aria-label="Vistas de tarefas">
+            <nav className="flex flex-col gap-0.5" aria-label="Visualizações de tarefas">
               {APP_TASK_LEAVES.map((item) => (
                 <SidebarLeafLink
                   key={item.to}

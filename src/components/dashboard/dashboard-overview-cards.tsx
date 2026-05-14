@@ -206,7 +206,7 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           <InsightShell
-            title="Prazos em vista"
+            title="Prazos a vencer"
             subtitle={`Tarefas em aberto com vencimento até ${UPCOMING_DAYS} dias ou atrasadas.`}
             icon={Clock}
           >

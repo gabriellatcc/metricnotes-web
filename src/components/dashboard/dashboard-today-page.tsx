@@ -5,9 +5,6 @@ import { Button } from "@/components/ui/button";
 import { DashboardOverviewCards } from "./dashboard-overview-cards";
 import { useWeeklyAnalytics } from "./mock-weekly-analytics";
 
-const TODAY_INTRO =
-  "Cartões KPI de exemplo sobre a série semanal, hábitos e o que já carregou das suas tarefas: prazos, progresso e tipos rápidas de bem‑estar.";
-
 export function DashboardTodayPage() {
   const { data, isLoading, isError, error, refetch } = useWeeklyAnalytics();
 
@@ -36,7 +33,6 @@ export function DashboardTodayPage() {
 
   return (
     <section className="rounded-2xl border border-border/60 bg-muted/[0.06] p-5 sm:p-6">
-      <p className="mb-6 max-w-3xl text-pretty text-sm text-muted-foreground">{TODAY_INTRO}</p>
       <DashboardOverviewCards weeklySummary={data.summary} />
     </section>
   );

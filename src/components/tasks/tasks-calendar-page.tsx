@@ -46,7 +46,7 @@ export function TasksCalendarPage({ embedded = false }: TasksCalendarPageProps) 
   if (tasksQuery.isLoading) {
     return (
       <div className={cn(shell)}>
-        <div className={cn("flex w-full flex-1 flex-col items-center justify-center gap-3 py-12", embedded ? "min-h-[36vh]" : "min-h-[40vh]")}>
+        <div className={cn("flex w-full flex-1 flex-col items-center justify-center gap-3 py-12", embedded ? "min-h-[18vh]" : "min-h-[20vh]")}>
           <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" aria-hidden />
           <p className="text-sm text-muted-foreground">{m.loadingCalendar}</p>
         </div>

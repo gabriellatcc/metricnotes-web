@@ -329,7 +329,19 @@ export function TasksAllPage() {
             {items.map((task) => (
               <li
                 key={task.id}
-                className="flex flex-col gap-3 rounded-xl border border-border/50 bg-card/40 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                className={cn(
+                  "flex cursor-pointer flex-col gap-3 rounded-xl border border-border/50 bg-card/40 px-4 py-3 outline-none transition-colors sm:flex-row sm:items-center sm:justify-between",
+                  "hover:border-primary/30 hover:bg-accent/30 hover:shadow-sm",
+                  "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                )}
+                tabIndex={0}
+                onClick={() => setViewTask(task)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setViewTask(task);
+                  }
+                }}
               >
                 <div className="min-w-0 flex-1 space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -354,10 +366,7 @@ export function TasksAllPage() {
                     {task.created_at ? formatTaskDateTime(task.created_at) : "—"}
                   </p>
                 </div>
-                <div className="flex shrink-0 flex-wrap gap-2">
-                  <Button type="button" size="sm" variant="outline" className="rounded-full" onClick={() => setViewTask(task)}>
-                    Ver
-                  </Button>
+                <div className="flex shrink-0 flex-wrap gap-2" onClick={(event) => event.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
                   <Button
                     type="button"
                     size="sm"
