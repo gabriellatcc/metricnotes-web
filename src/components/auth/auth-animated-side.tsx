@@ -15,14 +15,12 @@ export function AuthAnimatedSide({ variant = "login", className }: AuthAnimatedS
   return (
     <div
       className={cn(
-        "relative hidden min-h-[240px] overflow-hidden bg-gradient-to-br from-primary/15 via-background to-accent/20 lg:flex lg:min-h-screen",
-        className,
-      )}
+"relative hidden min-h-[240px] overflow-hidden bg-gradient-to-br from-primary/20 via-background to-accent-foreground/20 lg:flex lg:min-h-screen rounded-br-3xl"      )}
       aria-hidden
     >
       {/* Floating blobs */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="auth-blob auth-blob-1 absolute -left-20 top-1/4 size-72 rounded-full bg-primary/25 blur-3xl" />
+        <div className="auth-blob auth-blob-1 absolute -left-20 top-1/4 size-72 rounded-full blur-3xl" />
         <div className="auth-blob auth-blob-2 absolute bottom-1/4 right-[-10%] size-96 rounded-full bg-accent/30 blur-3xl" />
         <div className="auth-blob auth-blob-3 absolute left-1/3 top-[-20%] size-64 rounded-full bg-secondary/40 blur-2xl" />
       </div>
