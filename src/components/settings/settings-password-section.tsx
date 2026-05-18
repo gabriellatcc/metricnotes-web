@@ -40,15 +40,15 @@ export function SettingsPasswordSection({ userId, disabled }: SettingsPasswordSe
     (e: React.FormEvent) => {
       e.preventDefault();
       if (newPassword.length < 6) {
-        toastApiError(new Error("A senha deve ter pelo menos 6 caracteres."), "Validação");
+        toastApiError(new Error("A senha deve ter pelo menos 6 caracteres."), "Falha");
         return;
       }
       if (newPassword !== confirmPassword) {
-        toastApiError(new Error("As senhas não coincidem."), "Validação");
+        toastApiError(new Error("As senhas não coincidem."), "Falha");
         return;
       }
       if (!currentPassword.trim()) {
-        toastApiError(new Error("Informe a senha atual."), "Validação");
+        toastApiError(new Error("Informe a senha atual."), "Falha");
         return;
       }
 

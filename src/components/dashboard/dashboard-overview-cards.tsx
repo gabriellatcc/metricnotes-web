@@ -276,7 +276,7 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
               className="transition-transform duration-300 hover:-translate-y-0.5"
             >
               <p className="text-xs leading-relaxed text-muted-foreground">
-                A cada 90 minutes, separe de 5 a 10 minutos para alongar ou tomar água. Pequenas pausas frequentes reduzem a fadiga acumulada.
+                A cada 90 minutos, separe de 5 a 10 minutos para alongar ou tomar água. Pequenas pausas frequentes reduzem a fadiga acumulada.
               </p>
             </InsightShell>
 

@@ -69,11 +69,11 @@ export function SettingsAvatarSection({
       if (!file) return;
 
       if (!file.type || !ACCEPT_AVATAR.split(",").includes(file.type)) {
-        toastApiError(new Error("Use apenas JPG ou PNG."), "Validação");
+        toastApiError(new Error("Use apenas JPG ou PNG."), "Falha");
         return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        toastApiError(new Error("Arquivo acima de 5 MB."), "Validação");
+        toastApiError(new Error("Arquivo acima de 5 MB."), "Falha");
         return;
       }
 

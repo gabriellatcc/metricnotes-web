@@ -87,7 +87,7 @@ export function DashboardTaskStatusSummary({
         </h2>
         <Link
           to="/tasks"
-          className="inline-flex items-center gap-0.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+          className="inline-flex items-top gap-0.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           Ver quadro
           <ChevronRight className="size-3.5 opacity-70" aria-hidden />
@@ -99,10 +99,10 @@ export function DashboardTaskStatusSummary({
           ? ROWS.map((row) => (
               <div
                 key={row.key}
-                className="flex animate-pulse flex-col items-center gap-2 rounded-xl border border-border/50 bg-muted/30 px-4 py-5"
+                className="flex animate-pulse flex-col items-top justify-top gap-2.5 rounded-xl border border-border/50 bg-muted/30 px-2 py-2 h-24"
               >
-                <div className="size-11 rounded-full bg-muted" />
-                <div className="h-3 w-24 rounded-md bg-muted" />
+                <div className="h-8 w-12 rounded-full border-2 border-border/50 bg-transparent" />
+                <div className="h-2.5 w-20 rounded-md bg-muted" />
               </div>
             ))
           : ROWS.map((row) => {
@@ -112,17 +112,17 @@ export function DashboardTaskStatusSummary({
                 <div
                   key={row.key}
                   className={cn(
-                    "relative flex flex-col items-center gap-1.5 overflow-hidden px-4 py-3",
+                    "relative flex flex-col items-top justify-top gap-1 overflow-hidden py-2 h-24",
                   )}
                 >
                   <div
-                    className="flex size-11 items-center justify-center rounded-full text-lg font-bold tabular-nums"
+                    className="flex h-6 min-w-[32px] px-2 items-center justify-center rounded-full text-sm font-bold tabular-nums"
                     style={chartChipStyle(chart)}
                   >
                     {n}
                   </div>
                   <p
-                    className="text-center text-xs font-semibold uppercase tracking-wide"
+                    className="text-center text-xs font-semibold uppercase tracking-wide leading-tight"
                     style={{ color: `var(${chart})` }}
                   >
                     {row.label}

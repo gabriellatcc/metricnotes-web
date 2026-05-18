@@ -42,11 +42,11 @@ export function ForgotPasswordResetForm() {
     const cred = getPasswordRecoveryCredentials();
     if (!cred) return;
     if (password.length < 6) {
-      toastApiError(new Error("A senha deve ter pelo menos 6 caracteres."), "Validação");
+      toastApiError(new Error("A senha deve ter pelo menos 6 caracteres."), "Falha");
       return;
     }
     if (password !== confirmPassword) {
-      toastApiError(new Error("As senhas não coincidem."), "Validação");
+      toastApiError(new Error("As senhas não coincidem."), "Falha");
       return;
     }
     recover.mutate({

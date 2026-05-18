@@ -44,7 +44,7 @@ export function ForgotPasswordVerifyForm({ email }: ForgotPasswordVerifyFormProp
     event.preventDefault();
     const digits = code.replace(/\D/g, "").slice(0, 4);
     if (digits.length !== 4) {
-      toastApiError(new Error("Informe o código de 4 dígitos enviado por e-mail."), "Validação");
+      toastApiError(new Error("Informe o código de 4 dígitos enviado por e-mail."), "Falha");
       return;
     }
     verify.mutate({
