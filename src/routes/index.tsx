@@ -50,7 +50,7 @@ function tokenServerSnapshot() {
 const GITHUB_HREF = "https://github.com/gabriellatcc";
 const GITHUB_WEB_REPO_HREF = "https://github.com/gabriellatcc/metricnotes-web";
 const GITHUB_API_REPO_HREF = "https://github.com/gabriellatcc/metricnotes-api";
-const LINKEDIN_HREF = "https://www.linkedin.com/in/gabriellacorrea";
+const LINKEDIN_HREF = "https://www.linkedin.com/in/gabriellatccorrea";
 const EMAIL = "gabriellatccorrea@gmail.com";
 
 function MarketingHomePage() {
@@ -329,7 +329,7 @@ function MarketingHomePage() {
                 className="landing-fade-in-up relative z-10 mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none"
                 style={{ animationDelay: "0.22s" }}
               >
-                <div className="relative rounded-2xl border border-slate-200/70 bg-white/40 p-2 shadow-[0_32px_64px_-12px_rgba(15,23,42,0.18)] shadow-slate-300/40 ring-1 ring-white/70 backdrop-blur-xl">
+                <div className="relative p-2">
                   <div className="overflow-hidden rounded-xl border border-slate-200/50 bg-[#fafbfc]/90 shadow-inner">
                     <div className="flex items-center gap-2 border-b border-slate-200/60 bg-white/70 px-3 py-2.5 backdrop-blur-sm">
                       <div className="flex gap-1.5">
@@ -337,10 +337,9 @@ function MarketingHomePage() {
                         <span className="size-2.5 rounded-full bg-[#fcd34d]" />
                         <span className="size-2.5 rounded-full bg-[#86efac]" />
                       </div>
-                      <div className="ml-2 flex flex-1 items-center justify-center">
+                      <div className="ml-2 flex flex-1 items-center justify-start">
                         <div className="h-7 w-[72%] max-w-[280px] rounded-md bg-slate-100/90 text-[10px] font-medium tracking-wide text-slate-400 shadow-inner backdrop-blur-sm flex items-center justify-center gap-1.5">
-                          <LayoutGrid className="size-3 opacity-50" aria-hidden />
-                          app.metricnotes · overview
+                          metricnotes
                         </div>
                       </div>
                     </div>
@@ -350,7 +349,7 @@ function MarketingHomePage() {
                         {[
                           { label: "Em foco", value: "12", sub: "tarefas" },
                           { label: "Semana", value: "86%", sub: "concluído" },
-                          { label: "Notas", value: "28", sub: "ativas" },
+                          { label: "Notas", value: "13", sub: "ativas" },
                         ].map((kpi) => (
                           <div
                             key={kpi.label}
@@ -368,9 +367,9 @@ function MarketingHomePage() {
                       </div>
 
                       <div className="rounded-xl border border-slate-200/60 bg-gradient-to-br from-white/95 to-slate-50/80 p-4 shadow-sm backdrop-blur-md">
-                        <div className="mb-3 flex items-center justify-between gap-2">
-                          <span className="text-xs font-semibold text-slate-700">Fluxo · 7 dias</span>
+                        <div className="mb-3 flex items-center justify-start gap-2">
                           <BarChart3 className="size-4 text-(--primary)/70" aria-hidden />
+                          <span className="text-xs font-semibold text-slate-700">Últimos 7 dias</span>
                         </div>
                         <div className="flex h-36 items-end justify-between gap-1.5 px-1 sm:gap-2">
                           {[38, 62, 45, 78, 52, 88, 64].map((h, i) => (
@@ -395,17 +394,22 @@ function MarketingHomePage() {
 
                 {/* Floating notification */}
                 <div
-                  className="landing-float-delayed absolute -right-2 top-[18%] z-20 max-w-[220px] rounded-xl border border-slate-200/70 bg-white/85 p-3 shadow-lg shadow-slate-400/20 ring-1 ring-white/80 backdrop-blur-xl sm:-right-6 sm:max-w-[240px]"
+                  className="landing-float-delayed absolute 
+                  -right-2 top-[4%] z-20 max-w-[150px] 
+                  rounded-xl border border-slate-200/70 bg-white/85 p-3 shadow-lg shadow-slate-400/20 
+                  ring-1 ring-white/80 backdrop-blur-xl sm:-right-6 sm:max-w-[240px]"
                   style={{ animationDuration: "5.5s" }}
                 >
                   <div className="flex items-start gap-2.5">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-(--primary)00 to(--chart-4) text-white shadow-md">
-                      <Bell className="size-4" aria-hidden />
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-(--primary) to-(--chart-4) text-white shadow-md">
+                      <Bell size="14" aria-hidden />
                     </span>
                     <div className="min-w-0">
                       <p className="text-[11px] font-semibold text-slate-900">Lembrete</p>
-                      <p className="mt-0.5 text-[10px] leading-snug text-slate-500">
-                        Revisão “Planejamento” em 30 min.
+                      <p className="mt-0.5 text-[10px] leading-snug text-slate-500 text-wrap">
+                        Você tem 1 tarefa para amanhã.
+                        <br />
+                        <span className="text-primary">Ver</span>
                       </p>
                     </div>
                   </div>
@@ -436,7 +440,7 @@ function MarketingHomePage() {
                   {
                     icon: Layers,
                     title: "Veja o panorama",
-                    desc: "Prioridades e prazos num só olhar — sem planilhas infinitas.",
+                    desc: "Prioridades e prazos num só olhar, sem planilhas infinitas.",
                   },
                   {
                     icon: Wind,
@@ -549,35 +553,15 @@ function MarketingHomePage() {
               </p>
               <h2 className="landing-fade-in-up mt-4 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.65rem] md:leading-tight">
                 Ferramentas demais só adicionam ruído.{" "}
-                <span className="text-transparent bg-gradient-to-r from-(--accent-foreground)00 via-white to(--chart-2) bg-clip-text">
+                <span className="text-transparent bg-gradient-to-r from-(--accent-foreground) via-white to-(--chart-2) bg-clip-text">
                   Você merece clareza.
                 </span>
               </h2>
               <p className="landing-fade-in-up mx-auto mt-5 max-w-xl text-base text-slate-400">
-                Metricnotes existe no equilíbrio: bastante estrutura para responsabilidade, bastante
+                Metricnotes existe no equilíbrio: estrutura para responsabilidade,
                 simplicidade para querer voltar todos os dias.
               </p>
-              <div className="landing-fade-in-up mt-10 flex flex-wrap items-center justify-center gap-3">
-                <Link
-                  to={loggedIn ? "/dashboard" : "/signup"}
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "landing-cta-shimmer rounded-xl border-0 bg-white px-8 text-slate-900 shadow-xl shadow-black/40 hover:bg-slate-100",
-                  )}
-                >
-                  {loggedIn ? "Ir ao painel" : "Criar minha conta"}
-                  <ArrowRight className="ml-1 size-4" aria-hidden />
-                </Link>
-                <Link
-                  to="/login"
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "lg" }),
-                    "rounded-xl border-slate-600 bg-transparent text-slate-100 hover:bg-white/10 hover:text-white",
-                  )}
-                >
-                  Já sou usuário
-                </Link>
-              </div>
+             
             </div>
           </section>
 
@@ -640,7 +624,7 @@ function MarketingHomePage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-slate-600 underline decoration-slate-200 underline-offset-4 hover:text-slate-900"
                     >
-                      LinkedIn · gabriellacorrea
+                      LinkedIn · gabriellatccorrea
                       <ExternalLink className="size-3.5 shrink-0 opacity-60" aria-hidden />
                     </a>
                   </li>
