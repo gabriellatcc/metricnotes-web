@@ -6,7 +6,7 @@ type AuthAnimatedSideProps = {
 };
 
 export function AuthAnimatedSide({ variant = "login", className }: AuthAnimatedSideProps) {
-  const title = variant === "login" ? "Bem-vindo de volta" : "Junte-se ao MetricNotes";
+  const title = variant === "login" ? "Bem-vindo de volta" : "Junte-se ao Metricnotes";
   const subtitle =
     variant === "login"
       ? "Continue onde você parou."

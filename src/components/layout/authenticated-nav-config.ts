@@ -67,10 +67,10 @@ export function getAppShellTitleSegments(pathname: string): AppShellTitleSegment
   if (p.startsWith("/settings")) {
     return [{ label: "Configurações" }];
   }
-  return [{ label: "MetricNotes" }];
+  return [{ label: "Metricnotes" }];
 }
 
-export const APP_DOCUMENT_TITLE_BRAND = "MetricNotes";
+export const APP_DOCUMENT_TITLE_BRAND = "Metricnotes";
 
 /** Para `<title>` da página — espelha os segmentos do cabeçalho (aba · área · app). */
 export function documentTitleFromPath(pathname: string): string {

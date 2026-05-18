@@ -99,7 +99,7 @@ export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
               className="truncate text-base font-semibold tracking-tight text-sidebar-foreground"
               onClick={() => setMobileOpen(false)}
             >
-              MetricNotes
+              Metricnotes
             </Link>
             <Button
               type="button"

@@ -14,7 +14,7 @@ export interface IEvent {
 	color: TEventColor;
 	description: string;
 	user: IUser;
-	/** IDs de recurso externos (ex.: tarefa MetricNotes). */
+	/** IDs de recurso externos (ex.: tarefa Metricnotes). */
 	sourceTaskId?: string;
 }
 

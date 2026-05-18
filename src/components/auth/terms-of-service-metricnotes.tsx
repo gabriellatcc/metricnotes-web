@@ -7,7 +7,7 @@ export function TermsOfServiceMetricnotesContent() {
     <div className="space-y-6 text-sm leading-relaxed text-foreground">
       <div className="space-y-3">
         <p>
-          Seja bem-vindo ao site da MetricNotes. Antes de explorar tudo o que temos a oferecer, é importante que você
+          Seja bem-vindo ao site da Metricnotes. Antes de explorar tudo o que temos a oferecer, é importante que você
           entenda e concorde com algumas regras básicas que regem o uso do nosso site metricnotes.com, e qualquer outro
           serviço digital que nós oferecemos, como lojas e plataformas de e-commerce.
         </p>
@@ -21,7 +21,7 @@ export function TermsOfServiceMetricnotesContent() {
       <section className="space-y-2">
         <h2 className="text-base font-semibold text-foreground">1. Aceitando os Termos</h2>
         <p>
-          Ao navegar e usar o site da MetricNotes, você concorda automaticamente com nossas regras e condições. Estamos
+          Ao navegar e usar o site da Metricnotes, você concorda automaticamente com nossas regras e condições. Estamos
           sempre procurando melhorar, então esses termos podem mudar de vez em quando. Se fizermos alterações
           significativas, vamos postar as atualizações aqui no site. Continuar usando o site após essas mudanças
           significa que você aceita os novos termos.
@@ -41,7 +41,7 @@ export function TermsOfServiceMetricnotesContent() {
       <section className="space-y-2">
         <h2 className="text-base font-semibold text-foreground">3. Sua Privacidade</h2>
         <p>
-          Na MetricNotes, a privacidade é um valor essencial. Ao interagir com nosso site, você aceita nossa Política de
+          Na Metricnotes, a privacidade é um valor essencial. Ao interagir com nosso site, você aceita nossa Política de
           Privacidade, que detalha nossa abordagem responsável e conforme às leis para o manejo dos seus dados pessoais.
           Nosso compromisso é com a transparência e a segurança: explicamos como coletamos, usamos e protegemos suas
           informações, garantindo sua privacidade e oferecendo controle sobre seus dados.
@@ -56,7 +56,7 @@ export function TermsOfServiceMetricnotesContent() {
       <section className="space-y-2">
         <h2 className="text-base font-semibold text-foreground">4. Direitos de Conteúdo</h2>
         <p>
-          O conteúdo disponível no site da MetricNotes, incluindo, mas não se limitando a, textos, imagens,
+          O conteúdo disponível no site da Metricnotes, incluindo, mas não se limitando a, textos, imagens,
           ilustrações, designs, ícones, fotografias, programas de computador, videoclipes e áudios, constitui propriedade
           intelectual protegida tanto pela legislação nacional quanto por tratados internacionais sobre direitos autorais
           e propriedade industrial. Essa propriedade engloba não apenas materiais diretamente produzidos e publicados
@@ -66,7 +66,7 @@ export function TermsOfServiceMetricnotesContent() {
         <p>
           Ao acessar nosso site, você recebe uma licença limitada, não exclusiva e revogável para visualizar e usar o
           conteúdo para fins pessoais e não comerciais. Isso implica que qualquer reprodução, distribuição, transmissão ou
-          modificação do conteúdo, sem a devida autorização escrita da MetricNotes, é estritamente proibida. Tal
+          modificação do conteúdo, sem a devida autorização escrita da Metricnotes, é estritamente proibida. Tal
           restrição visa proteger os direitos de propriedade intelectual associados aos materiais disponibilizados,
           assegurando que sua utilização não infrinja os direitos dos criadores ou detentores desses direitos, além de
           promover um ambiente de respeito e valorização da criatividade e inovação.

@@ -19,7 +19,7 @@ export function SiteHeader() {
             to="/"
             className="shrink-0 text-lg font-semibold tracking-tight text-foreground hover:opacity-90"
           >
-            MetricNotes
+            Metricnotes
           </Link>
           {showMarketingNav ? (
             <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">

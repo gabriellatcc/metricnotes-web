@@ -218,7 +218,7 @@ function MarketingHomePage() {
               <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-(--primary) via(--primary) to-violet-500 p-2 text-white shadow-lg shadow-(--primary)00/25 ring-1 ring-white/40">
                 <ClipboardList className="size-[18px]" strokeWidth={2.2} aria-hidden />
               </span>
-              <span className="text-[15px] font-semibold tracking-tight text-slate-900">MetricNotes</span>
+              <span className="text-[15px] font-semibold tracking-tight text-slate-900">Metricnotes</span>
             </Link>
             <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
               <a href="#features" className="transition-colors hover:text-slate-900">
@@ -294,7 +294,7 @@ function MarketingHomePage() {
                   className="landing-fade-in-up mx-auto mt-5 max-w-xl text-pretty text-base text-slate-600 sm:text-lg lg:mx-0"
                   style={{ animationDelay: "0.2s" }}
                 >
-                  MetricNotes ajuda você a capturar ideias, organizar o trabalho e avançar com um
+                  Metricnotes ajuda você a capturar ideias, organizar o trabalho e avançar com um
                   ambiente tranquilo e focado — do planejamento da semana à próxima entrega.
                 </p>
 
@@ -554,7 +554,7 @@ function MarketingHomePage() {
                 </span>
               </h2>
               <p className="landing-fade-in-up mx-auto mt-5 max-w-xl text-base text-slate-400">
-                MetricNotes existe no equilíbrio: bastante estrutura para responsabilidade, bastante
+                Metricnotes existe no equilíbrio: bastante estrutura para responsabilidade, bastante
                 simplicidade para querer voltar todos os dias.
               </p>
               <div className="landing-fade-in-up mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -589,7 +589,7 @@ function MarketingHomePage() {
                   <span className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-(--primary) to(--chart-4) text-white">
                     <ClipboardList className="size-[15px]" aria-hidden />
                   </span>
-                  MetricNotes
+                  Metricnotes
                 </Link>
                 <p className="mt-3 text-sm leading-relaxed text-slate-500">
                   TG · Fatec Cruzeiro — foco na experiência entre notas e tarefas.
@@ -657,7 +657,7 @@ function MarketingHomePage() {
               </div>
             </div>
             <p className="mx-auto mt-12 max-w-6xl border-t border-slate-100 pt-8 text-center text-xs text-slate-400">
-              © {new Date().getFullYear()} MetricNotes.
+              © {new Date().getFullYear()} Metricnotes.
             </p>
           </footer>
         </main>

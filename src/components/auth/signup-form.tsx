@@ -198,7 +198,7 @@ export function SignupForm() {
               />
               <div className="min-w-0 flex-1 space-y-2">
                 <label htmlFor="signup-accept-terms" className="block cursor-pointer text-muted-foreground">
-                  Li e aceito os Termos de Uso e Serviço da MetricNotes.
+                  Li e aceito os Termos de Uso e Serviço da Metricnotes.
                 </label>
                 <button
                   type="button"
@@ -224,7 +224,7 @@ export function SignupForm() {
         <Dialog open={termsDialogOpen} onOpenChange={setTermsDialogOpen}>
           <DialogContent className="gap-0 p-0 sm:max-w-2xl" showClose>
             <DialogHeader>
-              <DialogTitle>Termos de Uso e Serviço da MetricNotes</DialogTitle>
+              <DialogTitle>Termos de Uso e Serviço da Metricnotes</DialogTitle>
               <DialogDescription className="text-left">
                 Leia com atenção antes de aceitar ao criar sua conta.
               </DialogDescription>

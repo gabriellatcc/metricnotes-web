@@ -1,4 +1,4 @@
-# MetricNotes
+# Metricnotes
 
 > **Gestão Produtiva e Business Intelligence para Autônomos**
 > 
