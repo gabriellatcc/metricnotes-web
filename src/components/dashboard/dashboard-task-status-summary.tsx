@@ -36,13 +36,13 @@ function computeBuckets(items: TaskResource[]) {
   return { inProgress, postponed, completed, overdue };
 }
 
-type ChartVar = "--chart-1" | "--chart-2" | "--chart-3" | "--chart-4";
+type ChartVar = "--chart-1" | "--chart-4" | "--chart-2" | "--chart-3";
 
 const ROWS: { key: keyof ReturnType<typeof computeBuckets>; label: string; chart: ChartVar }[] = [
   { key: "inProgress", label: "Em progresso", chart: "--chart-1" },
-  { key: "postponed", label: "Adiadas", chart: "--chart-3" },
-  { key: "completed", label: "Concluídas", chart: "--chart-4" },
-  { key: "overdue", label: "Atrasadas", chart: "--chart-2" },
+  { key: "postponed", label: "Adiadas", chart: "--chart-4" },
+  { key: "completed", label: "Concluídas", chart: "--chart-2" },
+  { key: "overdue", label: "Atrasadas", chart: "--chart-3" },
 ];
 
 function chartInk(chart: ChartVar): CSSProperties {
@@ -112,7 +112,7 @@ export function DashboardTaskStatusSummary({
                 <div
                   key={row.key}
                   className={cn(
-                    "relative flex flex-col items-center gap-1.5 overflow-hidden rounded-xl border border-border/60 bg-muted/[0.08] px-4 py-3",
+                    "relative flex flex-col items-center gap-1.5 overflow-hidden px-4 py-3",
                   )}
                 >
                   <div

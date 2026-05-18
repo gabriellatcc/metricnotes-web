@@ -5,13 +5,13 @@ import {
   Clock,
   Coffee,
   Droplets,
-  Divide,
   Layers,
   ListTodo,
   Loader2,
   Moon,
-  Sparkles,
   Sunrise,
+  CheckCircle2,
+  Circle,
   type LucideIcon,
 } from "lucide-react";
 import { useMemo, type ReactNode } from "react";
@@ -42,7 +42,6 @@ function isOpenTask(t: TaskResource): boolean {
   return t.status !== "completed" && (t.completed_at == null || t.completed_at === "");
 }
 
-/** Tarefas com prazo hoje até N dias ou já atrasadas (não concluídas). */
 export function filterUpcomingOpenTasks(items: TaskResource[], withinDays = UPCOMING_DAYS): TaskResource[] {
   const today0 = startOfTodayLocal();
   const horizonEnd = addDaysLocal(today0, withinDays + 1);
@@ -75,89 +74,20 @@ export function filterUpcomingOpenTasks(items: TaskResource[], withinDays = UPCO
 type InsightProps = {
   title: string;
   subtitle: string;
-  icon: LucideIcon;
+  icon: any;
   children: ReactNode;
+  className?: string;
 };
 
-function InsightShell({ title, subtitle, icon: Icon, children }: InsightProps) {
+function InsightShell({ title, subtitle, icon: Icon, children, className }: InsightProps) {
   return (
     <DashboardCardShell
       icon={Icon}
       title={title}
       subtitle={subtitle}
-      className="min-h-[176px] sm:min-h-[196px]"
+      className={cn("min-h-fit", className)}
     >
       {children}
-    </DashboardCardShell>
-  );
-}
-
-/** Cartões KPI derivados dos agregados de “desempenho na semanal” (mock até API própria). */
-function WeeklyPerformanceMiniCards({ summary }: { summary: WeeklyPerformanceSummary }) {
-  const kpi = (
-    title: string,
-    subtitle: string,
-    Icon: LucideIcon,
-    valueNode: ReactNode,
-  ) => (
-    <DashboardCardShell icon={Icon} title={title} subtitle={subtitle} className="min-h-[138px] sm:min-h-[148px]">
-      <div className="text-foreground">{valueNode}</div>
-    </DashboardCardShell>
-  );
-
-  return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      {kpi(
-        "Conclusões na semana",
-        "Total agregado usado pela série do painel",
-        Layers,
-        <p className="text-3xl font-semibold tabular-nums tracking-tight">{summary.totalTasksWeek}</p>,
-      )}
-      {kpi(
-        "Ritmo diário médio",
-        "Média por dia dentro da série",
-        Divide,
-        <p className="text-3xl font-semibold tabular-nums tracking-tight">{summary.dailyAverage.toFixed(1)}</p>,
-      )}
-      {kpi(
-        "Melhor dia",
-        "Um dia da série com maior volume registado",
-        CalendarDays,
-        <div>
-          <p className="text-lg font-semibold leading-tight">{summary.bestDay.label}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            <span className="tabular-nums">{summary.bestDay.total}</span> concluídas
-          </p>
-        </div>,
-      )}
-      {kpi(
-        "Melhor faixa horária",
-        "Janela com mais marcações nos dados atuais",
-        Sunrise,
-        <div>
-          <p className="text-lg font-semibold leading-tight">{summary.bestTimeBlock.label}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            <span className="tabular-nums">{summary.bestTimeBlock.total}</span> concluídas
-          </p>
-        </div>,
-      )}
-    </div>
-  );
-}
-
-function WeeklyInsightsBulletsCard({ insights }: Pick<WeeklyPerformanceSummary, "insights">) {
-  return (
-    <DashboardCardShell
-      icon={Sparkles}
-      title="Leituras rápidas"
-      subtitle="Sugestões derivadas apenas dos números de exemplo até existir modelo real no backend."
-      className="min-h-fit"
-    >
-      <ul className="list-disc space-y-2 pl-4 text-xs leading-relaxed text-muted-foreground marker:text-muted-foreground/80">
-        {insights.map((line) => (
-          <li key={line}>{line}</li>
-        ))}
-      </ul>
     </DashboardCardShell>
   );
 }
@@ -171,29 +101,33 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
 
   const items = query.data?.data?.items ?? [];
 
-  const { upcoming, inProgressCount } = useMemo(() => {
+  const { upcoming, todayTasks } = useMemo(() => {
     const upcomingList = filterUpcomingOpenTasks(items);
-    const inProgress = items.filter((t) => t.status === "in_progress" && isOpenTask(t)).length;
-    return { upcoming: upcomingList, inProgressCount: inProgress };
+    const todayStart = startOfTodayLocal().getTime();
+    
+    const todayList = items.filter((t) => {
+      if (!isOpenTask(t)) return false;
+      const due = parseTaskDueDate(t.current_due_date || t.original_due_date);
+      return due && startOfDueDay(due).getTime() === todayStart;
+    });
+
+    return { upcoming: upcomingList, todayTasks: todayList };
   }, [items]);
 
   const taskLoading = query.isLoading && !query.data;
   const taskFailed = query.isError;
 
+  const renderKpi = (title: string, subtitle: string, Icon: any, valueNode: ReactNode) => (
+    <DashboardCardShell icon={Icon} title={title} subtitle={subtitle} className="min-h-fit py-4">
+      <div className="text-foreground mt-1">{valueNode}</div>
+    </DashboardCardShell>
+  );
+
   return (
     <>
-      {!taskFailed ? (
-        <DashboardTaskStatusSummary items={items} loading={taskLoading} className="mb-6" />
-      ) : null}
-
-      <div className="space-y-4">
-        <WeeklyPerformanceMiniCards summary={weeklySummary} />
-        <WeeklyInsightsBulletsCard insights={weeklySummary.insights} />
-      </div>
-
       {taskLoading ? (
         <div className="mt-6 flex min-h-[120px] flex-col justify-center rounded-xl border border-dashed border-border/70 bg-muted/10 px-4 py-8 text-center">
-          <Loader2 className="mx-auto mb-3 size-6 animate-spin text-primary" aria-hidden />
+          <Loader2 className="mx-auto mb-3 size-6 animate-spin text-(--accent-foreground)" aria-hidden />
           <p className="text-sm text-muted-foreground">Carregando prazos e progresso das tarefas…</p>
         </div>
       ) : taskFailed ? (
@@ -204,22 +138,95 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
           </Link>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          <InsightShell
-            title="Prazos a vencer"
-            subtitle={`Tarefas em aberto com vencimento até ${UPCOMING_DAYS} dias ou atrasadas.`}
-            icon={Clock}
-          >
-            {upcoming.length === 0 ? (
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Nada urgente no horizonte com prazo definido. Ótimo momento para planejar com calma.
-              </p>
-            ) : (
-              <>
-                <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold tabular-nums text-foreground">{upcoming.length}</span>{" "}
-                  {upcoming.length === 1 ? "tarefa" : "tarefas"}
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          
+          <div className="lg:col-span-2 flex flex-col gap-4 h-full">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {renderKpi(
+                "Conclusões na semana",
+                "Total agregado da série",
+                (props: any) => <Layers {...props} className={cn(props.className, "text-(--accent-foreground)")} />,
+                <p className="text-3xl font-semibold tabular-nums tracking-tight">{weeklySummary.totalTasksWeek}</p>,
+              )}
+              
+              {renderKpi(
+                "Melhor dia",
+                "Maior volume registado",
+                (props: any) => <CalendarDays {...props} className={cn(props.className, "text-(--accent-foreground)")} />,
+                <div>
+                  <p className="text-base font-semibold leading-tight">{weeklySummary.bestDay.label}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    <span className="tabular-nums font-medium">{weeklySummary.bestDay.total}</span> concluídas
+                  </p>
+                </div>,
+              )}
+
+              {renderKpi(
+                "Melhor faixa horária",
+                "Janela de maior foco",
+                (props: any) => <Sunrise {...props} className={cn(props.className, "text-(--accent-foreground)")} />,
+                <div>
+                  <p className="text-base font-semibold leading-tight">{weeklySummary.bestTimeBlock.label}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    <span className="tabular-nums font-medium">{weeklySummary.bestTimeBlock.total}</span> concluídas
+                  </p>
+                </div>,
+              )}
+            </div>
+
+            <DashboardCardShell
+              title="Foco de Hoje"
+              subtitle="Suas prioridades absolutas programadas para este dia."
+              icon={(props: any) => <ListTodo {...props} className={cn(props.className, "text-(--accent-foreground)")} />}
+              className="flex-1 flex flex-col justify-between"
+            >
+              {todayTasks.length === 0 ? (
+                <div className="flex flex-col items-center justify-center text-center py-12 px-4 flex-1">
+                  <CheckCircle2 className="size-8 text-(--accent-foreground) mb-2 opacity-60" />
+                  <p className="text-sm font-medium text-foreground">Tudo limpo por hoje!</p>
+                  <p className="text-xs text-muted-foreground max-w-xs mt-0.5">
+                    Nenhuma tarefa prioritária restando para hoje. Aproveite para adiantar demandas ou planejar os próximos passos.
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-2 space-y-2 flex-1">
+                  {todayTasks.slice(0, 5).map((t) => (
+                    <div
+                      key={t.id}
+                      className="flex items-center gap-3 rounded-lg border border-border/50 bg-muted/[0.02] px-3 py-2.5 transition-colors hover:bg-muted/[0.05]"
+                    >
+                      <Circle className="size-4 shrink-0 text-muted-foreground/60" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-medium text-foreground truncate">{t.name}</p>
+                        {t.status === "in_progress" && (
+                          <span className="inline-flex mt-0.5 items-center rounded px-1.5 py-0.5 text-[9px] font-medium bg-primary/10 text-primary">
+                            Em progresso
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {todayTasks.length > 5 && (
+                    <p className="text-[10px] text-muted-foreground pl-1">E mais {todayTasks.length - 5} listadas no seu quadro...</p>
+                  )}
+                </div>
+              )}
+            </DashboardCardShell>
+          </div>
+
+          <div className="flex flex-col gap-4 lg:col-start-3 lg:row-start-1">
+            <DashboardTaskStatusSummary items={items} loading={taskLoading} />
+            
+            <InsightShell
+              title="Prazos a vencer"
+              subtitle={`Vencimento até ${UPCOMING_DAYS} dias.`}
+              icon={(props: any) => <Clock {...props} className={cn(props.className, "text-(--accent-foreground)")} />}
+            >
+              {upcoming.length === 0 ? (
+                <p className="text-xs leading-relaxed text-muted-foreground">
+                  Nada urgente no horizonte com prazo definido.
                 </p>
+              ) : (
                 <ul className="mt-2 space-y-1">
                   {upcoming.slice(0, LIST_MAX).map((t) => {
                     const due = parseTaskDueDate(t.current_due_date || t.original_due_date);
@@ -232,13 +239,8 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
                       >
                         <span className="min-w-0 truncate font-medium text-foreground">{t.name}</span>
                         {due ? (
-                          <span
-                            className={cn(
-                              "shrink-0 tabular-nums",
-                              late ? "font-medium text-destructive" : "text-muted-foreground",
-                            )}
-                          >
-                            {late ? "Atrasada · " : null}
+                          <span className={cn("shrink-0 tabular-nums", late ? "font-medium text-destructive" : "text-muted-foreground")}>
+                            {late ? "Atr. · " : null}
                             {formatDueLabel(due)}
                           </span>
                         ) : null}
@@ -246,68 +248,56 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
                     );
                   })}
                 </ul>
-                {upcoming.length > LIST_MAX ? (
-                  <p className="mt-2 text-[10px] text-muted-foreground">E mais {upcoming.length - LIST_MAX}…</p>
-                ) : null}
-              </>
-            )}
-            <div className="mt-3 border-t border-border/50 pt-3">
-              <Link
-                to="/tasks"
-                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-8 rounded-md px-3 text-xs")}
-              >
-                Ir para tarefas
-              </Link>
-            </div>
-          </InsightShell>
-
-          <InsightShell
-            title="Em progresso"
-            subtitle='Tarefas com estado “em progresso”, com base nos últimos registros carregados.'
-            icon={ListTodo}
-          >
-            <p className="text-3xl font-semibold tracking-tight tabular-nums text-foreground">{inProgressCount}</p>
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              Divida blocos grandes em passos menores para manter ritmo estável sem sobrecarga.
-            </p>
-            <Link
-              to="/tasks"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "sm" }),
-                "mt-4 inline-flex h-8 rounded-md px-3 text-xs",
               )}
+            </InsightShell>
+          </div>
+
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-2 duration-1000 animate-in fade-in slide-in-from-bottom-4 ease-out">
+            <InsightShell 
+              title="Pausas e foco" 
+              subtitle="Saúde no uso diário." 
+              icon={(props: any) => <Coffee {...props} className={cn(props.className, "text-(--accent-foreground)")} />} 
+              className="transition-transform duration-300 hover:-translate-y-0.5"
             >
-              Abrir quadro
-            </Link>
-          </InsightShell>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                A cada 90 minutes, separe de 5 a 10 minutos para alongar ou tomar água. Pequenas pausas frequentes reduzem a fadiga acumulada.
+              </p>
+            </InsightShell>
 
-          <InsightShell title="Pausas e foco" subtitle="Saúde no uso diário da ferramenta." icon={Coffee}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              A cada cerca de 90 minutos de foco, reserve 5–10 minutos para se alongar, olhar ao longe ou tomar água. Pequenas
-              pausas reduzem tensão e ajudam a manter clareza nas decisões.
-            </p>
-          </InsightShell>
+            <InsightShell 
+              title="Sono e ritmo" 
+              subtitle="Produtividade sustentável." 
+              icon={(props: any) => <Moon {...props} className={cn(props.className, "text-(--accent-foreground)")} />} 
+              className="transition-transform duration-300 hover:-translate-y-0.5 delay-75"
+            >
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Evite concentrar entregas complexas no final da noite. Distribuir a carga cognitiva protege seu descanso contínuo.
+              </p>
+            </InsightShell>
 
-          <InsightShell title="Sono e ritmo" subtitle="Produtividade sustentável." icon={Moon}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Evite concentrar todas as entregas no fim do dia ou à noite. Distribuir tarefas pela manhã e tarde costuma
-              proteger o descanso e a concentração no dia seguinte.
-            </p>
-          </InsightShell>
+            <InsightShell 
+              title="Corpo em movimento" 
+              subtitle="Leve ao longo da semana." 
+              icon={(props: any) => <Activity {...props} className={cn(props.className, "text-(--accent-foreground)")} />} 
+              className="transition-transform duration-300 hover:-translate-y-0.5 delay-150"
+            >
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Combine pequenas caminhadas com revisões de rotina. Atividades físicas moderadas aumentam a disposição mental geral.
+              </p>
+            </InsightShell>
 
-          <InsightShell title="Corpo em movimento" subtitle="Leve ao longo da semana." icon={Activity}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Combine uma caminhada curta com a revisão de tarefas leves no celular. Movimento moderado está associado a melhor
-              humor e energia ao longo da semana.
-            </p>
-          </InsightShell>
+            <InsightShell 
+              title="Hidratação" 
+              subtitle="Hábito de grande impacto." 
+              icon={(props: any) => <Droplets {...props} className={cn(props.className, "text-(--accent-foreground)")} />} 
+              className="transition-transform duration-300 hover:-translate-y-0.5 delay-200"
+            >
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Mantenha uma garrafa de água sempre visível em seu posto de trabalho. Ajuda diretamente a reter o foco por mais tempo.
+              </p>
+            </InsightShell>
+          </div>
 
-          <InsightShell title="Hidratação" subtitle="Hábito simples com grande impacto." icon={Droplets}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Manter uma garrafa visível perto do local de trabalho lembra a beber água com frequência — bom para fadiga
-              mental e para longas sessões em frente à tela.
-            </p>
-          </InsightShell>
         </div>
       )}
     </>

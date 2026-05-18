@@ -19,7 +19,7 @@ export function DashboardTodayPage() {
 
   if (isError || !data) {
     return (
-      <div className="mx-auto max-w-md rounded-xl border border-destructive/30 bg-destructive/5 p-6 text-center">
+      <div className="mx-auto max-w-md text-center">
         <p className="text-sm font-medium text-destructive">Não foi possível carregar o resumo</p>
         <p className="mt-1 text-sm text-muted-foreground">
           {error instanceof Error ? error.message : "Erro desconhecido"}
@@ -32,7 +32,7 @@ export function DashboardTodayPage() {
   }
 
   return (
-    <section className="rounded-2xl border border-border/60 bg-muted/[0.06] p-5 sm:p-6">
+    <section>
       <DashboardOverviewCards weeklySummary={data.summary} />
     </section>
   );
