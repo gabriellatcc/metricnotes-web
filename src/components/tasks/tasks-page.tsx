@@ -322,7 +322,7 @@ export function TasksPage() {
     [applyKanbanMove],
   );
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSavingTaskAndTips(true);
     try {
@@ -333,7 +333,7 @@ export function TasksPage() {
             name: form.name,
             description: form.description,
             status: form.status,
-            priority: form.priority,
+            priority: "1",
             due_date: form.due_date,
             due_time: form.due_time,
           },
@@ -351,7 +351,10 @@ export function TasksPage() {
         return;
       }
 
-      const res = await storeMutation.mutateAsync({ data: form });
+      // INJETANDO PRIORIDADE 1 NA CRIAÇÃO
+      const payloadComPrioridade = { ...form, priority: "1" };
+      const res = await storeMutation.mutateAsync({ data: payloadComPrioridade });
+      
       const newId = res.success && res.data?.id ? res.data.id : null;
       if (newId) {
         try {
@@ -595,7 +598,8 @@ export function TasksPage() {
                         </select>
                       </FieldContent>
                     </Field>
-                    <Field>
+                    {/**
+                     * <Field>
                       <FieldLabel htmlFor="task-priority">Prioridade</FieldLabel>
                       <FieldContent>
                         <select
@@ -612,6 +616,7 @@ export function TasksPage() {
                         </select>
                       </FieldContent>
                     </Field>
+                     */}
                     <Field>
                       <FieldLabel htmlFor="task-due">Prazo (data)</FieldLabel>
                       <FieldContent>

@@ -469,10 +469,12 @@ export function TasksAllPage() {
                     <dt className="text-muted-foreground">Status</dt>
                     <dd>{statusLabel(viewTask.status)}</dd>
                   </div>
-                  <div className="flex justify-between gap-2">
+                  {/**
+                   * <div className="flex justify-between gap-2">
                     <dt className="text-muted-foreground">Prioridade</dt>
                     <dd className="font-mono">{viewTask.priority}</dd>
                   </div>
+                   */} 
                 </dl>
               </div>
             </>
@@ -530,6 +532,7 @@ export function TasksAllPage() {
                       </select>
                     </FieldContent>
                   </Field>
+                  {/*
                   <Field>
                     <FieldLabel>Prioridade</FieldLabel>
                     <FieldContent>
@@ -545,7 +548,7 @@ export function TasksAllPage() {
                         ))}
                       </select>
                     </FieldContent>
-                  </Field>
+                  </Field> */}
                   <Field>
                     <FieldLabel htmlFor="all-task-due">Prazo (data)</FieldLabel>
                     <FieldContent>

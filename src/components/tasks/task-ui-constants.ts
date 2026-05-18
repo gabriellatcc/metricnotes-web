@@ -32,7 +32,6 @@ export function formatTaskDateTime(iso: string): string {
   return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
 }
 
-/** Normaliza `TaskResource.tips` (gerado como `unknown[]`) para exibição na UI. */
 export function parseEmbeddedTips(
   tips: unknown[],
 ): Array<{ id: string; name: string; color: string }> {
@@ -60,7 +59,6 @@ export function emptyForm(): TaskStoreBody {
   };
 }
 
-/** Extrai `due_date` (DD-MM-AAAA) e `due_time` (HH:MM) a partir da tarefa para formulários e PUT. */
 export function taskDueParts(task: TaskResource): Pick<TaskStoreBody, "due_date" | "due_time"> {
   const raw = task.current_due_date || task.original_due_date || "";
   const fallback = emptyForm();

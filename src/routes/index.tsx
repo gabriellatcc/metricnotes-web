@@ -440,7 +440,7 @@ function MarketingHomePage() {
                   {
                     icon: Layers,
                     title: "Veja o panorama",
-                    desc: "Prioridades e prazos num só olhar, sem planilhas infinitas.",
+                    desc: "Tarefas com prazos num só olhar, sem planilhas infinitas.",
                   },
                   {
                     icon: Wind,

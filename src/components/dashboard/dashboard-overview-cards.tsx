@@ -138,7 +138,7 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
           </Link>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           
           <div className="lg:col-span-2 flex flex-col gap-4 h-full">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -217,18 +217,34 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
           <div className="flex flex-col gap-4 lg:col-start-3 lg:row-start-1">
             <DashboardTaskStatusSummary items={items} loading={taskLoading} />
             
-            <InsightShell
+        <InsightShell
               title="Prazos a vencer"
-              subtitle={`Vencimento até ${UPCOMING_DAYS} dias.`}
+              subtitle="Vencimento hoje e amanhã."
               icon={(props: any) => <Clock {...props} className={cn(props.className, "text-(--accent-foreground)")} />}
             >
-              {upcoming.length === 0 ? (
+              {upcoming.filter((t) => {
+                const due = parseTaskDueDate(t.current_due_date || t.original_due_date);
+                if (!due) return false;
+                const today0 = startOfTodayLocal();
+                const tomorrow0 = new Date(today0);
+                tomorrow0.setDate(tomorrow0.getDate() + 1);
+                const dueTime = startOfDueDay(due).getTime();
+                return dueTime === today0.getTime() || dueTime === tomorrow0.getTime();
+              }).length === 0 ? (
                 <p className="text-xs leading-relaxed text-muted-foreground">
                   Nada urgente no horizonte com prazo definido.
                 </p>
               ) : (
                 <ul className="mt-2 space-y-1">
-                  {upcoming.slice(0, LIST_MAX).map((t) => {
+                  {upcoming.filter((t) => {
+                    const due = parseTaskDueDate(t.current_due_date || t.original_due_date);
+                    if (!due) return false;
+                    const today0 = startOfTodayLocal();
+                    const tomorrow0 = new Date(today0);
+                    tomorrow0.setDate(tomorrow0.getDate() + 1);
+                    const dueTime = startOfDueDay(due).getTime();
+                    return dueTime === today0.getTime() || dueTime === tomorrow0.getTime();
+                  }).slice(0, LIST_MAX).map((t) => {
                     const due = parseTaskDueDate(t.current_due_date || t.original_due_date);
                     const today0 = startOfTodayLocal();
                     const late = due && startOfDueDay(due).getTime() < today0.getTime();
