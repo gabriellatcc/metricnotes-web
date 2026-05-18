@@ -276,7 +276,7 @@ export function NotesPage() {
       <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8 border-b border-border pb-6">
           <p className="max-w-2xl text-pretty text-sm text-muted-foreground">
-            Visualização em grade: cartões com título e detalhes; clique num cartão para ler a nota completa.
+            Visualização em grade: cartões com título e detalhes; clique em um cartão para ler a nota completa.
           </p>
         </header>
 

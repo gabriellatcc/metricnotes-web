@@ -116,8 +116,7 @@ export const calendarMessagesPt: CalendarMessages = {
   loadingCalendar: "Carregando o calendário…",
   calendarLoadError: "Não foi possível carregar as tarefas para o calendário.",
   calendarPageTitle: "Calendário de tarefas",
-  calendarPageIntro:
-    "Cada marca corresponde ao prazo atual ou original de uma tarefa (dia completo, sem hora).",
+  calendarPageIntro: "",
   calendarPageFootnote:
     "",
   rangeFormatError: "Erro ao formatar datas",

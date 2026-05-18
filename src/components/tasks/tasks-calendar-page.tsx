@@ -13,7 +13,6 @@ import { cn } from "@/lib/utils";
 const PER_PAGE = 250;
 
 export type TasksCalendarPageProps = {
-  /** Omitir envoltória de página inteira quando embutido noutra rota (ex.: Painel). */
   embedded?: boolean;
 };
 

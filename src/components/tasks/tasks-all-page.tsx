@@ -254,7 +254,7 @@ export function TasksAllPage() {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-6 bg-background">
-      <div className="rounded-xl bg-muted/45 px-3 py-2 sm:px-3.5 sm:py-2.5">
+      <div className="rounded-xl bg-muted/45 ">
         <label className="sr-only" htmlFor="task-all-search">
           Buscar tarefas
         </label>
@@ -265,7 +265,7 @@ export function TasksAllPage() {
             placeholder="Buscar por nome ou descrição…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="h-11 rounded-lg border-0 bg-transparent pl-10 shadow-none ring-offset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
+            className="h-8 rounded-lg border-0 bg-transparent pl-10 shadow-none ring-offset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0"
           />
         </div>
       </div>

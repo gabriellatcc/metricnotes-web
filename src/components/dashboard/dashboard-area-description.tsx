@@ -4,16 +4,15 @@ import { useRouterState } from "@tanstack/react-router";
 import { APP_DASHBOARD_LEAVES, pathnameMatchesDashboardLeaf } from "@/components/layout/authenticated-nav-config";
 import { cn } from "@/lib/utils";
 
-/** Descrições do cabeçalho por vista do painel (alinhadas à sidebar). */
 const DASHBOARD_TAB_COPY = {
   today:
-    "Visualização diária agregada com os mesmos princípios do painel — ainda em construção. Use Últimos 7 dias ou o calendário de prazos enquanto esta vista evolui.",
+    "Acompanhe suas métricas e tarefas de hoje. Para um panorama maior, explore a visão semanal ou o calendário.",
   week:
-    "Mapa por dia × faixa horária e barras por dia da semanal. Sem conclusões registadas há bastante tempo, aparece um convite para regressar ao quadro.",
+    "Analise seu ritmo ao longo da semana. Descubra seus horários mais produtivos e retome facilmente as tarefas do quadro.",
   month:
-    "Visualização mensal agregada com os mesmos princípios do painel — ainda em construção. Use Últimos 7 dias ou o calendário de prazos enquanto esta vista evolui.",
+    "Um resumo consolidado do seu mês (em aprimoramento). Por enquanto, recomendamos explorar a visão semanal ou o calendário.",
   calendar:
-    "Prazos das tarefas no calendário mensal. As alterações refletem o mesmo conjunto de tarefas do quadro.",
+    "Visualize e gerencie os prazos das suas tarefas. Todas as alterações são sincronizadas automaticamente com o seu quadro principal.",
 } as const;
 
 type DashboardSegment = keyof typeof DASHBOARD_TAB_COPY;

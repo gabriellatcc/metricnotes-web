@@ -9,7 +9,7 @@ const TASKS_TAB_COPY: Record<"board" | "all" | "trash" | "types" | "completed", 
     board:
       "Arraste cartas entre colunas, crie pelo quadro e acompanhe o fluxo sem sair desta vista. Para prazos no calendário, use o Painel.",
     all:
-      "Lista de todas as tarefas ativas: busca, filtro por status, filtro por tipo e paginação. Clique num cartão para ver detalhes; edite ou envie para a lixeira pelos botões.",
+      "Lista de todas as tarefas ativas: busca, filtro por status, filtro por tipo e paginação. Clique em um cartão para ver detalhes; edite ou envie para a lixeira pelos botões.",
     trash:
       "Tarefas que removeu ficam aqui até restaurá-las. Pode desfazer sempre que precisar.",
     types:
