@@ -405,7 +405,7 @@ export const getColorClass = (color: string): string => {
 			"border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-300",
 		green:
 			"border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300",
-		blue: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300",
+		blue: "border-(--accent-foreground)00 bg-(--primary)0 text-(--primary) dark:border-(--primary) dark:bg-(--accent-foreground) dark:text-(--accent-foreground)",
 		orange:
 			"border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300",
 		purple:
@@ -419,7 +419,7 @@ export const getBgColor = (color: string): string => {
 		red: "bg-red-400 dark:bg-red-600",
 		yellow: "bg-yellow-400 dark:bg-yellow-600",
 		green: "bg-green-400 dark:bg-green-600",
-		blue: "bg-blue-400 dark:bg-blue-600",
+		blue: "bg-(--accent-foreground) dark:bg-(--primary)",
 		orange: "bg-orange-400 dark:bg-orange-600",
 		purple: "bg-purple-400 dark:bg-purple-600",
 	};

@@ -199,11 +199,11 @@ function MarketingHomePage() {
       <div className="landing-dot-grid relative min-h-screen overflow-x-hidden text-slate-900">
         {/* Background orbs */}
         <div
-          className="pointer-events-none absolute -left-[20%] top-[8%] size-[520px] rounded-full bg-blue-400/25 blur-3xl landing-orb-glow landing-float-slow"
+          className="pointer-events-none absolute -left-[20%] top-[8%] size-[520px] rounded-full bg-(--accent-foreground)/25 blur-3xl landing-orb-glow landing-float-slow"
           aria-hidden
         />
         <div
-          className="landing-float-delayed pointer-events-none absolute -right-[15%] top-[35%] size-[460px] rounded-full bg-indigo-500/20 blur-3xl"
+          className="landing-float-delayed pointer-events-none absolute -right-[15%] top-[35%] size-[460px] rounded-full bg(--primary)/20 blur-3xl"
           aria-hidden
         />
         <div
@@ -215,7 +215,7 @@ function MarketingHomePage() {
         <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-[#fafafa]/70 backdrop-blur-xl backdrop-saturate-150 supports-[backdrop-filter]:bg-[#fafafa]/55">
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
             <Link to="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-90">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 via-indigo-500 to-violet-500 p-2 text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/40">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-(--primary) via(--primary) to-violet-500 p-2 text-white shadow-lg shadow-(--primary)00/25 ring-1 ring-white/40">
                 <ClipboardList className="size-[18px]" strokeWidth={2.2} aria-hidden />
               </span>
               <span className="text-[15px] font-semibold tracking-tight text-slate-900">MetricNotes</span>
@@ -278,7 +278,6 @@ function MarketingHomePage() {
                   className="landing-fade-in-up landing-float-slow mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/60 px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-md lg:mx-0"
                   style={{ animationDelay: "0.05s" }}
                 >
-                  <Sparkles className="size-3.5 text-indigo-500" aria-hidden />
                   <span>Notas &amp; tarefas, sem o barulho visual</span>
                 </div>
 
@@ -307,7 +306,7 @@ function MarketingHomePage() {
                     to={loggedIn ? "/dashboard" : "/signup"}
                     className={cn(
                       buttonVariants({ size: "lg" }),
-                      "landing-cta-shimmer rounded-xl border-0 bg-gradient-to-r from-blue-600 to-indigo-600 px-7 text-white shadow-xl shadow-blue-600/25 transition-transform hover:scale-[1.02] hover:from-blue-600 hover:to-indigo-600",
+                      "landing-cta-shimmer rounded-xl border-0 bg-gradient-to-r from-(--primary) to-(--accent-foreground) px-7 text-white shadow-xl shadow-(--primary)/25 transition-transform hover:scale-[1.02] hover:from-(--primary) hover:to(--chart-4)",
                     )}
                   >
                     {loggedIn ? "Abrir painel" : "Comece gratuitamente"}
@@ -371,7 +370,7 @@ function MarketingHomePage() {
                       <div className="rounded-xl border border-slate-200/60 bg-gradient-to-br from-white/95 to-slate-50/80 p-4 shadow-sm backdrop-blur-md">
                         <div className="mb-3 flex items-center justify-between gap-2">
                           <span className="text-xs font-semibold text-slate-700">Fluxo · 7 dias</span>
-                          <BarChart3 className="size-4 text-blue-600/70" aria-hidden />
+                          <BarChart3 className="size-4 text-(--primary)/70" aria-hidden />
                         </div>
                         <div className="flex h-36 items-end justify-between gap-1.5 px-1 sm:gap-2">
                           {[38, 62, 45, 78, 52, 88, 64].map((h, i) => (
@@ -380,7 +379,7 @@ function MarketingHomePage() {
                               className="flex h-full min-h-[6rem] flex-1 flex-col justify-end rounded-t-lg bg-transparent"
                             >
                               <div
-                                className="landing-bar-rise w-full min-h-0 rounded-t-lg bg-gradient-to-t from-blue-600/92 via-indigo-500/82 to-blue-400/65 shadow-inner"
+                                className="landing-bar-rise w-full min-h-0 rounded-t-lg bg-gradient-to-t from-(--primary)/92 via(--primary)/82 to-(--accent-foreground)/65 shadow-inner"
                                 style={{
                                   ["--landing-bar-h" as string]: `${h}%`,
                                   animationDelay: `${0.12 + i * 0.08}s`,
@@ -400,7 +399,7 @@ function MarketingHomePage() {
                   style={{ animationDuration: "5.5s" }}
                 >
                   <div className="flex items-start gap-2.5">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-(--primary)00 to(--chart-4) text-white shadow-md">
                       <Bell className="size-4" aria-hidden />
                     </span>
                     <div className="min-w-0">
@@ -447,11 +446,11 @@ function MarketingHomePage() {
                 ].map((item) => (
                   <div
                     key={item.title}
-                    className="group relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white/50 p-6 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-slate-300/80 hover:shadow-xl hover:shadow-indigo-500/5"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white/50 p-6 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-slate-300/80 hover:shadow-xl hover:shadow(--primary)/5"
                   >
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/[0.04] via-transparent to-indigo-500/[0.06] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-(--primary)00/[0.04] via-transparent to(--primary)/[0.06] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                     <div className="relative">
-                      <div className="mb-4 inline-flex size-11 items-center justify-center rounded-xl border border-slate-200/80 bg-white/80 text-blue-600 shadow-sm transition-transform duration-300 group-hover:rotate-[-4deg] group-hover:scale-110">
+                      <div className="mb-4 inline-flex size-11 items-center justify-center rounded-xl border border-slate-200/80 bg-white/80 text-(--primary) shadow-sm transition-transform duration-300 group-hover:rotate-[-4deg] group-hover:scale-110">
                         <item.icon className="size-5" strokeWidth={2} aria-hidden />
                       </div>
                       <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
@@ -468,7 +467,7 @@ function MarketingHomePage() {
             <div className="mx-auto max-w-6xl">
               <div className="landing-fade-in-up mb-10 text-center" style={{ animationDelay: "0s" }}>
                 <div className="mx-auto mb-4 inline-flex size-12 items-center justify-center rounded-2xl border border-slate-200/80 bg-white shadow-sm">
-                  <BookOpen className="size-6 text-blue-600" aria-hidden />
+                  <BookOpen className="size-6 text-(--primary)" aria-hidden />
                 </div>
                 <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
                   Documentação no GitHub
@@ -484,34 +483,34 @@ function MarketingHomePage() {
                   href={GITHUB_WEB_REPO_HREF}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/10"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border(--chart-2) hover:shadow-lg hover:shadow(--primary)/10"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">Front-end</p>
+                      <p className="text-xs font-semibold uppercase tracking-wide text(--chart-4)">Front-end</p>
                       <p className="mt-2 text-lg font-semibold text-slate-900">metricnotes-web</p>
                       <p className="mt-2 text-sm leading-relaxed text-slate-600">
                         App React/Vite: instalação, scripts e contribuições.
                       </p>
                     </div>
-                    <ExternalLink className="size-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-600" aria-hidden />
+                    <ExternalLink className="size-5 shrink-0 text-slate-400 transition-colors group-hover:text(--chart-4)" aria-hidden />
                   </div>
                 </a>
                 <a
                   href={GITHUB_API_REPO_HREF}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/10"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border(--chart-2) hover:shadow-lg hover:shadow(--primary)/10"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">API</p>
+                      <p className="text-xs font-semibold uppercase tracking-wide text(--chart-4)">API</p>
                       <p className="mt-2 text-lg font-semibold text-slate-900">metricnotes-api</p>
                       <p className="mt-2 text-sm leading-relaxed text-slate-600">
                         Backend Laravel: ambiente, migrate e JWT.
                       </p>
                     </div>
-                    <ExternalLink className="size-5 shrink-0 text-slate-400 transition-colors group-hover:text-indigo-600" aria-hidden />
+                    <ExternalLink className="size-5 shrink-0 text-slate-400 transition-colors group-hover:text(--chart-4)" aria-hidden />
                   </div>
                 </a>
               </div>
@@ -522,7 +521,7 @@ function MarketingHomePage() {
                   href={GITHUB_HREF}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-medium text-indigo-600 underline decoration-indigo-200 underline-offset-4 hover:text-indigo-700"
+                  className="inline-flex items-center gap-1 font-medium text(--chart-4) underline decoration(--chart-2) underline-offset-4 hover:text-(--chart-2)"
                 >
                   gabriellatcc no GitHub
                   <ExternalLink className="size-3.5 opacity-70" aria-hidden />
@@ -545,12 +544,12 @@ function MarketingHomePage() {
               aria-hidden
             />
             <div className="relative mx-auto max-w-3xl text-center">
-              <p className="landing-fade-in-up text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300/90">
+              <p className="landing-fade-in-up text-xs font-semibold uppercase tracking-[0.2em] text-(--chart-4)/90">
                 Manifesto
               </p>
               <h2 className="landing-fade-in-up mt-4 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-[2.65rem] md:leading-tight">
                 Ferramentas demais só adicionam ruído.{" "}
-                <span className="text-transparent bg-gradient-to-r from-blue-200 via-white to-indigo-200 bg-clip-text">
+                <span className="text-transparent bg-gradient-to-r from-(--accent-foreground)00 via-white to(--chart-2) bg-clip-text">
                   Você merece clareza.
                 </span>
               </h2>
@@ -587,7 +586,7 @@ function MarketingHomePage() {
             <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <Link to="/" className="flex items-center gap-2 font-semibold text-slate-900">
-                  <span className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
+                  <span className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-(--primary) to(--chart-4) text-white">
                     <ClipboardList className="size-[15px]" aria-hidden />
                   </span>
                   MetricNotes

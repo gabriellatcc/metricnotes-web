@@ -28,7 +28,7 @@ interface IProps {
 export const dayCellVariants = cva("text-white", {
   variants: {
     color: {
-      blue: "bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-400 ",
+      blue: "bg-(--primary) dark:bg-(--primary)00 hover:bg-(--primary) dark:hover:bg-(--accent-foreground) ",
       green:
         "bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-400",
       red: "bg-red-600 dark:bg-red-500 hover:bg-red-700 dark:hover:bg-red-400",

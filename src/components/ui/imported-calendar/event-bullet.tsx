@@ -7,7 +7,7 @@ import type { TEventColor } from "@/components/ui/imported-calendar/types";
 const eventBulletVariants = cva("size-2 rounded-full", {
   variants: {
     color: {
-      blue: "bg-blue-600 dark:bg-blue-500",
+      blue: "bg-(--primary) dark:bg-(--primary)00",
       green: "bg-green-600 dark:bg-green-500",
       red: "bg-red-600 dark:bg-red-500",
       yellow: "bg-yellow-600 dark:bg-yellow-500",
