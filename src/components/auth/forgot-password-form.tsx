@@ -1,17 +1,8 @@
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { useUserForgotPassword } from "@/generated/api/user-operation/user-operation";
 import { clearPasswordRecoveryCredentials } from "@/lib/password-recovery-session";
 import { toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
@@ -46,14 +37,14 @@ export function ForgotPasswordForm() {
   };
 
   return (
-    <Card className={authFormCardClassName("w-full max-w-md")}>
-      <CardHeader className="space-y-2">
-        <CardTitle>Esqueci minha senha</CardTitle>
-        <CardDescription>
+    <div className="w-full max-w-md mx-auto space-y-6 items-center text-center">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-semibold tracking-tight">Esqueci minha senha</h2>
+        <p className="text-sm text-muted-foreground">
           Enviamos um código de 4 dígitos para o e-mail informado, caso exista conta cadastrada.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </p>
+      </div>
+      <div>
         <form onSubmit={handleSubmit} className="space-y-5">
           <FieldGroup>
             <Field>
@@ -76,14 +67,14 @@ export function ForgotPasswordForm() {
             {forgot.isPending ? "Enviando…" : "Enviar código"}
           </Button>
         </form>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-2 text-sm text-muted-foreground">
+      </div>
+      <div className="flex flex-col gap-2 text-sm text-muted-foreground">
         <p>
           <Link to="/login" className="text-foreground underline underline-offset-4">
             Voltar ao login
           </Link>
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }

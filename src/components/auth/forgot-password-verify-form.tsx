@@ -1,17 +1,8 @@
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { useUserVerifyResetCode } from "@/generated/api/user-operation/user-operation";
 import {
   clearPasswordRecoveryCredentials,
@@ -62,10 +53,10 @@ export function ForgotPasswordVerifyForm({ email }: ForgotPasswordVerifyFormProp
   };
 
   return (
-    <Card className={authFormCardClassName("w-full max-w-md")}>
-      <CardHeader className="space-y-2">
-        <CardTitle>Confirme o código</CardTitle>
-        <CardDescription className="space-y-1">
+    <div className="w-full max-w-md mx-auto space-y-6 items-center text-center">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-semibold tracking-tight">Confirme o código</h2>
+        <div className="text-sm text-muted-foreground space-y-1">
           <span className="block">
             Digite os 4 dígitos enviados para{" "}
             <span className="font-medium text-foreground">{email}</span>.
@@ -73,9 +64,9 @@ export function ForgotPasswordVerifyForm({ email }: ForgotPasswordVerifyFormProp
           <span className="block text-muted-foreground">
             Se existir conta, você receberá um e-mail; confira também o spam ou lixo eletrônico.
           </span>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </div>
+      </div>
+      <div>
         <form onSubmit={handleSubmit} className="space-y-5">
           <FieldGroup>
             <Field>
@@ -102,8 +93,8 @@ export function ForgotPasswordVerifyForm({ email }: ForgotPasswordVerifyFormProp
             {verify.isPending ? "Verificando…" : "Confirmar código"}
           </Button>
         </form>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-3 text-sm text-muted-foreground">
+      </div>
+      <div className="flex flex-col gap-3 text-sm text-muted-foreground">
         <p>
           Não recebeu ou errou o e-mail?{" "}
           <Link
@@ -118,7 +109,7 @@ export function ForgotPasswordVerifyForm({ email }: ForgotPasswordVerifyFormProp
             Voltar ao login
           </Link>
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }

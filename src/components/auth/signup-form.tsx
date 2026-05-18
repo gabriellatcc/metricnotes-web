@@ -2,16 +2,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
 import { TermsOfServiceMetricnotesContent } from "@/components/auth/terms-of-service-metricnotes";
-import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -85,12 +76,14 @@ export function SignupForm() {
   };
 
   return (
-    <Card className={authFormCardClassName("w-full max-w-md")}>
-      <CardHeader className="space-y-2">
-        <CardTitle>Criar conta</CardTitle>
-        <CardDescription>Nome, e-mail, senha e aceite dos termos.</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <div className="w-full max-w-md mx-auto space-y-6 items-center text-center">
+    
+      <div className="space-y-2">
+        <h2 className="text-2xl font-semibold tracking-tight">Criar conta</h2>
+        <p className="text-sm text-muted-foreground">Nome, e-mail, senha e aceite dos termos.</p>
+      </div>
+
+      <div>
         <form onSubmit={handleSubmit} className="space-y-5">
           <FieldGroup>
             <Field>
@@ -209,11 +202,6 @@ export function SignupForm() {
                 </button>
               </div>
             </div>
-            {!acceptedTerms ? (
-              <p className="text-xs text-muted-foreground">
-                Você só poderá clicar em &quot;Criar conta&quot; após marcar a aceitação acima.
-              </p>
-            ) : null}
           </div>
 
           <Button type="submit" className="w-full" disabled={signup.isPending || !acceptedTerms}>
@@ -251,15 +239,16 @@ export function SignupForm() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </CardContent>
-      <CardFooter className="text-sm text-muted-foreground">
+      </div>
+
+      <div className="text-sm text-muted-foreground">
         <p>
           Já tem uma conta?{" "}
           <Link to="/login" className="text-foreground underline underline-offset-4">
             Entrar
           </Link>
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }

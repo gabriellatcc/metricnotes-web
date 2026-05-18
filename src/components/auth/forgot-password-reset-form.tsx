@@ -2,15 +2,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { useMemo, useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { authFormCardClassName } from "@/components/auth/auth-page-layout";
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PasswordStrengthBar } from "@/components/ui/password-strength-bar";
@@ -71,15 +62,15 @@ export function ForgotPasswordResetForm() {
   if (!credentials) return null;
 
   return (
-    <Card className={authFormCardClassName("w-full max-w-md")}>
-      <CardHeader className="space-y-2">
-        <CardTitle>Nova senha</CardTitle>
-        <CardDescription>
+    <div className="w-full max-w-md mx-auto space-y-6 items-center text-center">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-semibold tracking-tight">Nova senha</h2>
+        <p className="text-sm text-muted-foreground">
           Escolha uma senha diferente da anterior. Em seguida você poderá entrar com o e-mail e a
           nova senha.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
+        </p>
+      </div>
+      <div>
         <form onSubmit={handleSubmit} className="space-y-5">
           <FieldGroup>
             <Field>
@@ -150,14 +141,14 @@ export function ForgotPasswordResetForm() {
             {recover.isPending ? "Salvando…" : "Redefinir senha"}
           </Button>
         </form>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-2 text-sm text-muted-foreground">
+      </div>
+      <div className="flex flex-col gap-2 text-sm text-muted-foreground">
         <p>
           <Link to="/login" className="text-foreground underline underline-offset-4">
             Cancelar e voltar ao login
           </Link>
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
