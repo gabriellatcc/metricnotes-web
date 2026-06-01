@@ -17,7 +17,6 @@ function taskStatusColor(status: string): TEventColor {
   return "blue";
 }
 
-/** Uma entrada por prazo atual ou original da tarefa (dia inteiro local). */
 export function taskDueEventsForCalendar(tasks: TaskResource[], user: IUser): IEvent[] {
   const events: IEvent[] = [];
 
@@ -28,13 +27,16 @@ export function taskDueEventsForCalendar(tasks: TaskResource[], user: IUser): IE
     const dayStart = startOfDay(due);
     const dayEnd = endOfDay(due);
 
+    const tips = t.tips as Array<{ name: string; color: string }> | undefined;
+    const customTipColor = tips && tips.length > 0 ? tips[0].color : null;
+
     events.push({
       id: t.id,
       title: t.name,
       description: t.description ?? "",
       startDate: dayStart.toISOString(),
       endDate: dayEnd.toISOString(),
-      color: taskStatusColor(t.status),
+      color: (customTipColor || taskStatusColor(t.status)) as TEventColor,
       user,
       sourceTaskId: t.id,
     });

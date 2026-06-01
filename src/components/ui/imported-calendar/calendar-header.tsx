@@ -12,7 +12,6 @@ import {
 import { useCalendar } from "@/components/ui/imported-calendar/calendar-context";
 import { AddEditEventDialog } from "@/components/ui/imported-calendar/add-edit-event-dialog";
 import { DateNavigator } from "@/components/ui/imported-calendar/date-navigator";
-import FilterEvents from "@/components/ui/imported-calendar/filter";
 import { TodayButton } from "@/components/ui/imported-calendar/today-button";
 import { UserSelect } from "@/components/ui/imported-calendar/user-select";
 import Views from "./view-tabs";
@@ -29,7 +28,6 @@ export function CalendarHeader() {
         animate="animate"
         transition={transition}
       >
-        <TodayButton />
         <DateNavigator view={view} events={events} />
       </motion.div>
 
@@ -41,7 +39,6 @@ export function CalendarHeader() {
         transition={transition}
       >
         <div className="options flex-wrap flex items-center gap-4 md:gap-2">
-          <FilterEvents />
           <Views />
         </div>
 

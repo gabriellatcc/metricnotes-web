@@ -45,13 +45,14 @@ const eventBadgeVariants = cva(
     defaultVariants: {
       color: "blue-dot",
     },
-  },
+  }
 );
 
-interface IProps extends Omit<
-  VariantProps<typeof eventBadgeVariants>,
-  "color" | "multiDayPosition"
-> {
+interface IProps
+  extends Omit<
+    VariantProps<typeof eventBadgeVariants>,
+    "color" | "multiDayPosition"
+  > {
   event: IEvent;
   cellDate: Date;
   eventCurrentDay?: number;
@@ -94,12 +95,18 @@ export function MonthEventBadge({
   const renderBadgeText = ["first", "none"].includes(position);
   const renderBadgeTime = ["last", "none"].includes(position);
 
-  const color = (
-    badgeVariant === "dot" ? `${event.color}-dot` : event.color
-  ) as VariantProps<typeof eventBadgeVariants>["color"];
+  const isCustomColor =
+    event.color?.startsWith("#") || event.color?.startsWith("rgb");
+
+  const colorVariant = isCustomColor
+    ? undefined
+    : ((badgeVariant === "dot"
+        ? `${event.color}-dot`
+        : event.color) as VariantProps<typeof eventBadgeVariants>["color"]);
 
   const eventBadgeClasses = cn(
-    eventBadgeVariants({ color, multiDayPosition: position, className }),
+    eventBadgeVariants({ color: colorVariant, multiDayPosition: position, className })
+    // Removi a classe que forçava o texto branco e tirava a borda!
   );
 
   const marginClass = {
@@ -109,13 +116,35 @@ export function MonthEventBadge({
     none: "mx-1",
   }[position || "none"];
 
+  // Calcula o visual semi-transparente similar aos padrões do CVA
+  const customStyle =
+    isCustomColor && badgeVariant !== "dot"
+      ? {
+          backgroundColor: `color-mix(in srgb, ${event.color} 15%, transparent)`, // Fundo 15% opaco
+          borderColor: `color-mix(in srgb, ${event.color} 30%, transparent)`,     // Borda 30% opaca
+          color: event.color,                                                     // Texto na cor pura
+        }
+      : undefined;
+
   return (
     <DraggableEvent event={event} className={marginClass}>
       <EventDetailsDialog event={event}>
-        <button type="button" className={eventBadgeClasses}>
+        <button
+          type="button"
+          className={eventBadgeClasses}
+          style={customStyle}
+        >
           <div className="flex items-center gap-1.5 truncate">
-            {!["middle", "last"].includes(position) &&
-              badgeVariant === "dot" && <EventBullet color={event.color} />}
+            {!["middle", "last"].includes(position) && badgeVariant === "dot" && (
+              isCustomColor ? (
+                <div
+                  className="h-2.5 w-2.5 rounded-full shrink-0"
+                  style={{ backgroundColor: event.color }}
+                />
+              ) : (
+                <EventBullet color={event.color} />
+              )
+            )}
 
             {renderBadgeText && (
               <p className="flex-1 truncate font-semibold">
@@ -132,7 +161,11 @@ export function MonthEventBadge({
           <div className="hidden sm:block">
             {renderBadgeTime && (
               <span>
-                {formatTime(new Date(event.startDate), use24HourFormat, dateLocale)}
+                {formatTime(
+                  new Date(event.startDate),
+                  use24HourFormat,
+                  dateLocale
+                )}
               </span>
             )}
           </div>
