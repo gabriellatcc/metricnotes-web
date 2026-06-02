@@ -16,7 +16,10 @@ import {
   taskDueParts,
   canEditTaskDueDateInForm,
 } from "@/components/tasks/task-ui-constants";
-import { useRegisterOpenNewTaskFromHeader } from "@/components/tasks/tasks-new-task-context";
+import {
+  useRegisterOpenNewTaskFromHeader,
+  useTasksNewTaskHeader,
+} from "@/components/tasks/tasks-new-task-context";
 import { TaskFormDueFields } from "@/components/tasks/task-form-due-fields";
 import { TaskFormTipsPicker } from "@/components/tasks/task-form-tips-picker";
 import { Badge } from "@/components/ui/badge";
@@ -192,17 +195,19 @@ export function TasksAllPage() {
 
   useRegisterOpenNewTaskFromHeader(openNewTaskDialog);
 
+  const { beginNewTaskFlow } = useTasksNewTaskHeader();
+
   const { newTask } = tasksAllRouteApi.useSearch();
 
   useEffect(() => {
     if (!newTask) return;
-    openNewTaskDialog();
+    beginNewTaskFlow();
     void navigate({
       replace: true,
       to: "/tasks/all",
       search: { newTask: false },
     });
-  }, [newTask, navigate, openNewTaskDialog]);
+  }, [newTask, navigate, beginNewTaskFlow]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
