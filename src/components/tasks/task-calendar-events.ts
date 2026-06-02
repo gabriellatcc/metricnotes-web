@@ -1,4 +1,4 @@
-import { addMinutes, endOfDay, parseISO, startOfDay } from "date-fns";
+import { addMinutes, endOfDay, parseISO, set, startOfDay } from "date-fns";
 
 import type { IUser, IEvent } from "@/components/ui/imported-calendar/interfaces";
 import type { TEventColor } from "@/components/ui/imported-calendar/types";
@@ -22,11 +22,7 @@ function tipColor(t: TaskResource): TEventColor | string | null {
   return tips && tips.length > 0 ? tips[0].color : null;
 }
 
-function isCompletedTask(t: TaskResource): boolean {
-  return t.status === "completed" || (t.completed_at != null && t.completed_at !== "");
-}
-
-/** Prazos (dia inteiro) e conclusões (hora real) das tarefas para o calendário. */
+/** Um evento por tarefa: dia do prazo (se houver) com hora de criação; sem hora de conclusão. */
 export function taskEventsForCalendar(tasks: TaskResource[], user: IUser): IEvent[] {
   const events: IEvent[] = [];
 
@@ -34,40 +30,42 @@ export function taskEventsForCalendar(tasks: TaskResource[], user: IUser): IEven
     const customColor = tipColor(t);
     const baseColor = (customColor || taskStatusColor(t.status)) as TEventColor;
 
+    const created = parseDateTime(t.created_at);
     const due = parseDateTime(t.current_due_date) ?? parseDateTime(t.original_due_date);
-    if (due) {
-      const dayStart = startOfDay(due);
-      const dayEnd = endOfDay(due);
-      events.push({
-        id: `${t.id}:due`,
-        title: t.name,
-        description: t.description ?? "",
-        startDate: dayStart.toISOString(),
-        endDate: dayEnd.toISOString(),
-        color: baseColor,
-        user,
-        sourceTaskId: t.id,
-        taskEventKind: "due",
-      });
+    const dayAnchor = due ?? created;
+    if (!dayAnchor) continue;
+
+    let startDate: string;
+    let endDate: string;
+
+    if (created) {
+      const start =
+        due != null
+          ? set(startOfDay(due), {
+              hours: created.getHours(),
+              minutes: created.getMinutes(),
+              seconds: created.getSeconds(),
+              milliseconds: created.getMilliseconds(),
+            })
+          : created;
+      startDate = start.toISOString();
+      endDate = addMinutes(start, 30).toISOString();
+    } else {
+      startDate = startOfDay(dayAnchor).toISOString();
+      endDate = endOfDay(dayAnchor).toISOString();
     }
 
-    if (isCompletedTask(t)) {
-      const completedAt = parseDateTime(t.completed_at);
-      if (completedAt) {
-        const end = addMinutes(completedAt, 30);
-        events.push({
-          id: `${t.id}:completed`,
-          title: t.name,
-          description: t.description ?? "",
-          startDate: completedAt.toISOString(),
-          endDate: end.toISOString(),
-          color: "green",
-          user,
-          sourceTaskId: t.id,
-          taskEventKind: "completed",
-        });
-      }
-    }
+    events.push({
+      id: `${t.id}:task`,
+      title: t.name,
+      description: t.description ?? "",
+      startDate,
+      endDate,
+      color: baseColor,
+      user,
+      sourceTaskId: t.id,
+      taskEventKind: "due",
+    });
   }
 
   return events;

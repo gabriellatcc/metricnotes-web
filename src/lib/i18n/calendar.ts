@@ -120,7 +120,7 @@ export const calendarMessagesPt: CalendarMessages = {
   calendarPageTitle: "Calendário de tarefas",
   calendarPageIntro: "",
   calendarPageFootnote:
-    "Cor da bolinha do prazo segue o estado da tarefa (ou a primeira tip); conclusões aparecem a verde no dia e hora em que foram concluídas.",
+    "Uma entrada por tarefa no dia do prazo (ou da criação, se não houver prazo), com hora de criação; conclusões não geram evento extra.",
   rangeFormatError: "Erro ao formatar datas",
   weekViewMobileHintLine1: "A vista semanal é pouco prática em ecrãs pequenos.",
   weekViewMobileHintLine2: "Usa um computador ou a vista diária.",
