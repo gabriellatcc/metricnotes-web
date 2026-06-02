@@ -48,6 +48,7 @@ import { useTipIndex } from "@/generated/api/tip/tip";
 import { toast, toastApiError, toastApiSuccessFromBody } from "@/lib/api-toast";
 import { apiClient } from "@/lib/api-client";
 import { assignTaskTipIds } from "@/lib/task-assign-tips";
+import { readTasksAllPerPage, writeTasksAllPerPage } from "@/lib/tasks-all-pagination-cache";
 import { tipListFromIndexPayload } from "@/lib/tip-index-normalize";
 import { cn } from "@/lib/utils";
 
@@ -59,7 +60,7 @@ export function TasksAllPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(() => readTasksAllPerPage(PER_PAGE_OPTIONS));
   const [filterTab, setFilterTab] = useState<TaskFilterTabId>("all");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -407,7 +408,14 @@ export function TasksAllPage() {
             <label className="whitespace-nowrap text-xs font-medium text-muted-foreground" htmlFor="task-all-per-page">
               Por página
             </label>
-            <Select value={String(perPage)} onValueChange={(v) => setPerPage(Number(v))}>
+            <Select
+              value={String(perPage)}
+              onValueChange={(v) => {
+                const next = Number(v);
+                setPerPage(next);
+                writeTasksAllPerPage(next);
+              }}
+            >
               <SelectTrigger id="task-all-per-page" className="h-8 w-[4.75rem] rounded-lg text-xs" size="sm">
                 <SelectValue />
               </SelectTrigger>
