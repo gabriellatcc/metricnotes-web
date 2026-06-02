@@ -57,6 +57,8 @@ export type CalendarMessages = {
   weekViewMobileHintLine2: string;
   dayProgress: (current: number, total: number) => string;
   dayViewNoCurrentEvents: string;
+  taskDueLabel: string;
+  taskCompletedLabel: string;
 };
 
 export const calendarMessagesPt: CalendarMessages = {
@@ -77,7 +79,7 @@ export const calendarMessagesPt: CalendarMessages = {
     orange: "Laranja",
   },
   tasksModeHint:
-    "Os prazos vêm das tuas tarefas. Para alterar datas, usa o quadro (arrastar ou editar).",
+    "Bolinhas = prazos e conclusões das tarefas. Para alterar prazos, usa o quadro.",
   addEvent: "Adicionar evento",
   editEvent: "Editar",
   deleteEvent: "Eliminar",
@@ -118,10 +120,12 @@ export const calendarMessagesPt: CalendarMessages = {
   calendarPageTitle: "Calendário de tarefas",
   calendarPageIntro: "",
   calendarPageFootnote:
-    "",
+    "Cor da bolinha do prazo segue o estado da tarefa (ou a primeira tip); conclusões aparecem a verde no dia e hora em que foram concluídas.",
   rangeFormatError: "Erro ao formatar datas",
   weekViewMobileHintLine1: "A vista semanal é pouco prática em ecrãs pequenos.",
   weekViewMobileHintLine2: "Usa um computador ou a vista diária.",
   dayProgress: (current, total) => `Dia ${current} de ${total}`,
   dayViewNoCurrentEvents: "Não há eventos neste momento",
+  taskDueLabel: "Prazo da tarefa",
+  taskCompletedLabel: "Conclusão da tarefa",
 };

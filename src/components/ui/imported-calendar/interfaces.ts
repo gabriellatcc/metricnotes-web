@@ -16,6 +16,8 @@ export interface IEvent {
 	user: IUser;
 	/** IDs de recurso externos (ex.: tarefa Metricnotes). */
 	sourceTaskId?: string;
+	/** Origem do evento quando ligado a uma tarefa. */
+	taskEventKind?: "due" | "completed";
 }
 
 export interface ICalendarCell {

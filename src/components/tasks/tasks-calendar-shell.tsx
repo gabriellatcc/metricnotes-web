@@ -18,7 +18,7 @@ export function TasksCalendarShell({
   view?: TCalendarView;
 }) {
   return (
-    <CalendarProvider integrationsMode="tasks" badge="colored" events={events} users={users} view={view}>
+    <CalendarProvider integrationsMode="tasks" badge="dot" events={events} users={users} view={view}>
       <DndProvider>
         <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-background">
           <CalendarHeader />

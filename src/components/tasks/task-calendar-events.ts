@@ -1,10 +1,10 @@
-import { endOfDay, parseISO, startOfDay } from "date-fns";
+import { addMinutes, endOfDay, parseISO, startOfDay } from "date-fns";
 
 import type { IUser, IEvent } from "@/components/ui/imported-calendar/interfaces";
 import type { TEventColor } from "@/components/ui/imported-calendar/types";
 import type { TaskResource } from "@/generated/api/models";
 
-function parseDue(raw: string | null | undefined): Date | null {
+function parseDateTime(raw: string | null | undefined): Date | null {
   if (!raw || typeof raw !== "string" || raw.trim() === "") return null;
   const d = parseISO(raw);
   return Number.isNaN(d.getTime()) ? null : d;
@@ -17,30 +17,61 @@ function taskStatusColor(status: string): TEventColor {
   return "blue";
 }
 
-export function taskDueEventsForCalendar(tasks: TaskResource[], user: IUser): IEvent[] {
+function tipColor(t: TaskResource): TEventColor | string | null {
+  const tips = t.tips as Array<{ name: string; color: string }> | undefined;
+  return tips && tips.length > 0 ? tips[0].color : null;
+}
+
+function isCompletedTask(t: TaskResource): boolean {
+  return t.status === "completed" || (t.completed_at != null && t.completed_at !== "");
+}
+
+/** Prazos (dia inteiro) e conclusões (hora real) das tarefas para o calendário. */
+export function taskEventsForCalendar(tasks: TaskResource[], user: IUser): IEvent[] {
   const events: IEvent[] = [];
 
   for (const t of tasks) {
-    const due = parseDue(t.current_due_date) ?? parseDue(t.original_due_date);
-    if (!due) continue;
+    const customColor = tipColor(t);
+    const baseColor = (customColor || taskStatusColor(t.status)) as TEventColor;
 
-    const dayStart = startOfDay(due);
-    const dayEnd = endOfDay(due);
+    const due = parseDateTime(t.current_due_date) ?? parseDateTime(t.original_due_date);
+    if (due) {
+      const dayStart = startOfDay(due);
+      const dayEnd = endOfDay(due);
+      events.push({
+        id: `${t.id}:due`,
+        title: t.name,
+        description: t.description ?? "",
+        startDate: dayStart.toISOString(),
+        endDate: dayEnd.toISOString(),
+        color: baseColor,
+        user,
+        sourceTaskId: t.id,
+        taskEventKind: "due",
+      });
+    }
 
-    const tips = t.tips as Array<{ name: string; color: string }> | undefined;
-    const customTipColor = tips && tips.length > 0 ? tips[0].color : null;
-
-    events.push({
-      id: t.id,
-      title: t.name,
-      description: t.description ?? "",
-      startDate: dayStart.toISOString(),
-      endDate: dayEnd.toISOString(),
-      color: (customTipColor || taskStatusColor(t.status)) as TEventColor,
-      user,
-      sourceTaskId: t.id,
-    });
+    if (isCompletedTask(t)) {
+      const completedAt = parseDateTime(t.completed_at);
+      if (completedAt) {
+        const end = addMinutes(completedAt, 30);
+        events.push({
+          id: `${t.id}:completed`,
+          title: t.name,
+          description: t.description ?? "",
+          startDate: completedAt.toISOString(),
+          endDate: end.toISOString(),
+          color: "green",
+          user,
+          sourceTaskId: t.id,
+          taskEventKind: "completed",
+        });
+      }
+    }
   }
 
   return events;
 }
+
+/** @deprecated Use taskEventsForCalendar */
+export const taskDueEventsForCalendar = taskEventsForCalendar;

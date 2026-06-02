@@ -13,7 +13,6 @@ import { getMonthCellEvents } from "@/components/ui/imported-calendar/helpers";
 import { useMediaQuery } from "@/components/ui/imported-calendar/hooks";
 import type { ICalendarCell, IEvent } from "@/components/ui/imported-calendar/interfaces";
 import { EventBullet } from "@/components/ui/imported-calendar/event-bullet";
-import { MonthEventBadge } from "@/components/ui/imported-calendar/month-event-badge";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { AddEditEventDialog } from "@/components/ui/imported-calendar/add-edit-event-dialog";
@@ -51,7 +50,7 @@ const MAX_VISIBLE_EVENTS = 3;
 export function DayCell({ cell, events, eventPositions }: IProps) {
   const { day, currentMonth, date } = cell;
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const { messages } = useCalendar();
+  const { messages, integrationsMode } = useCalendar();
 
   // Memoize cellEvents and currentCellMonth for performance
   const { cellEvents, currentCellMonth } = useMemo(() => {
@@ -89,14 +88,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: position * 0.1, ...transition }}
         >
-          {showBullet && (
-            <EventBullet className="lg:hidden" color={event.color} />
-          )}
-          <MonthEventBadge
-            className="hidden lg:flex"
-            event={event}
-            cellDate={startOfDay(date)}
-          />
+          {showBullet && <EventBullet color={event.color} />}
         </motion.div>
       );
     },
@@ -137,7 +129,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
               !currentMonth && "opacity-50",
             )}
           >
-            {cellEvents.length === 0 && !isMobile ? (
+            {cellEvents.length === 0 && !isMobile && integrationsMode !== "tasks" ? (
               <div className="w-full h-full flex justify-center items-center group">
                 <AddEditEventDialog startDate={date}>
                   <Button
@@ -191,7 +183,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
     ],
   );
 
-  if (isMobile && currentMonth) {
+  if (currentMonth && cellEvents.length > 0) {
     return (
       <EventListDialog date={date} events={cellEvents}>
         {cellContent}

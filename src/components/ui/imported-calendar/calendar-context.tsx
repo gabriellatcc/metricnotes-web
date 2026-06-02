@@ -45,7 +45,7 @@ interface CalendarSettings {
 }
 
 const DEFAULT_SETTINGS: CalendarSettings = {
-  badgeVariant: "colored",
+  badgeVariant: "dot",
   view: "day",
   use24HourFormat: true,
   agendaModeGroupBy: "date",
@@ -57,7 +57,7 @@ export function CalendarProvider({
   children,
   users,
   events,
-  badge = "colored",
+  badge = "dot",
   view = "day",
   integrationsMode = null,
   dateLocale = ptBR,

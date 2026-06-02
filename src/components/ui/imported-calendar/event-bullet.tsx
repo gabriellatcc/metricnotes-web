@@ -21,16 +21,26 @@ const eventBulletVariants = cva("size-2 rounded-full", {
   },
 });
 
+function isCustomColor(color: string): boolean {
+  return color.startsWith("#") || color.startsWith("rgb");
+}
+
 export function EventBullet({
   color,
   className,
 }: {
-  color: TEventColor;
+  color: TEventColor | string;
   className?: string;
 }) {
+  const custom = typeof color === "string" && isCustomColor(color);
+
   return (
     <motion.div
-      className={cn(eventBulletVariants({ color, className }))}
+      className={cn(
+        custom ? "size-2 rounded-full shrink-0" : eventBulletVariants({ color: color as TEventColor, className }),
+        custom && className,
+      )}
+      style={custom ? { backgroundColor: color } : undefined}
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       whileHover={{ scale: 1.2 }}

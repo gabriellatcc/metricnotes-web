@@ -176,8 +176,10 @@ export function TaskNewTaskBrainstormFlow({
       <Dialog open={goalsOpen} onOpenChange={setGoalsOpen}>
         <DialogContent className="gap-0 p-0 sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Pronto para definir as metas depois de, sei lá, anotar ideias?</DialogTitle>
-            <DialogDescription>Abra o formulário de nova tarefa para definir metas e detalhes.</DialogDescription>
+            <DialogTitle>Pronto para tornar essas ideias em tarefas?</DialogTitle>
+            <DialogDescription>
+              Basta definir nome, prazo e detalhes. A tarefa será criada automaticamente.
+            </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-2">
             <Button type="button" variant="outline" className="rounded-full" onClick={() => setGoalsOpen(false)}>

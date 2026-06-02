@@ -31,6 +31,13 @@ export function EventDetailsDialog({ event, children }: IProps) {
   const endDate = parseISO(event.endDate);
   const { use24HourFormat, removeEvent, integrationsMode, dateLocale, messages } = useCalendar();
 
+  const taskKindLabel =
+    event.taskEventKind === "due"
+      ? messages.taskDueLabel
+      : event.taskEventKind === "completed"
+        ? messages.taskCompletedLabel
+        : null;
+
   const deleteEvent = (eventId: string) => {
     try {
       removeEvent(eventId);
@@ -45,7 +52,14 @@ export function EventDetailsDialog({ event, children }: IProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{event.title}</DialogTitle>
+          <DialogTitle>
+            {event.title}
+            {taskKindLabel ? (
+              <span className="mt-1 block text-sm font-normal text-muted-foreground">
+                {taskKindLabel}
+              </span>
+            ) : null}
+          </DialogTitle>
         </DialogHeader>
 
         <ScrollArea className="max-h-[80vh]">

@@ -3,7 +3,7 @@
 
   import type { IUser } from "@/components/ui/imported-calendar/interfaces";
   import { TasksCalendarShell } from "@/components/tasks/tasks-calendar-shell";
-  import { taskDueEventsForCalendar } from "@/components/tasks/task-calendar-events";
+  import { taskEventsForCalendar } from "@/components/tasks/task-calendar-events";
   import { useAuthMe } from "@/generated/api/auth/auth";
   import type { UserResource } from "@/generated/api/models/userResource";
   import { useTaskIndex } from "@/generated/api/task/task";
@@ -38,7 +38,7 @@
 
     const items = tasksQuery.data?.data?.items ?? [];
 
-    const events = useMemo(() => taskDueEventsForCalendar(items, calendarUser), [items, calendarUser]);
+    const events = useMemo(() => taskEventsForCalendar(items, calendarUser), [items, calendarUser]);
 
     const shell = cn("flex min-h-0 flex-1 flex-col", !embedded && "bg-background");
 
