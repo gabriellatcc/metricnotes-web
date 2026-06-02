@@ -102,3 +102,11 @@ export function taskToUpdateBody(task: TaskResource, patch: Partial<TaskUpdateBo
     ...patch,
   };
 }
+
+/** Prazo editável no formulário apenas com tarefa em progresso (não adiada/concluída). */
+export function canEditTaskDueDateInForm(status: string): boolean {
+  return status === "in_progress";
+}
+
+export const TASK_DUE_DATE_LOCKED_HINT =
+  "O prazo só pode ser alterado quando a tarefa está em progresso.";

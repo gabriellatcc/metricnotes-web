@@ -11,12 +11,15 @@ import {
   STATUS_OPTIONS,
   statusLabel,
   taskDueParts,
+  canEditTaskDueDateInForm,
   taskToUpdateBody,
 } from "@/components/tasks/task-ui-constants";
+import { TaskFormDueFields } from "@/components/tasks/task-form-due-fields";
 import { TaskFormTipsPicker } from "@/components/tasks/task-form-tips-picker";
 import { useRegisterOpenNewTaskFromHeader } from "@/components/tasks/tasks-new-task-context";
 import { TaskKanbanBoard } from "@/components/tasks/task-kanban-board";
-import { getKanbanColumnId, KANBAN_COLUMNS, type KanbanColumnId } from "@/components/tasks/task-kanban-types";
+import { getKanbanColumnId, type KanbanColumnId } from "@/components/tasks/task-kanban-types";
+import { TaskPostponeDateDialog } from "@/components/tasks/task-postpone-date-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -72,6 +75,10 @@ function targetPostponedCountForColumn(to: "p1" | "p2" | "p3"): 1 | 2 | 3 {
   if (to === "p1") return 1;
   if (to === "p2") return 2;
   return 3;
+}
+
+function isPostponeColumn(to: KanbanColumnId): to is "p1" | "p2" | "p3" {
+  return to === "p1" || to === "p2" || to === "p3";
 }
 
 function taskQualifiesForViewSession(task: TaskResource): boolean {
@@ -183,7 +190,8 @@ export function TasksPage() {
 
   const postponeMutation = useTaskUpdatePostpone({
     mutation: {
-      onSuccess: () => {
+      onSuccess: (res) => {
+        toastApiSuccessFromBody(res, "Tarefa adiada.");
         invalidateTasks();
       },
       onError: (error) => toastApiError(error),
@@ -241,7 +249,7 @@ export function TasksPage() {
   useRegisterOpenNewTaskFromHeader(openNewTaskDialog);
 
   const applyKanbanMove = useCallback(
-    async (task: TaskResource, to: KanbanColumnId) => {
+    async (task: TaskResource, to: KanbanColumnId, selectedDueDate?: string) => {
       const from = getKanbanColumnId(task);
       if (from === to) return;
       let work: TaskResource = { ...task };
@@ -286,7 +294,8 @@ export function TasksPage() {
       }
 
       for (let i = 0; i < need; i += 1) {
-        const due = nextPostponeDueDate(work);
+        const isLast = i === need - 1;
+        const due = isLast && selectedDueDate ? selectedDueDate : nextPostponeDueDate(work);
         const p = await postponeMutation.mutateAsync({
           id: work.id,
           data: { current_due_date: due },
@@ -307,14 +316,33 @@ export function TasksPage() {
     [postponeMutation, updateMutation],
   );
 
+  const confirmPostponementWithDate = useCallback(
+    async (task: TaskResource, to: "p1" | "p2" | "p3", isoDate: string) => {
+      setPostponeBusy(true);
+      try {
+        await applyKanbanMove(task, to, isoDate);
+        setPendingPostpone(null);
+      } catch {
+        /* toast via onError */
+      } finally {
+        setPostponeBusy(false);
+      }
+    },
+    [applyKanbanMove],
+  );
+
   const moveTaskOnBoard = useCallback(
     async (task: TaskResource, to: KanbanColumnId) => {
       const from = getKanbanColumnId(task);
       if (from === to) return;
 
-      if (task.status === "in_progress" && (to === "p1" || to === "p2" || to === "p3")) {
-        setPendingPostpone({ task, to });
-        return;
+      if (isPostponeColumn(to)) {
+        const want = targetPostponedCountForColumn(to);
+        const eff = task.status === "postponed" ? Math.max(0, task.postponed_count) : 0;
+        if (want > eff) {
+          setPendingPostpone({ task, to });
+          return;
+        }
       }
 
       await applyKanbanMove(task, to);
@@ -327,6 +355,9 @@ const handleSubmit = async (e: React.FormEvent) => {
     setSavingTaskAndTips(true);
     try {
       if (editingId) {
+        const due = dueDateEditable
+          ? { due_date: form.due_date, due_time: form.due_time }
+          : taskDueParts(editingTask ?? items.find((t) => t.id === editingId)!);
         await updateMutation.mutateAsync({
           id: editingId,
           data: {
@@ -334,8 +365,8 @@ const handleSubmit = async (e: React.FormEvent) => {
             description: form.description,
             status: form.status,
             priority: "1",
-            due_date: form.due_date,
-            due_time: form.due_time,
+            due_date: due.due_date,
+            due_time: due.due_time,
           },
         });
         try {
@@ -401,10 +432,8 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   const formTitle = editingId ? "Editar tarefa" : "Nova tarefa";
   const formDesc = editingId ? "Atualize os campos e salve." : "Preencha para criar uma nova tarefa.";
-
-  const postponeColumnTitle = pendingPostpone
-    ? (KANBAN_COLUMNS.find((c) => c.id === pendingPostpone.to)?.title ?? "Coluna de adiamento")
-    : "";
+  const editingTask = editingId ? items.find((t) => t.id === editingId) : undefined;
+  const dueDateEditable = canEditTaskDueDateInForm(form.status);
 
   const boardShellClass =
     "w-full bg-background ";
@@ -617,32 +646,15 @@ const handleSubmit = async (e: React.FormEvent) => {
                       </FieldContent>
                     </Field>
                      */}
-                    <Field>
-                      <FieldLabel htmlFor="task-due">Prazo (data)</FieldLabel>
-                      <FieldContent>
-                        <Input
-                          id="task-due"
-                          value={form.due_date}
-                          onChange={(e) => setForm((f) => ({ ...f, due_date: e.target.value }))}
-                          placeholder="DD-MM-AAAA"
-                          required
-                          className="rounded-xl"
-                        />
-                      </FieldContent>
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="task-due-time">Hora</FieldLabel>
-                      <FieldContent>
-                        <Input
-                          id="task-due-time"
-                          type="time"
-                          value={form.due_time}
-                          onChange={(e) => setForm((f) => ({ ...f, due_time: e.target.value }))}
-                          required
-                          className="rounded-xl"
-                        />
-                      </FieldContent>
-                    </Field>
+                    <TaskFormDueFields
+                      idPrefix="task"
+                      dueDate={form.due_date}
+                      dueTime={form.due_time}
+                      editable={dueDateEditable}
+                      busy={busy}
+                      onDueDateChange={(value) => setForm((f) => ({ ...f, due_date: value }))}
+                      onDueTimeChange={(value) => setForm((f) => ({ ...f, due_time: value }))}
+                    />
                   </div>
                   <TaskFormTipsPicker selectedIds={selectedTipIds} onChange={setSelectedTipIds} disabled={busy} />
                 </FieldGroup>
@@ -668,63 +680,24 @@ const handleSubmit = async (e: React.FormEvent) => {
           </DialogContent>
         </Dialog>
 
-        <Dialog
-          open={pendingPostpone != null}
+        <TaskPostponeDateDialog
+          open={pendingPostpone != null && isPostponeColumn(pendingPostpone.to)}
+          task={pendingPostpone?.task ?? null}
+          postponementLevel={
+            pendingPostpone != null && isPostponeColumn(pendingPostpone.to)
+              ? targetPostponedCountForColumn(pendingPostpone.to)
+              : 1
+          }
+          busy={postponeBusy}
           onOpenChange={(open) => {
             if (!open && !postponeBusy) setPendingPostpone(null);
           }}
-        >
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Confirmar adiamento</DialogTitle>
-              <DialogDescription asChild>
-                <div className="space-y-2 text-muted-foreground">
-                  <p>
-                    A tarefa <span className="font-medium text-foreground">&quot;{pendingPostpone?.task.name}&quot;</span> está{" "}
-                    <span className="font-medium text-foreground">em progresso</span>. Ao mover para{" "}
-                    <span className="font-medium text-foreground">{postponeColumnTitle}</span>, o estado passa a{" "}
-                    <span className="font-medium text-foreground">Adiada</span> e o prazo atual é prolongado segundo as regras do
-                    quadro (até ao limite de adiamentos).
-                  </p>
-                </div>
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter className="gap-2 sm:gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="rounded-full"
-                disabled={postponeBusy}
-                onClick={() => {
-                  if (!postponeBusy) setPendingPostpone(null);
-                }}
-              >
-                Cancelar
-              </Button>
-              <Button
-                type="button"
-                className="rounded-full gap-2"
-                disabled={postponeBusy}
-                onClick={() => {
-                  const p = pendingPostpone;
-                  if (!p) return;
-                  setPostponeBusy(true);
-                  void (async () => {
-                    try {
-                      await applyKanbanMove(p.task, p.to);
-                    } finally {
-                      setPostponeBusy(false);
-                      setPendingPostpone(null);
-                    }
-                  })();
-                }}
-              >
-                {postponeBusy ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
-                Confirmar adiamento
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+          onSelectDate={(isoDate) => {
+            const p = pendingPostpone;
+            if (!p || !isPostponeColumn(p.to)) return;
+            void confirmPostponementWithDate(p.task, p.to, isoDate);
+          }}
+        />
       </div>
       
     </main>

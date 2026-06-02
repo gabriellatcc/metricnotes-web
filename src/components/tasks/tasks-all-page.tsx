@@ -14,8 +14,10 @@ import {
   type TaskFilterTabId,
   statusLabel,
   taskDueParts,
+  canEditTaskDueDateInForm,
 } from "@/components/tasks/task-ui-constants";
 import { useRegisterOpenNewTaskFromHeader } from "@/components/tasks/tasks-new-task-context";
+import { TaskFormDueFields } from "@/components/tasks/task-form-due-fields";
 import { TaskFormTipsPicker } from "@/components/tasks/task-form-tips-picker";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -207,6 +209,9 @@ export function TasksAllPage() {
     setSavingTaskAndTips(true);
     try {
       if (editingId) {
+        const due = dueDateEditable
+          ? { due_date: form.due_date, due_time: form.due_time }
+          : taskDueParts(editingTask ?? items.find((t) => t.id === editingId)!);
         await updateMutation.mutateAsync({
           id: editingId,
           data: {
@@ -214,8 +219,8 @@ export function TasksAllPage() {
             description: form.description,
             status: form.status,
             priority: form.priority,
-            due_date: form.due_date,
-            due_time: form.due_time,
+            due_date: due.due_date,
+            due_time: due.due_time,
           },
         });
         try {
@@ -252,6 +257,8 @@ export function TasksAllPage() {
 
   const formTitle = editingId ? "Editar tarefa" : "Nova tarefa";
   const formDesc = editingId ? "Atualize os campos e salve." : "Preencha para criar uma nova tarefa.";
+  const editingTask = editingId ? items.find((t) => t.id === editingId) : undefined;
+  const dueDateEditable = canEditTaskDueDateInForm(form.status);
 
   return (
     <main className="flex min-h-0 flex-1 flex-col gap-6 bg-background">
@@ -557,32 +564,15 @@ export function TasksAllPage() {
                       </select>
                     </FieldContent>
                   </Field> */}
-                  <Field>
-                    <FieldLabel htmlFor="all-task-due">Prazo (data)</FieldLabel>
-                    <FieldContent>
-                      <Input
-                        id="all-task-due"
-                        value={form.due_date}
-                        onChange={(e) => setForm((f) => ({ ...f, due_date: e.target.value }))}
-                        placeholder="DD-MM-AAAA"
-                        required
-                        className="rounded-xl"
-                      />
-                    </FieldContent>
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="all-task-time">Hora</FieldLabel>
-                    <FieldContent>
-                      <Input
-                        id="all-task-time"
-                        type="time"
-                        value={form.due_time}
-                        onChange={(e) => setForm((f) => ({ ...f, due_time: e.target.value }))}
-                        required
-                        className="rounded-xl"
-                      />
-                    </FieldContent>
-                  </Field>
+                  <TaskFormDueFields
+                    idPrefix="all-task"
+                    dueDate={form.due_date}
+                    dueTime={form.due_time}
+                    editable={dueDateEditable}
+                    busy={busy}
+                    onDueDateChange={(value) => setForm((f) => ({ ...f, due_date: value }))}
+                    onDueTimeChange={(value) => setForm((f) => ({ ...f, due_time: value }))}
+                  />
                 </div>
                 <TaskFormTipsPicker selectedIds={selectedTipIds} onChange={setSelectedTipIds} disabled={busy} />
               </FieldGroup>

@@ -26,6 +26,9 @@
     },
     {
       "name": "Notification"
+    },
+    {
+      "name": "Analytics"
     }
   ],
   "paths": {
@@ -229,6 +232,38 @@
             "bearer": []
           }
         ]
+      }
+    },
+    "/analytics/weekly": {
+      "get": {
+        "summary": "Weekly analytics",
+        "deprecated": false,
+        "description": "Agregados da semana civil anterior (Seg–Dom): KPIs, heatmap e gráficos do painel.",
+        "operationId": "analyticsWeekly",
+        "tags": ["Analytics"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "description": "WeeklyAnalyticsData (dashboard/types.ts)"
+                    },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["success", "data", "message"]
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearer": [] }]
       }
     },
     "/auth/refresh-token": {
