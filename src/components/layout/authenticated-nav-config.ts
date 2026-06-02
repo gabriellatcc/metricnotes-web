@@ -15,12 +15,17 @@ export type AppNavLeaf = {
   readonly to: string;
   readonly label: string;
   readonly icon: LucideIcon;
+  /** Temporariamente indisponível na navegação (tooltip em vez de link). */
+  readonly comingSoon?: boolean;
 };
+
+export const DASHBOARD_MONTH_COMING_SOON_TOOLTIP =
+  "Em construção! Por agora, explore Últimos 7 dias.";
 
 export const APP_DASHBOARD_LEAVES: AppNavLeaf[] = [
   { to: "/dashboard", label: "Hoje", icon: SunMedium },
   { to: "/dashboard/week", label: "Últimos 7 dias", icon: BarChart3 },
-  { to: "/dashboard/month", label: "Último mês", icon: CalendarClock },
+  { to: "/dashboard/month", label: "Último mês", icon: CalendarClock, comingSoon: true },
   { to: "/dashboard/calendar", label: "Calendário", icon: CalendarDays },
 ];
 

@@ -8,6 +8,7 @@ import {
   APP_DASHBOARD_LEAVES,
   APP_DOCUMENT_TITLE_BRAND,
   APP_TASK_LEAVES,
+  DASHBOARD_MONTH_COMING_SOON_TOOLTIP,
   documentTitleFromPath,
   pathnameMatchesDashboardLeaf,
   pathnameMatchesTaskLeaf,
@@ -17,6 +18,7 @@ import { HeaderTaskNotifications } from "@/components/layout/header-task-notific
 import { TasksHeaderNewTaskButton } from "@/components/tasks/tasks-header-new-task-button";
 import { TasksNewTaskHeaderProvider } from "@/components/tasks/tasks-new-task-context";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 function SidebarLeafLink({
@@ -26,6 +28,7 @@ function SidebarLeafLink({
   pathname,
   isActive,
   onPick,
+  comingSoon,
 }: {
   to: string;
   label: string;
@@ -33,22 +36,42 @@ function SidebarLeafLink({
   pathname: string;
   isActive: (pathname: string, href: string) => boolean;
   onPick?: () => void;
+  comingSoon?: boolean;
 }) {
-  const active = isActive(pathname, to);
+  const active = !comingSoon && isActive(pathname, to);
 
-  return (
-    <Link
-      to={to}
-      className={cn(
-        "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
-        active
-          ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground shadow-sm"
-          : "text-sidebar-foreground hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground",
-      )}
-      onClick={onPick}
-    >
+  const className = cn(
+    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+    active
+      ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground shadow-sm"
+      : "text-sidebar-foreground hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground",
+  );
+
+  const content = (
+    <>
       <Icon className="size-4 shrink-0 opacity-80" aria-hidden />
       {label}
+    </>
+  );
+
+  if (comingSoon) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button type="button" className={cn(className, "w-full cursor-pointer border-0 bg-transparent text-left font-[inherit]")} aria-disabled="true">
+            {content}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="right" sideOffset={8} className="max-w-[240px] text-left">
+          {DASHBOARD_MONTH_COMING_SOON_TOOLTIP}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return (
+    <Link to={to} className={className} onClick={onPick}>
+      {content}
     </Link>
   );
 }
@@ -116,17 +139,20 @@ export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
           <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-2 py-3">
             <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Painel</p>
             <nav className="flex flex-col gap-0.5" aria-label="Visualizações do painel">
-              {APP_DASHBOARD_LEAVES.map((item) => (
-                <SidebarLeafLink
-                  key={item.to}
-                  to={item.to}
-                  label={item.label}
-                  icon={item.icon}
-                  pathname={pathname}
-                  isActive={pathnameMatchesDashboardLeaf}
-                  onPick={() => setMobileOpen(false)}
-                />
-              ))}
+              <TooltipProvider delayDuration={200}>
+                {APP_DASHBOARD_LEAVES.map((item) => (
+                  <SidebarLeafLink
+                    key={item.to}
+                    to={item.to}
+                    label={item.label}
+                    icon={item.icon}
+                    pathname={pathname}
+                    isActive={pathnameMatchesDashboardLeaf}
+                    onPick={() => setMobileOpen(false)}
+                    comingSoon={item.comingSoon}
+                  />
+                ))}
+              </TooltipProvider>
             </nav>
 
             <p className="mt-3 px-3 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
