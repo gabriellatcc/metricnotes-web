@@ -20,7 +20,7 @@ export type AppNavLeaf = {
 export const APP_DASHBOARD_LEAVES: AppNavLeaf[] = [
   { to: "/dashboard", label: "Hoje", icon: SunMedium },
   { to: "/dashboard/week", label: "Últimos 7 dias", icon: BarChart3 },
-  { to: "/dashboard/month", label: "Último mês", icon: CalendarClock },
+  // { to: "/dashboard/month", label: "Último mês", icon: CalendarClock },
   { to: "/dashboard/calendar", label: "Calendário", icon: CalendarDays },
 ];
 

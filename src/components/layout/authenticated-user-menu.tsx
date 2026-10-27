@@ -15,6 +15,7 @@ import { setAuthAccessToken } from "@/lib/api-client";
 import { resolveLaravelStorageUrl } from "@/lib/resolve-media-url";
 import { initialsFromName } from "@/lib/utils";
 import { Settings } from "lucide-react";
+import { Skeleton } from "../ui/skeleton";
 
 export function AuthenticatedUserMenu() {
   const navigate = useNavigate();
@@ -65,7 +66,11 @@ export function AuthenticatedUserMenu() {
             )}
           </span>
           <span className="min-w-0 flex-1 truncate text-left text-sm text-sidebar-foreground">
-            {user?.name ?? (me.isLoading ? "Carregando…" : "Conta")}
+            {me.isLoading ? (
+              <Skeleton className="h-4 w-24 inline-block align-middle" />
+            ) : (
+              user?.name ?? "Erro"
+            )}
           </span>
         </Button>
       </DropdownMenuTrigger>

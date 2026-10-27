@@ -9,47 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TasksRouteImport } from './routes/tasks'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as NotesRouteImport } from './routes/notes'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TasksIndexRouteImport } from './routes/tasks.index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
-import { Route as TasksTypesRouteImport } from './routes/tasks.types'
-import { Route as TasksTrashRouteImport } from './routes/tasks.trash'
-import { Route as TasksCompletedRouteImport } from './routes/tasks.completed'
-import { Route as TasksCalendarRouteImport } from './routes/tasks.calendar'
-import { Route as TasksAllRouteImport } from './routes/tasks.all'
-import { Route as DashboardWeekRouteImport } from './routes/dashboard.week'
-import { Route as DashboardMonthRouteImport } from './routes/dashboard.month'
-import { Route as DashboardCalendarRouteImport } from './routes/dashboard.calendar'
-import { Route as authSignupRouteImport } from './routes/(auth)/signup'
-import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as NotesRouteImport } from './routes/notes'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authSignupRouteImport } from './routes/(auth)/signup'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardCalendarRouteImport } from './routes/dashboard.calendar'
+import { Route as DashboardMonthRouteImport } from './routes/dashboard.month'
+import { Route as DashboardWeekRouteImport } from './routes/dashboard.week'
+import { Route as TasksIndexRouteImport } from './routes/tasks.index'
+import { Route as TasksAllRouteImport } from './routes/tasks.all'
+import { Route as TasksCalendarRouteImport } from './routes/tasks.calendar'
+import { Route as TasksCompletedRouteImport } from './routes/tasks.completed'
+import { Route as TasksTrashRouteImport } from './routes/tasks.trash'
+import { Route as TasksTypesRouteImport } from './routes/tasks.types'
 import { Route as authForgotPasswordIndexRouteImport } from './routes/(auth)/forgot-password.index'
-import { Route as authForgotPasswordVerifyRouteImport } from './routes/(auth)/forgot-password.verify'
 import { Route as authForgotPasswordResetRouteImport } from './routes/(auth)/forgot-password.reset'
+import { Route as authForgotPasswordVerifyRouteImport } from './routes/(auth)/forgot-password.verify'
 
-const TasksRoute = TasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotesRoute = NotesRouteImport.update({
-  id: '/notes',
-  path: '/notes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -57,69 +42,24 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TasksIndexRoute = TasksIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => TasksRoute,
-} as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const TasksTypesRoute = TasksTypesRouteImport.update({
-  id: '/types',
-  path: '/types',
-  getParentRoute: () => TasksRoute,
-} as any)
-const TasksTrashRoute = TasksTrashRouteImport.update({
-  id: '/trash',
-  path: '/trash',
-  getParentRoute: () => TasksRoute,
-} as any)
-const TasksCompletedRoute = TasksCompletedRouteImport.update({
-  id: '/completed',
-  path: '/completed',
-  getParentRoute: () => TasksRoute,
-} as any)
-const TasksCalendarRoute = TasksCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => TasksRoute,
-} as any)
-const TasksAllRoute = TasksAllRouteImport.update({
-  id: '/all',
-  path: '/all',
-  getParentRoute: () => TasksRoute,
-} as any)
-const DashboardWeekRoute = DashboardWeekRouteImport.update({
-  id: '/week',
-  path: '/week',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardMonthRoute = DashboardMonthRouteImport.update({
-  id: '/month',
-  path: '/month',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardCalendarRoute = DashboardCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const authSignupRoute = authSignupRouteImport.update({
-  id: '/(auth)/signup',
-  path: '/signup',
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authLoginRoute = authLoginRouteImport.update({
-  id: '/(auth)/login',
-  path: '/login',
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TasksRoute = TasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
@@ -127,9 +67,74 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authSignupRoute = authSignupRouteImport.update({
+  id: '/(auth)/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCalendarRoute = DashboardCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardMonthRoute = DashboardMonthRouteImport.update({
+  id: '/month',
+  path: '/month',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardWeekRoute = DashboardWeekRouteImport.update({
+  id: '/week',
+  path: '/week',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const TasksIndexRoute = TasksIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksAllRoute = TasksAllRouteImport.update({
+  id: '/all',
+  path: '/all',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksCalendarRoute = TasksCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksCompletedRoute = TasksCompletedRouteImport.update({
+  id: '/completed',
+  path: '/completed',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksTrashRoute = TasksTrashRouteImport.update({
+  id: '/trash',
+  path: '/trash',
+  getParentRoute: () => TasksRoute,
+} as any)
+const TasksTypesRoute = TasksTypesRouteImport.update({
+  id: '/types',
+  path: '/types',
+  getParentRoute: () => TasksRoute,
+} as any)
 const authForgotPasswordIndexRoute = authForgotPasswordIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => authForgotPasswordRoute,
+} as any)
+const authForgotPasswordResetRoute = authForgotPasswordResetRouteImport.update({
+  id: '/reset',
+  path: '/reset',
   getParentRoute: () => authForgotPasswordRoute,
 } as any)
 const authForgotPasswordVerifyRoute =
@@ -138,11 +143,6 @@ const authForgotPasswordVerifyRoute =
     path: '/verify',
     getParentRoute: () => authForgotPasswordRoute,
   } as any)
-const authForgotPasswordResetRoute = authForgotPasswordResetRouteImport.update({
-  id: '/reset',
-  path: '/reset',
-  getParentRoute: () => authForgotPasswordRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -300,32 +300,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/tasks': {
-      id: '/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof TasksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notes': {
-      id: '/notes'
-      path: '/notes'
-      fullPath: '/notes'
-      preLoaderRoute: typeof NotesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -335,95 +314,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tasks/': {
-      id: '/tasks/'
-      path: '/'
-      fullPath: '/tasks/'
-      preLoaderRoute: typeof TasksIndexRouteImport
-      parentRoute: typeof TasksRoute
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/tasks/types': {
-      id: '/tasks/types'
-      path: '/types'
-      fullPath: '/tasks/types'
-      preLoaderRoute: typeof TasksTypesRouteImport
-      parentRoute: typeof TasksRoute
-    }
-    '/tasks/trash': {
-      id: '/tasks/trash'
-      path: '/trash'
-      fullPath: '/tasks/trash'
-      preLoaderRoute: typeof TasksTrashRouteImport
-      parentRoute: typeof TasksRoute
-    }
-    '/tasks/completed': {
-      id: '/tasks/completed'
-      path: '/completed'
-      fullPath: '/tasks/completed'
-      preLoaderRoute: typeof TasksCompletedRouteImport
-      parentRoute: typeof TasksRoute
-    }
-    '/tasks/calendar': {
-      id: '/tasks/calendar'
-      path: '/calendar'
-      fullPath: '/tasks/calendar'
-      preLoaderRoute: typeof TasksCalendarRouteImport
-      parentRoute: typeof TasksRoute
-    }
-    '/tasks/all': {
-      id: '/tasks/all'
-      path: '/all'
-      fullPath: '/tasks/all'
-      preLoaderRoute: typeof TasksAllRouteImport
-      parentRoute: typeof TasksRoute
-    }
-    '/dashboard/week': {
-      id: '/dashboard/week'
-      path: '/week'
-      fullPath: '/dashboard/week'
-      preLoaderRoute: typeof DashboardWeekRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/month': {
-      id: '/dashboard/month'
-      path: '/month'
-      fullPath: '/dashboard/month'
-      preLoaderRoute: typeof DashboardMonthRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/calendar': {
-      id: '/dashboard/calendar'
-      path: '/calendar'
-      fullPath: '/dashboard/calendar'
-      preLoaderRoute: typeof DashboardCalendarRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/(auth)/signup': {
-      id: '/(auth)/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof authSignupRouteImport
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/login': {
-      id: '/(auth)/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof authLoginRouteImport
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tasks': {
+      id: '/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof TasksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/forgot-password': {
@@ -433,6 +349,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/signup': {
+      id: '/(auth)/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof authSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/calendar': {
+      id: '/dashboard/calendar'
+      path: '/calendar'
+      fullPath: '/dashboard/calendar'
+      preLoaderRoute: typeof DashboardCalendarRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/month': {
+      id: '/dashboard/month'
+      path: '/month'
+      fullPath: '/dashboard/month'
+      preLoaderRoute: typeof DashboardMonthRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/week': {
+      id: '/dashboard/week'
+      path: '/week'
+      fullPath: '/dashboard/week'
+      preLoaderRoute: typeof DashboardWeekRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/tasks/': {
+      id: '/tasks/'
+      path: '/'
+      fullPath: '/tasks/'
+      preLoaderRoute: typeof TasksIndexRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/all': {
+      id: '/tasks/all'
+      path: '/all'
+      fullPath: '/tasks/all'
+      preLoaderRoute: typeof TasksAllRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/calendar': {
+      id: '/tasks/calendar'
+      path: '/calendar'
+      fullPath: '/tasks/calendar'
+      preLoaderRoute: typeof TasksCalendarRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/completed': {
+      id: '/tasks/completed'
+      path: '/completed'
+      fullPath: '/tasks/completed'
+      preLoaderRoute: typeof TasksCompletedRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/trash': {
+      id: '/tasks/trash'
+      path: '/trash'
+      fullPath: '/tasks/trash'
+      preLoaderRoute: typeof TasksTrashRouteImport
+      parentRoute: typeof TasksRoute
+    }
+    '/tasks/types': {
+      id: '/tasks/types'
+      path: '/types'
+      fullPath: '/tasks/types'
+      preLoaderRoute: typeof TasksTypesRouteImport
+      parentRoute: typeof TasksRoute
+    }
     '/(auth)/forgot-password/': {
       id: '/(auth)/forgot-password/'
       path: '/'
@@ -440,18 +440,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordIndexRouteImport
       parentRoute: typeof authForgotPasswordRoute
     }
-    '/(auth)/forgot-password/verify': {
-      id: '/(auth)/forgot-password/verify'
-      path: '/verify'
-      fullPath: '/forgot-password/verify'
-      preLoaderRoute: typeof authForgotPasswordVerifyRouteImport
-      parentRoute: typeof authForgotPasswordRoute
-    }
     '/(auth)/forgot-password/reset': {
       id: '/(auth)/forgot-password/reset'
       path: '/reset'
       fullPath: '/forgot-password/reset'
       preLoaderRoute: typeof authForgotPasswordResetRouteImport
+      parentRoute: typeof authForgotPasswordRoute
+    }
+    '/(auth)/forgot-password/verify': {
+      id: '/(auth)/forgot-password/verify'
+      path: '/verify'
+      fullPath: '/forgot-password/verify'
+      preLoaderRoute: typeof authForgotPasswordVerifyRouteImport
       parentRoute: typeof authForgotPasswordRoute
     }
   }

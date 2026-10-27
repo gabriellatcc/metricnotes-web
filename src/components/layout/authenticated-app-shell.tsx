@@ -12,13 +12,12 @@ import {
   pathnameMatchesDashboardLeaf,
   pathnameMatchesTaskLeaf,
 } from "@/components/layout/authenticated-nav-config";
-import { AuthenticatedUserMenu } from "@/components/layout/authenticated-user-menu";
 import { HeaderTaskNotifications } from "@/components/layout/header-task-notifications";
 import { TasksHeaderNewTaskButton } from "@/components/tasks/tasks-header-new-task-button";
 import { TasksNewTaskHeaderProvider } from "@/components/tasks/tasks-new-task-context";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
+import { AuthenticatedUserMenu } from "./authenticated-user-menu";
 function SidebarLeafLink({
   to,
   label,
@@ -157,10 +156,6 @@ export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
               />
             </div>
           </div>
-
-          <div className="shrink-0 space-y-1 border-t border-sidebar-border px-2 py-3">
-            <AuthenticatedUserMenu />
-          </div>
         </aside>
 
         <div className="relative flex min-h-0 flex-1 flex-col md:pl-60">
@@ -183,6 +178,9 @@ export function AuthenticatedAppShell({ children }: { children: ReactNode }) {
             <div className="flex shrink-0 items-center gap-2">
               {pathname.startsWith("/tasks") ? <TasksHeaderNewTaskButton /> : null}
               <HeaderTaskNotifications enabled />
+            </div>
+            <div className="shrink-0 space-y-1 border-t border-sidebar-border px-2 py-3">
+              <AuthenticatedUserMenu />
             </div>
           </header>
 
