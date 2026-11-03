@@ -1,9 +1,10 @@
 "use client";
 
 import { cva } from "class-variance-authority";
-import { isToday, startOfDay, isSunday, isSameMonth } from "date-fns";
+import { isToday, isSunday } from "date-fns";
 import { motion } from "framer-motion";
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
+import { Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { transition } from "@/components/ui/imported-calendar/animations";
@@ -12,10 +13,8 @@ import { DroppableArea } from "@/components/ui/imported-calendar/droppable-area"
 import { getMonthCellEvents } from "@/components/ui/imported-calendar/helpers";
 import { useMediaQuery } from "@/components/ui/imported-calendar/hooks";
 import type { ICalendarCell, IEvent } from "@/components/ui/imported-calendar/interfaces";
-import { EventBullet } from "@/components/ui/imported-calendar/event-bullet";
-import { MonthEventBadge } from "@/components/ui/imported-calendar/month-event-badge";
+import { MonthEventDot } from "@/components/ui/imported-calendar/month-event-dot";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { AddEditEventDialog } from "@/components/ui/imported-calendar/add-edit-event-dialog";
 import { useCalendar } from "@/components/ui/imported-calendar/calendar-context";
 
@@ -46,67 +45,15 @@ export const dayCellVariants = cva("text-white", {
   },
 });
 
-const MAX_VISIBLE_EVENTS = 3;
-
 export function DayCell({ cell, events, eventPositions }: IProps) {
   const { day, currentMonth, date } = cell;
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { messages } = useCalendar();
 
-  // Memoize cellEvents and currentCellMonth for performance
-  const { cellEvents, currentCellMonth } = useMemo(() => {
-    const cellEvents = getMonthCellEvents(date, events, eventPositions);
-    const currentCellMonth = startOfDay(
-      new Date(date.getFullYear(), date.getMonth(), 1),
-    );
-    return { cellEvents, currentCellMonth };
-  }, [date, events, eventPositions]);
-
-  // Memoize event rendering for each position with animation
-  const renderEventAtPosition = useCallback(
-    (position: number) => {
-      const event = cellEvents.find((e) => e.position === position);
-      if (!event) {
-        return (
-          <motion.div
-            key={`empty-${position}`}
-            className="lg:flex-1"
-            initial={false}
-            animate={false}
-          />
-        );
-      }
-      const showBullet = isSameMonth(
-        new Date(event.startDate),
-        currentCellMonth,
-      );
-
-      return (
-        <motion.div
-          key={`event-${event.id}-${position}`}
-          className="lg:flex-1"
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: position * 0.1, ...transition }}
-        >
-          {showBullet && (
-            <EventBullet className="lg:hidden" color={event.color} />
-          )}
-          <MonthEventBadge
-            className="hidden lg:flex"
-            event={event}
-            cellDate={startOfDay(date)}
-          />
-        </motion.div>
-      );
-    },
-    [cellEvents, currentCellMonth, date],
+  const cellEvents = useMemo(
+    () => getMonthCellEvents(date, events, eventPositions),
+    [date, events, eventPositions],
   );
-
-  const showMoreCount = cellEvents.length - MAX_VISIBLE_EVENTS;
-
-  const showMobileMore = isMobile && currentMonth && showMoreCount > 0;
-  const showDesktopMore = !isMobile && currentMonth && showMoreCount > 0;
 
   const cellContent = useMemo(
     () => (
@@ -132,63 +79,37 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
           </motion.span>
 
           <motion.div
-            className={cn(
-              "flex h-fit gap-1 px-2 mt-1 lg:h-[47px] lg:flex-col lg:gap-1 lg:px-0",
-              !currentMonth && "opacity-50",
-            )}
+            className={cn("mt-1 px-2", !currentMonth && "opacity-50")}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={transition}
           >
-            {cellEvents.length === 0 && !isMobile ? (
-              <div className="w-full h-full flex justify-center items-center group">
-                <AddEditEventDialog startDate={date}>
-                  <Button
-                    variant="ghost"
-                    className="border opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                  >
-                    <Plus className="h-4 w-4" />
-                    <span className="max-sm:hidden">{messages.addEvent}</span>
-                  </Button>
-                </AddEditEventDialog>
-              </div>
+            {cellEvents.length === 0 ? (
+              !isMobile && (
+                <div className="group flex min-h-[47px] w-full items-center justify-center">
+                  <AddEditEventDialog startDate={date}>
+                    <Button
+                      variant="ghost"
+                      className="border opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span className="max-sm:hidden">{messages.addEvent}</span>
+                    </Button>
+                  </AddEditEventDialog>
+                </div>
+              )
             ) : (
-              [0, 1, 2].map(renderEventAtPosition)
+              <div className="flex flex-wrap items-center gap-1.5 py-1">
+                {cellEvents.map((event) => (
+                  <MonthEventDot key={event.id} event={event} static={isMobile} />
+                ))}
+              </div>
             )}
           </motion.div>
-
-          {showMobileMore && (
-            <div className="flex justify-end items-end mx-2">
-              <span className="text-[0.6rem] font-semibold text-accent-foreground">
-                +{showMoreCount}
-              </span>
-            </div>
-          )}
-
-          {showDesktopMore && (
-            <motion.div
-              className={cn(
-                "h-4.5 px-1.5 my-2 text-end text-xs font-semibold text-muted-foreground",
-                !currentMonth && "opacity-50",
-              )}
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, ...transition }}
-            >
-              <EventListDialog date={date} events={cellEvents} />
-            </motion.div>
-          )}
         </DroppableArea>
       </motion.div>
     ),
-    [
-      date,
-      day,
-      currentMonth,
-      cellEvents,
-      showMobileMore,
-      showDesktopMore,
-      showMoreCount,
-      renderEventAtPosition,
-      isMobile,
-    ],
+    [date, day, currentMonth, cellEvents, isMobile, messages],
   );
 
   if (isMobile && currentMonth) {

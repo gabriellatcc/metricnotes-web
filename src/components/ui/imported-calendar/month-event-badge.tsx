@@ -92,7 +92,7 @@ export function MonthEventBadge({
   }
 
   const renderBadgeText = ["first", "none"].includes(position);
-  const renderBadgeTime = ["last", "none"].includes(position);
+  const renderBadgeTime = false;
 
   const color = (
     badgeVariant === "dot" ? `${event.color}-dot` : event.color

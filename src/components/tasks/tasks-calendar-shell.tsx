@@ -7,7 +7,7 @@ import { DndProvider } from "@/components/ui/imported-calendar/dnd-context";
 import type { IEvent, IUser } from "@/components/ui/imported-calendar/interfaces";
 import type { TCalendarView } from "@/components/ui/imported-calendar/types";
 
-/** Calendário (registo [full-calendar ShadCN](https://github.com/yassir-jeraidi/full-calendar)), alimentado por eventos externos. */
+/** Calendário (registo [full-calendar ShadCN](https://github.com/yassir-jeraidi/full-calendar)), alimentado por tarefas externos. */
 export function TasksCalendarShell({
   events,
   users,
