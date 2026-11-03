@@ -19,7 +19,7 @@ export function DashboardTodayPage() {
 
   if (isError || !data) {
     return (
-      <div className="mx-auto max-w-md rounded-xl border border-destructive/30 bg-destructive/5 p-6 text-center">
+      <div className="mx-auto max-w-md bg-destructive/5 p-6 text-center">
         <p className="text-sm font-medium text-destructive">Não foi possível carregar o resumo</p>
         <p className="mt-1 text-sm text-muted-foreground">
           {error instanceof Error ? error.message : "Erro desconhecido"}

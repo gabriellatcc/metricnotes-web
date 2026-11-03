@@ -7,11 +7,9 @@ import { cn } from "@/lib/utils";
 /** Descrições do cabeçalho por vista do painel (alinhadas à sidebar). */
 const DASHBOARD_TAB_COPY = {
   today:
-    "Visualização diária agregada com os mesmos princípios do painel — ainda em construção. Use Últimos 7 dias ou o calendário de prazos enquanto esta vista evolui.",
+    "Visualização diária agregada com os mesmos princípios do painel.",
   week:
     "Mapa por dia × faixa horária e barras por dia da semanal. Sem conclusões registadas há bastante tempo, aparece um convite para regressar ao quadro.",
-  month:
-    "Visualização mensal agregada com os mesmos princípios do painel — ainda em construção. Use Últimos 7 dias ou o calendário de prazos enquanto esta vista evolui.",
   calendar:
     "Prazos das tarefas no calendário mensal. As alterações refletem o mesmo conjunto de tarefas do quadro.",
 } as const;
@@ -26,8 +24,6 @@ function dashboardDescriptionSegment(pathname: string): DashboardSegment {
         return "today";
       case "/dashboard/week":
         return "week";
-      case "/dashboard/month":
-        return "month";
       case "/dashboard/calendar":
         return "calendar";
       default:

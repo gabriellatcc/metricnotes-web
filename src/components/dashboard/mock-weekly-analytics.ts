@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import type { WeeklyAnalyticsData } from "./types";
+import { apiClient } from "@/lib/api-client";
 
 /**
  * Dados de exemplo: representam uma **última semana** (7 dias, Seg–Dom) de tarefas concluídas.
@@ -62,10 +63,10 @@ export const MOCK_WEEKLY_ANALYTICS: WeeklyAnalyticsData = {
     { blockId: "18-21", label: "18–21", totalCompleted: 26 },
   ],
   summary: {
-    totalTasksWeek: 193,
-    dailyAverage: 27.6,
-    bestDay: { label: "Terça-feira", total: 35 },
-    bestTimeBlock: { label: "09:00–12:00", total: 65 },
+    totalTasksWeek: 18,
+    dailyAverage: 3.3,
+    bestDay: { label: "Terça-feira", total: 4 },
+    bestTimeBlock: { label: "09:00–12:00", total: 7 },
     insights: [
       "O meio da manhã (09–12) concentra o maior volume de conclusões — proteja essa janela para trabalho focado.",
       "Terça e quinta são seus dias mais fortes; considere agendar revisões nos dias mais leves.",
@@ -73,14 +74,15 @@ export const MOCK_WEEKLY_ANALYTICS: WeeklyAnalyticsData = {
     ],
   },
   recordingMeta: {
-    /** Altere para ≥7 para pré-visualizar estado vazio convite aos gráficos. */
     daysSinceLastCompletion: 0,
   },
 };
 
 async function fetchWeeklyAnalytics(): Promise<WeeklyAnalyticsData> {
-  await new Promise((r) => setTimeout(r, 180));
-  return MOCK_WEEKLY_ANALYTICS;
+  return apiClient<WeeklyAnalyticsData>({
+    url: "api/analytics/weekly",
+    method: "GET",
+  });
 }
 
 const QUERY_KEY = ["weekly-analytics"] as const;

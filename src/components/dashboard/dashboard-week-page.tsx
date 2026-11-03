@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 import { SparseWeekInsightsBanner } from "./dashboard-weekly-charts-feedback";
 import { HeatmapChart } from "./HeatmapChart";
-import { useWeeklyAnalytics } from "./mock-weekly-analytics";
+import { useWeeklyAnalytics } from "/home/gabriella-correa/Documentos/repositorios-locais/metricnotes/metricnotes-web/src/lib/use-weekly-analytics.ts";
 import { WeeklyBarChart } from "./WeeklyBarChart";
 import { STALE_ANALYTICS_AFTER_DAYS, deriveWeeklyChartsStatus } from "./weekly-charts-meta";
 

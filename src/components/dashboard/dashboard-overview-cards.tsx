@@ -145,23 +145,6 @@ function WeeklyPerformanceMiniCards({ summary }: { summary: WeeklyPerformanceSum
   );
 }
 
-function WeeklyInsightsBulletsCard({ insights }: Pick<WeeklyPerformanceSummary, "insights">) {
-  return (
-    <DashboardCardShell
-      icon={Sparkles}
-      title="Leituras rápidas"
-      subtitle="Sugestões derivadas apenas dos números de exemplo até existir modelo real no backend."
-      className="min-h-fit"
-    >
-      <ul className="list-disc space-y-2 pl-4 text-xs leading-relaxed text-muted-foreground marker:text-muted-foreground/80">
-        {insights.map((line) => (
-          <li key={line}>{line}</li>
-        ))}
-      </ul>
-    </DashboardCardShell>
-  );
-}
-
 type DashboardOverviewCardsProps = {
   weeklySummary: WeeklyPerformanceSummary;
 };
@@ -181,135 +164,141 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
   const taskFailed = query.isError;
 
   return (
-    <>
-      {!taskFailed ? (
-        <DashboardTaskStatusSummary items={items} loading={taskLoading} className="mb-6" />
-      ) : null}
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-start">
+      {/* Coluna principal */}
+      <div className="min-w-0">
+        {!taskFailed ? (
+          <DashboardTaskStatusSummary items={items} loading={taskLoading} className="mb-6" />
+        ) : null}
 
-      <div className="space-y-4">
-        <WeeklyPerformanceMiniCards summary={weeklySummary} />
-        <WeeklyInsightsBulletsCard insights={weeklySummary.insights} />
+        <div className="space-y-4">
+          <WeeklyPerformanceMiniCards summary={weeklySummary} />
+        </div>
+
+        {taskLoading ? (
+          <div className="mt-6 flex min-h-[120px] flex-col justify-center rounded-xl border border-dashed border-border/70 bg-muted/10 px-4 py-8 text-center">
+            <Loader2 className="mx-auto mb-3 size-6 animate-spin text-primary" aria-hidden />
+            <p className="text-sm text-muted-foreground">Carregando prazos e progresso das tarefas…</p>
+          </div>
+        ) : taskFailed ? (
+          <div className="mt-6 rounded-xl border border-border/70 bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
+            Não foi possível combinar dados em tempo real das suas tarefas.{" "}
+            <Link to="/tasks" className="font-medium text-primary underline-offset-2 hover:underline">
+              Abrir tarefas
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
+  <InsightShell
+    title="Prazos a vencer"
+    subtitle={``}
+    icon={Clock}
+  >
+    <div className="relative">
+      <div className="absolute -top-10 right-0">
+        <Link
+          to="/tasks"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-8 rounded-md px-3 text-xs")}
+        >
+          Ir para tarefas
+        </Link>
       </div>
 
-      {taskLoading ? (
-        <div className="mt-6 flex min-h-[120px] flex-col justify-center rounded-xl border border-dashed border-border/70 bg-muted/10 px-4 py-8 text-center">
-          <Loader2 className="mx-auto mb-3 size-6 animate-spin text-primary" aria-hidden />
-          <p className="text-sm text-muted-foreground">Carregando prazos e progresso das tarefas…</p>
-        </div>
-      ) : taskFailed ? (
-        <div className="mt-6 rounded-xl border border-border/70 bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
-          Não foi possível combinar dados em tempo real das suas tarefas.{" "}
-          <Link to="/tasks" className="font-medium text-primary underline-offset-2 hover:underline">
-            Abrir tarefas
-          </Link>
-        </div>
+      {upcoming.length === 0 ? (
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Nada urgente no horizonte com prazo definido. Ótimo momento para planejar com calma.
+        </p>
       ) : (
-        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          <InsightShell
-            title="Prazos a vencer"
-            subtitle={`Tarefas em aberto com vencimento até ${UPCOMING_DAYS} dias ou atrasadas.`}
-            icon={Clock}
-          >
-            {upcoming.length === 0 ? (
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Nada urgente no horizonte com prazo definido. Ótimo momento para planejar com calma.
-              </p>
-            ) : (
-              <>
-                <p className="text-xs text-muted-foreground">
-                  <span className="font-semibold tabular-nums text-foreground">{upcoming.length}</span>{" "}
-                  {upcoming.length === 1 ? "tarefa" : "tarefas"}
-                </p>
-                <ul className="mt-2 space-y-1">
-                  {upcoming.slice(0, LIST_MAX).map((t) => {
-                    const due = parseTaskDueDate(t.current_due_date || t.original_due_date);
-                    const today0 = startOfTodayLocal();
-                    const late = due && startOfDueDay(due).getTime() < today0.getTime();
-                    return (
-                      <li
-                        key={t.id}
-                        className="flex items-baseline justify-between gap-2 rounded-lg border border-border/50 px-2.5 py-1.5 text-xs"
-                      >
-                        <span className="min-w-0 truncate font-medium text-foreground">{t.name}</span>
-                        {due ? (
-                          <span
-                            className={cn(
-                              "shrink-0 tabular-nums",
-                              late ? "font-medium text-destructive" : "text-muted-foreground",
-                            )}
-                          >
-                            {late ? "Atrasada · " : null}
-                            {formatDueLabel(due)}
-                          </span>
-                        ) : null}
-                      </li>
-                    );
-                  })}
-                </ul>
-                {upcoming.length > LIST_MAX ? (
-                  <p className="mt-2 text-[10px] text-muted-foreground">E mais {upcoming.length - LIST_MAX}…</p>
-                ) : null}
-              </>
-            )}
-            <div className="mt-3 border-t border-border/50 pt-3">
-              <Link
-                to="/tasks"
-                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-8 rounded-md px-3 text-xs")}
-              >
-                Ir para tarefas
-              </Link>
-            </div>
-          </InsightShell>
-
-          <InsightShell
-            title="Em progresso"
-            subtitle='Tarefas com estado “em progresso”, com base nos últimos registros carregados.'
-            icon={ListTodo}
-          >
-            <p className="text-3xl font-semibold tracking-tight tabular-nums text-foreground">{inProgressCount}</p>
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              Divida blocos grandes em passos menores para manter ritmo estável sem sobrecarga.
-            </p>
-            <Link
-              to="/tasks"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "sm" }),
-                "mt-4 inline-flex h-8 rounded-md px-3 text-xs",
-              )}
-            >
-              Abrir quadro
-            </Link>
-          </InsightShell>
-
-          <InsightShell title="Pausas e foco" subtitle="Saúde no uso diário da ferramenta." icon={Coffee}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              A cada cerca de 90 minutos de foco, reserve 5–10 minutos para se alongar, olhar ao longe ou tomar água. Pequenas
-              pausas reduzem tensão e ajudam a manter clareza nas decisões.
-            </p>
-          </InsightShell>
-
-          <InsightShell title="Sono e ritmo" subtitle="Produtividade sustentável." icon={Moon}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Evite concentrar todas as entregas no fim do dia ou à noite. Distribuir tarefas pela manhã e tarde costuma
-              proteger o descanso e a concentração no dia seguinte.
-            </p>
-          </InsightShell>
-
-          <InsightShell title="Corpo em movimento" subtitle="Leve ao longo da semana." icon={Activity}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Combine uma caminhada curta com a revisão de tarefas leves no celular. Movimento moderado está associado a melhor
-              humor e energia ao longo da semana.
-            </p>
-          </InsightShell>
-
-          <InsightShell title="Hidratação" subtitle="Hábito simples com grande impacto." icon={Droplets}>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Manter uma garrafa visível perto do local de trabalho lembra a beber água com frequência — bom para fadiga
-              mental e para longas sessões em frente à tela.
-            </p>
-          </InsightShell>
-        </div>
+        <>
+          <p className="text-xs text-muted-foreground">
+            <span className="font-semibold tabular-nums text-foreground">{upcoming.length}</span>{" "}
+            {upcoming.length === 1 ? "tarefa" : "tarefas"}
+          </p>
+          <ul className="mt-2 space-y-1">
+            {upcoming.slice(0, LIST_MAX).map((t) => {
+              const due = parseTaskDueDate(t.current_due_date || t.original_due_date);
+              const today0 = startOfTodayLocal();
+              const late = due && startOfDueDay(due).getTime() < today0.getTime();
+              return (
+                <li
+                  key={t.id}
+                  className="flex items-baseline justify-between gap-2 rounded-lg border border-border/50 px-2.5 py-1.5 text-xs"
+                >
+                  <span className="min-w-0 truncate font-medium text-foreground">{t.name}</span>
+                  {due ? (
+                    <span
+                      className={cn(
+                        "shrink-0 tabular-nums",
+                        late ? "font-medium text-destructive" : "text-muted-foreground",
+                      )}
+                    >
+                      {late ? "Atrasada · " : null}
+                      {formatDueLabel(due)}
+                    </span>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+          {upcoming.length > LIST_MAX ? (
+            <p className="mt-2 text-[10px] text-muted-foreground">E mais {upcoming.length - LIST_MAX}…</p>
+          ) : null}
+        </>
       )}
-    </>
+    </div>
+  </InsightShell>
+
+  <InsightShell
+    title="Em progresso"
+    subtitle='Com base nos últimos registros carregados.'
+    icon={ListTodo}
+  >
+    <div className="relative">
+      <div className="absolute -top-16 right-0">
+        <Link
+          to="/tasks"
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-8 rounded-md px-3 text-xs")}
+        >
+          Abrir quadro
+        </Link>
+      </div>
+
+      <p className="text-3xl font-semibold tracking-tight tabular-nums text-foreground">{inProgressCount}</p>
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+        Divida blocos grandes em passos menores para manter ritmo estável sem sobrecarga.
+      </p>
+    </div>
+  </InsightShell>
+</div>
+        )}
+      </div>
+
+      {/* Coluna da direita, ao lado de tudo */}
+      <HealthTipsColumn />
+    </div>
+  );
+}
+function HealthTipsColumn() {
+  return (
+    <aside className="flex flex-col gap-3 items-start h-fit">
+      <InsightShell title="Pausas e foco" subtitle="Saúde no uso diário da ferramenta." icon={Coffee}>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          A cada cerca de 90 minutos de foco, reserve 5–10 minutos para se xalongar. Pequenas
+          pausas reduzem tensão e ajudam a manter clareza nas decisões.
+        </p>
+      </InsightShell>
+      <InsightShell title="Corpo em movimento" subtitle="Leve ao longo da semana." icon={Activity}>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Movimento moderado está associado a melhor humor e energia ao longo da semana.
+        </p>
+      </InsightShell>
+
+      <InsightShell title="Hidratação" subtitle="Hábito simples com grande impacto." icon={Droplets}>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Manter uma garrafa visível perto do local de trabalho lembra a beber água com frequência — bom para fadiga
+          mental e para longas sessões em frente à tela.
+        </p>
+      </InsightShell>
+    </aside>
   );
 }
