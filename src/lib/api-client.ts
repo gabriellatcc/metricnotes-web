@@ -16,6 +16,7 @@ export function getAuthAccessToken(): string | null {
   );
 }
 
+// REQUEST: anexa o token em toda chamada
 axiosInstance.interceptors.request.use((config) => {
   const token = getAuthAccessToken();
   if (token) {
@@ -24,12 +25,26 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// RESPONSE: 401 fora do login limpa a sessão e volta para /login
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const isLoginRequest = error.config?.url?.includes("/auth/login");
+    if (axios.isAxiosError(error) && error.response?.status === 401 && !isLoginRequest) {
+      setAuthAccessToken(null);
+      if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+        window.location.assign("/login");
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+
 function notifyAuthStorageChanged() {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event("metricnotes-auth"));
   }
 }
-
 /**
  * @param rememberMe — if true, persist in `localStorage`; otherwise session-only (`sessionStorage`).
  */

@@ -18,20 +18,32 @@ export function getApiErrorMessage(error: unknown): string {
     const data = error.response?.data;
 
     if (data && typeof data === "object") {
-      const msg = (data as { message?: unknown }).message;
-      if (typeof msg === "string" && msg.length > 0) return msg;
+  const body = data as {
+    message?: unknown;
+    data?: unknown;
+    errors?: Record<string, string[] | string>;
+  };
 
-      const errors = (data as { errors?: Record<string, string[] | string> }).errors;
-      if (errors && typeof errors === "object") {
-        const firstKey = Object.keys(errors)[0];
-        if (firstKey) {
-          const val = errors[firstKey];
-          if (Array.isArray(val) && val[0]) return String(val[0]);
-          if (typeof val === "string") return val;
-        }
-        return "Erro de validação. Confira os campos.";
-      }
+  const fieldErrors =
+    status === 422
+      ? ((body.errors ?? body.data) as Record<string, string[] | string> | null | undefined)
+      : body.errors;
+
+  if (fieldErrors && typeof fieldErrors === "object" && !Array.isArray(fieldErrors)) {
+    const firstKey = Object.keys(fieldErrors)[0];
+    if (firstKey) {
+      const val = fieldErrors[firstKey];
+      if (Array.isArray(val) && val[0]) return String(val[0]);
+      if (typeof val === "string" && val) return val;
     }
+  }
+
+  if (typeof body.message === "string" && body.message.length > 0) return body.message;
+
+  if (fieldErrors && typeof fieldErrors === "object") {
+    return "Erro de validação. Confira os campos.";
+  }
+}
 
     if (status === 401) return "Sessão inválida ou expirada. Faça login novamente.";
     if (status === 403) return "Sem permissão para esta ação.";
