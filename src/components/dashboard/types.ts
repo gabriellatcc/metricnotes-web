@@ -26,9 +26,8 @@ export interface TimeBlockDistribution {
 export interface WeeklyPerformanceSummary {
   totalTasksWeek: number;
   dailyAverage: number;
-  bestDay: { label: string; total: number };
-  bestTimeBlock: { label: string; total: number };
-  /** Short bullet insights derived from the same dataset */
+  bestDay: { label: string; total: number } | null;
+  bestTimeBlock: { label: string; total: number } | null;
   insights: string[];
 }
 

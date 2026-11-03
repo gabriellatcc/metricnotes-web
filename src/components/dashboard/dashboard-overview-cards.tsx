@@ -9,8 +9,6 @@ import {
   Layers,
   ListTodo,
   Loader2,
-  Moon,
-  Sparkles,
   Sunrise,
   type LucideIcon,
 } from "lucide-react";
@@ -30,6 +28,19 @@ const TASKS_PAGE_SIZE = 100;
 const UPCOMING_DAYS = 7;
 const LIST_MAX = 4;
 
+const MOCK_WEEKLY_SUMMARY: WeeklyPerformanceSummary = {
+  totalTasksWeek: 24,
+  dailyAverage: 3.4,
+  bestDay: { label: "Quarta-feira", total: 7 },
+  bestTimeBlock: { label: "09h–12h", total: 11 },
+  insights: [
+    "Você conclui mais tarefas pela manhã.",
+    "Quarta-feira é seu dia mais produtivo.",
+  ],
+};
+type DashboardOverviewCardsProps = {
+  weeklySummary: WeeklyPerformanceSummary | null | undefined;
+};
 function startOfDueDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
 }
@@ -108,50 +119,58 @@ function WeeklyPerformanceMiniCards({ summary }: { summary: WeeklyPerformanceSum
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {kpi(
-        "Conclusões na semana",
-        "Total agregado usado pela série do painel",
-        Layers,
-        <p className="text-3xl font-semibold tabular-nums tracking-tight">{summary.totalTasksWeek}</p>,
-      )}
-      {kpi(
-        "Ritmo diário médio",
-        "Média por dia dentro da série",
-        Divide,
-        <p className="text-3xl font-semibold tabular-nums tracking-tight">{summary.dailyAverage.toFixed(1)}</p>,
-      )}
-      {kpi(
-        "Melhor dia",
-        "Um dia da série com maior volume registado",
-        CalendarDays,
-        <div>
-          <p className="text-lg font-semibold leading-tight">{summary.bestDay.label}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            <span className="tabular-nums">{summary.bestDay.total}</span> concluídas
-          </p>
-        </div>,
-      )}
-      {kpi(
-        "Melhor faixa horária",
-        "Janela com mais marcações nos dados atuais",
-        Sunrise,
-        <div>
-          <p className="text-lg font-semibold leading-tight">{summary.bestTimeBlock.label}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            <span className="tabular-nums">{summary.bestTimeBlock.total}</span> concluídas
-          </p>
-        </div>,
-      )}
+  "Conclusões na semana",
+  "Total agregado usado pela série do painel",
+  Layers,
+  <p className="text-3xl font-semibold tabular-nums tracking-tight">
+    {summary.totalTasksWeek ?? 0}
+  </p>,
+)}
+{kpi(
+  "Ritmo diário médio",
+  "Média por dia dentro da série",
+  Divide,
+  <p className="text-3xl font-semibold tabular-nums tracking-tight">
+    {(summary.dailyAverage ?? 0).toFixed(1)}
+  </p>,
+)}
+{kpi(
+  "Melhor dia",
+  "Um dia da série com maior volume registado",
+  CalendarDays,
+  summary.bestDay ? (
+    <div>
+      <p className="text-lg font-semibold leading-tight">{summary.bestDay.label}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        <span className="tabular-nums">{summary.bestDay.total}</span> concluídas
+      </p>
+    </div>
+  ) : (
+    <p className="text-sm text-muted-foreground">Sem conclusões registradas ainda.</p>
+  ),
+)}
+{kpi(
+  "Melhor faixa horária",
+  "Janela com mais marcações nos dados atuais",
+  Sunrise,
+  summary.bestTimeBlock ? (
+    <div>
+      <p className="text-lg font-semibold leading-tight">{summary.bestTimeBlock.label}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        <span className="tabular-nums">{summary.bestTimeBlock.total}</span> concluídas
+      </p>
+    </div>
+  ) : (
+    <p className="text-sm text-muted-foreground">Sem conclusões registradas ainda.</p>
+  ),
+)}
     </div>
   );
 }
 
-type DashboardOverviewCardsProps = {
-  weeklySummary: WeeklyPerformanceSummary;
-};
-
 export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCardsProps) {
   const query = useTaskIndex({ page: 1, per_page: TASKS_PAGE_SIZE });
-
+  const summary = weeklySummary ?? MOCK_WEEKLY_SUMMARY;
   const items = query.data?.data?.items ?? [];
 
   const { upcoming, inProgressCount } = useMemo(() => {
@@ -172,7 +191,7 @@ export function DashboardOverviewCards({ weeklySummary }: DashboardOverviewCards
         ) : null}
 
         <div className="space-y-4">
-          <WeeklyPerformanceMiniCards summary={weeklySummary} />
+          <WeeklyPerformanceMiniCards summary={summary} />
         </div>
 
         {taskLoading ? (
